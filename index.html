@@ -173,30 +173,110 @@ FriendGroupList © 2026
 const levels = [
 
 {
-rank:1,
-name:"Blue Overdrive",
-creator:"Useryipee",
-verifier:"Cactusman9919",
-firstVictor:"",
-victors:[""],
-points:300,
-image:"Screenshot 2026-05-10 131531.png"
-}
+    rank:1,
+    name:"Blue Overdrive",
+    creator:"Useryipee",
+    verifier:"Cactusman9919",
+    firstVictor:"",
+    victors:[],
+    points:300,
+    image:"Screenshot 2026-05-10 131531.png"
+},
 
-];
 {
-rank:2,
-name:"Dingus Unleashed",
-creator:"Useryipee",
-verifier:"Useryipee",
-firstVictor:"Sirjefferson",
-victors:["Sirjefferson, Cactusman9919"],
-points:250,ge:"Screenshot 2026-07-07 171312.png
-ima"
+    rank:2,
+    name:"Dingus Unleashed",
+    creator:"Useryipee",
+    verifier:"Useryipee",
+    firstVictor:"Sirjefferson",
+    victors:[
+        "Sirjefferson",
+        "Cactusman9919"
+    ],
+    points:250,
+    image:"Screenshot 2026-07-07 171312.png"
 }
 
 ];
 
+document.querySelectorAll(".stat h2")[0].textContent = levels.length;
+
+const players = new Set();
+levels.forEach(level => {
+    if(level.creator) players.add(level.creator);
+    if(level.verifier) players.add(level.verifier);
+    if(level.firstVictor) players.add(level.firstVictor);
+    level.victors.forEach(v => {
+        if(v) players.add(v);
+    });
+});
+
+document.querySelectorAll(".stat h2")[1].textContent = players.size;
+
+const firstVictors = levels.filter(level => level.firstVictor !== "").length;
+document.querySelectorAll(".stat h2")[2].textContent = firstVictors;
+
+const container = document.getElementById("list");
+
+levels.forEach(level => {
+
+    const card = document.createElement("div");
+    card.className = "level";
+
+    card.innerHTML = `
+
+    <img src="${level.image}" onerror="this.src='https://placehold.co/320x180/333333/FFFFFF?text=No+Image'">
+
+    <div class="info">
+
+        <div class="rank">#${level.rank}</div>
+
+        <div class="name">${level.name}</div>
+
+        <div class="creator">
+            Created by <b>${level.creator}</b>
+        </div>
+
+        <div class="points">
+            ⭐ ${level.points} Points
+        </div>
+
+        <div class="details">
+
+            <p><b>Verifier:</b> ${level.verifier || "None"}</p>
+
+            <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
+
+            <p><b>Victors:</b> ${
+                level.victors.length ? level.victors.join(", ") : "None"
+            }</p>
+
+            <br>
+
+            <span class="badge">#${level.rank}</span>
+            <span class="badge">✔ Verified</span>
+
+            ${
+                level.firstVictor
+                ? '<span class="badge">🏆 First Victor</span>'
+                : ""
+            }
+
+        </div>
+
+    </div>
+
+    `;
+
+    card.onclick = () => {
+        card.classList.toggle("open");
+    };
+
+    container.appendChild(card);
+
+});
+
+</script>
 const container=document.getElementById("list");
 
 levels.forEach(level=>{
