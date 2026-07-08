@@ -4,134 +4,364 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FriendGroupList</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#090b14;
+    --surface:#12152a;
+    --surface-2:#1a1e3d;
+    --border:#262b52;
+    --cyan:#2fe8ff;
+    --magenta:#ff3d7f;
+    --gold:#ffce3d;
+    --text:#eef0fb;
+    --muted:#8892b8;
+    --font-display:'Orbitron',sans-serif;
+    --font-body:'Rajdhani',sans-serif;
+    --font-mono:'Share Tech Mono',monospace;
+}
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#111;
-    color:white;
+    background:
+        radial-gradient(circle at 15% 0%, rgba(47,232,255,0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(255,61,127,0.07), transparent 40%),
+        var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    min-height:100vh;
 }
 
+/* ---------- Header ---------- */
+
 header{
-    background:linear-gradient(90deg,#ff8c00,#ffb300);
-    padding:30px;
+    position:relative;
+    padding:56px 20px 0;
     text-align:center;
+    background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 32px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 32px),
+        linear-gradient(160deg,#0d1026,#171b3a 60%,#1a1440);
+    overflow:hidden;
+}
+
+header .eyebrow{
+    font-family:var(--font-mono);
+    letter-spacing:4px;
+    font-size:12px;
+    color:var(--cyan);
+    text-transform:uppercase;
 }
 
 header h1{
-    font-size:55px;
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:clamp(34px,6vw,64px);
+    margin-top:14px;
+    letter-spacing:1px;
+    background:linear-gradient(90deg,var(--cyan),#7fd8ff 40%,var(--magenta));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 40px rgba(47,232,255,0.15);
 }
 
 header p{
-    margin-top:10px;
-    opacity:.9;
+    margin:14px auto 40px;
+    max-width:480px;
+    color:var(--muted);
+    font-size:17px;
+    font-weight:500;
 }
+
+.spike-row{
+    display:flex;
+    width:100%;
+    height:16px;
+    line-height:0;
+}
+
+.spike-row .spike{
+    flex:1 0 auto;
+    height:100%;
+    clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.spike-row .spike:nth-child(3n){ background:var(--cyan); }
+.spike-row .spike:nth-child(3n+1){ background:var(--magenta); }
+.spike-row .spike:nth-child(3n+2){ background:var(--gold); }
+
+/* ---------- Tabs ---------- */
+
+.tabs{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin:32px 20px 0;
+}
+
+.tab-btn{
+    font-family:var(--font-display);
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--surface);
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:12px 26px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.tab-btn:hover{ color:var(--text); border-color:var(--cyan); }
+
+.tab-btn.active{
+    color:#04121a;
+    background:linear-gradient(90deg,var(--cyan),#7fd8ff);
+    border-color:transparent;
+}
+
+/* ---------- Stats ---------- */
 
 .stats{
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
-    gap:20px;
-    margin:30px;
+    gap:18px;
+    margin:32px 20px;
 }
 
 .stat{
-    background:#1d1d1d;
-    width:180px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    width:170px;
     padding:20px;
     border-radius:12px;
     text-align:center;
 }
 
 .stat h2{
-    color:gold;
+    font-family:var(--font-mono);
+    font-size:32px;
+    color:var(--gold);
 }
 
-.container{
-    width:90%;
-    max-width:1100px;
-    margin:auto;
+.stat span{
+    font-size:13px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
 }
+
+/* ---------- Layout ---------- */
+
+.view{ display:none; }
+.view.active{ display:block; }
+
+.container{
+    width:92%;
+    max-width:1000px;
+    margin:0 auto 60px;
+}
+
+/* ---------- Level cards ---------- */
 
 .level{
     display:flex;
-    gap:20px;
-    background:#1c1c1c;
-    margin-bottom:20px;
-    border-radius:12px;
+    gap:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    margin-bottom:18px;
+    border-radius:14px;
     overflow:hidden;
     cursor:pointer;
-    transition:.25s;
+    transition:.2s;
 }
 
 .level:hover{
-    transform:scale(1.01);
-    background:#262626;
+    border-color:var(--cyan);
+    box-shadow:0 0 24px rgba(47,232,255,0.12);
 }
 
+.level.tier-1{ border-color:var(--magenta); }
+.level.tier-2{ border-color:var(--cyan); }
+.level.tier-3{ border-color:var(--gold); }
+
 .level img{
-    width:320px;
-    height:180px;
+    width:220px;
+    min-width:220px;
     object-fit:cover;
-    background:#333;
+    background:var(--surface-2);
 }
 
 .info{
-    padding:20px;
+    padding:22px 26px;
     flex:1;
 }
 
-.rank{
-    color:gold;
-    font-size:34px;
-    font-weight:bold;
+.level-top{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    flex-wrap:wrap;
 }
 
+.rank{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:38px;
+    color:var(--muted);
+}
+
+.tier-1 .rank{ color:var(--magenta); text-shadow:0 0 18px rgba(255,61,127,0.5); }
+.tier-2 .rank{ color:var(--cyan); text-shadow:0 0 18px rgba(47,232,255,0.4); }
+.tier-3 .rank{ color:var(--gold); text-shadow:0 0 18px rgba(255,206,61,0.4); }
+
 .name{
-    font-size:30px;
-    margin-top:5px;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:24px;
 }
 
 .creator{
-    margin-top:10px;
-    color:#bbb;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:15px;
 }
 
-.points{
-    margin-top:10px;
-    color:#00ff99;
-    font-size:22px;
+.creator b{ color:var(--text); }
+
+.rating{
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.rating .spikes{ display:flex; gap:3px; }
+
+.rating .spikes i{
+    width:10px;
+    height:10px;
+    clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
+    background:var(--border);
+}
+
+.rating .spikes i.lit{ background:var(--gold); }
+
+.rating .pts{
+    font-family:var(--font-mono);
+    color:var(--gold);
+    font-size:14px;
 }
 
 .details{
     max-height:0;
     overflow:hidden;
-    transition:.3s;
-    margin-top:10px;
+    transition:.3s ease;
 }
 
 .level.open .details{
     max-height:400px;
+    margin-top:16px;
 }
+
+.details p{
+    font-size:15px;
+    color:var(--muted);
+    margin-bottom:6px;
+}
+
+.details p b{ color:var(--text); }
+
+.badges{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
 
 .badge{
     display:inline-block;
-    background:#333;
+    font-family:var(--font-mono);
+    font-size:12px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
     padding:5px 10px;
-    border-radius:8px;
-    margin:5px 5px 0 0;
+    border-radius:6px;
+}
+
+.badge.win{ border-color:var(--gold); color:var(--gold); }
+
+/* ---------- Leaderboard ---------- */
+
+.board{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.board-row{
+    display:grid;
+    grid-template-columns:60px 1fr 100px 140px;
+    align-items:center;
+    padding:16px 22px;
+    border-bottom:1px solid var(--border);
+    gap:10px;
+}
+
+.board-row:last-child{ border-bottom:none; }
+
+.board-row.head{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    background:var(--surface-2);
+}
+
+.board-rank{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:20px;
+    color:var(--muted);
+}
+
+.board-row.p1 .board-rank{ color:var(--magenta); }
+.board-row.p2 .board-rank{ color:var(--cyan); }
+.board-row.p3 .board-rank{ color:var(--gold); }
+
+.board-name{ font-weight:600; font-size:17px; }
+.board-name small{ display:block; color:var(--muted); font-weight:400; font-size:13px; margin-top:2px; }
+
+.board-points{ font-family:var(--font-mono); color:var(--gold); text-align:right; }
+.board-count{ color:var(--muted); font-size:14px; text-align:right; }
+
+.empty{
+    text-align:center;
+    padding:40px;
+    color:var(--muted);
 }
 
 footer{
     text-align:center;
-    margin:40px;
-    color:#666;
+    margin:20px 20px 50px;
+    color:var(--muted);
+    font-size:13px;
+    font-family:var(--font-mono);
+}
+
+@media (max-width:640px){
+    .level{ flex-direction:column; }
+    .level img{ width:100%; height:160px; }
+    .board-row{ grid-template-columns:40px 1fr 70px; }
+    .board-count{ display:none; }
 }
 </style>
 </head>
@@ -139,155 +369,220 @@ footer{
 <body>
 
 <header>
-<h1>🏆 FriendGroupList</h1>
-<p>The hardest friend-made Geometry Dash levels.</p>
+    <div class="eyebrow">Friend-verified &middot; Hardest to easiest</div>
+    <h1>FriendGroupList</h1>
+    <p>The hardest friend-made Geometry Dash levels, ranked by the crew that beat them.</p>
 </header>
 
-<div class="stats">
-    <div class="stat">
-        <h2 id="levelCount">0</h2>
-        Levels
-    </div>
+<div class="spike-row" id="spikeRow"></div>
 
-    <div class="stat">
-        <h2 id="playerCount">0</h2>
-        Players
-    </div>
-
-    <div class="stat">
-        <h2 id="victorCount">0</h2>
-        First Victors
-    </div>
+<div class="tabs">
+    <button class="tab-btn active" data-view="levels">Levels</button>
+    <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
 </div>
 
-<div class="container" id="list"></div>
+<div class="stats">
+    <div class="stat"><h2 id="levelCount">0</h2><span>Levels</span></div>
+    <div class="stat"><h2 id="playerCount">0</h2><span>Players</span></div>
+    <div class="stat"><h2 id="victorCount">0</h2><span>First Victors</span></div>
+</div>
 
-<footer>
-FriendGroupList © 2026
-</footer>
+<div class="container">
+
+    <div class="view active" id="levels-view"></div>
+
+    <div class="view" id="leaderboard-view">
+        <div class="board" id="board"></div>
+    </div>
+
+</div>
+
+<footer>FriendGroupList © 2026 &mdash; built by the crew, for the crew</footer>
 
 <script>
 
 const levels = [
-
-{
-    rank:2,
-    name:"Blue Overdrive",
-    creator:"Useryipee",
-    verifier:"Cactusman9919",
-    firstVictor:"",
-    victors:[],
-    points:300,
-    image:"Screenshot 2026-05-10 131531.png"
-},
-
-{
-    rank:3,
-    name:"Dingus Unleashed",
-    creator:"Useryipee",
-    verifier:"Useryipee",
-    firstVictor:"Sirjefferson",
-    victors:[
-        "Sirjefferson",
-        "Cactusman9919"
-    ],
-    points:250,
-    image:"Screenshot 2026-07-07 171312.png"
-}
-
-];
-
     {
-    rank:1,
-    name:"Hearing Loss",
-    creator:"Useryipee",
-    verifier:"Cactusman9919",
-    firstVictor:"",
-    victors:[
-        "",
-    ],
-    points:200,
-    image:"Screenshot 2026-07-08 214231.png"
-}
-
+        rank:1,
+        name:"Hearing Loss",
+        creator:"Useryipee",
+        verifier:"Cactusman9919",
+        firstVictor:"",
+        victors:[],
+        points:400,
+        image:"Screenshot 2026-07-08 214231.png"
+    },
+    {
+        rank:2,
+        name:"Blue Overdrive",
+        creator:"Useryipee",
+        verifier:"Cactusman9919",
+        firstVictor:"",
+        victors:[],
+        points:300,
+        image:"Screenshot 2026-05-10 131531.png"
+    },
+    {
+        rank:3,
+        name:"Dingus Unleashed",
+        creator:"Useryipee",
+        verifier:"Useryipee",
+        firstVictor:"Sirjefferson",
+        victors:[
+            "Sirjefferson",
+            "Cactusman9919"
+        ],
+        points:250,
+        image:"Screenshot 2026-07-07 171312.png"
+    }
 ];
 
-// Stats
+// ---------- Signature spike divider ----------
+
+const spikeRow = document.getElementById("spikeRow");
+for(let i=0;i<50;i++){
+    const s = document.createElement("div");
+    s.className = "spike";
+    spikeRow.appendChild(s);
+}
+
+// ---------- Stats ----------
+
 document.getElementById("levelCount").textContent = levels.length;
 
-const players = new Set();
-
+const allPlayers = new Set();
 levels.forEach(level=>{
-    if(level.creator) players.add(level.creator);
-    if(level.verifier) players.add(level.verifier);
-    if(level.firstVictor) players.add(level.firstVictor);
-
-    level.victors.forEach(v=>{
-        if(v) players.add(v);
-    });
+    if(level.creator) allPlayers.add(level.creator);
+    if(level.verifier) allPlayers.add(level.verifier);
+    if(level.firstVictor) allPlayers.add(level.firstVictor);
+    level.victors.forEach(v=>{ if(v) allPlayers.add(v); });
 });
 
-document.getElementById("playerCount").textContent = players.size;
-
+document.getElementById("playerCount").textContent = allPlayers.size;
 document.getElementById("victorCount").textContent =
-levels.filter(level=>level.firstVictor !== "").length;
+    levels.filter(level=>level.firstVictor !== "").length;
 
+// ---------- Difficulty rating (derived from points, 1-10 spikes) ----------
 
-// Cards
-const container=document.getElementById("list");
+function ratingFor(points){
+    return Math.max(1, Math.min(10, Math.round(points / 50)));
+}
+
+function tierFor(rank){
+    if(rank === 1) return "tier-1";
+    if(rank === 2) return "tier-2";
+    if(rank === 3) return "tier-3";
+    return "";
+}
+
+// ---------- Level cards ----------
+
+const levelsView = document.getElementById("levels-view");
 
 levels.forEach(level=>{
+    const card = document.createElement("div");
+    card.className = `level ${tierFor(level.rank)}`;
 
-const card=document.createElement("div");
-card.className="level";
+    const rating = ratingFor(level.points);
+    let spikesHtml = "";
+    for(let i=1;i<=10;i++){
+        spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
+    }
 
-card.innerHTML=`
+    const victorsList = level.victors.filter(v=>v).length
+        ? level.victors.filter(v=>v).join(", ")
+        : "None yet";
 
-<img src="${level.image}" onerror="this.src='https://placehold.co/320x180?text=No+Image'">
+    card.innerHTML = `
+        <img src="${level.image}" onerror="this.src='https://placehold.co/220x160/12152a/2fe8ff?text=No+Image'">
+        <div class="info">
+            <div class="level-top">
+                <div class="rank">#${level.rank}</div>
+                <div class="name">${level.name}</div>
+            </div>
+            <div class="creator">Created by <b>${level.creator}</b></div>
+            <div class="rating">
+                <div class="spikes">${spikesHtml}</div>
+                <div class="pts">${level.points} PTS</div>
+            </div>
+            <div class="details">
+                <p><b>Verifier:</b> ${level.verifier || "None"}</p>
+                <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
+                <p><b>Victors:</b> ${victorsList}</p>
+                <div class="badges">
+                    <span class="badge">RANK #${level.rank}</span>
+                    <span class="badge">VERIFIED</span>
+                    ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                </div>
+            </div>
+        </div>
+    `;
 
-<div class="info">
-
-<div class="rank">#${level.rank}</div>
-
-<div class="name">${level.name}</div>
-
-<div class="creator">
-Created by <b>${level.creator}</b>
-</div>
-
-<div class="points">
-⭐ ${level.points} Points
-</div>
-
-<div class="details">
-
-<p><b>Verifier:</b> ${level.verifier || "None"}</p>
-
-<p><b>First Victor:</b> ${level.firstVictor || "None Yet"}</p>
-
-<p><b>Victors:</b> ${
-level.victors.length ? level.victors.join(", ") : "None"
-}</p>
-
-<br>
-
-<span class="badge">#${level.rank}</span>
-<span class="badge">✔ Verified</span>
-
-${level.firstVictor ? '<span class="badge">🏆 First Victor</span>' : ""}
-
-</div>
-
-</div>
-
-`;
-
-card.addEventListener("click",()=>{
-    card.classList.toggle("open");
+    card.addEventListener("click", ()=> card.classList.toggle("open"));
+    levelsView.appendChild(card);
 });
 
-container.appendChild(card);
+// ---------- Leaderboard ----------
 
+function computeLeaderboard(){
+    const map = new Map();
+
+    levels.forEach(level=>{
+        const completers = new Set();
+        if(level.verifier) completers.add(level.verifier);
+        if(level.firstVictor) completers.add(level.firstVictor);
+        level.victors.forEach(v=>{ if(v) completers.add(v); });
+
+        completers.forEach(player=>{
+            if(!map.has(player)){
+                map.set(player, { name:player, points:0, count:0, hardestRank:Infinity, hardestName:"" });
+            }
+            const entry = map.get(player);
+            entry.points += level.points;
+            entry.count += 1;
+            if(level.rank < entry.hardestRank){
+                entry.hardestRank = level.rank;
+                entry.hardestName = level.name;
+            }
+        });
+    });
+
+    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
+}
+
+const board = document.getElementById("board");
+const ranked = computeLeaderboard();
+
+if(ranked.length === 0){
+    board.innerHTML = `<div class="empty">No completions logged yet.</div>`;
+} else {
+    board.innerHTML = `
+        <div class="board-row head">
+            <div>#</div>
+            <div>Player</div>
+            <div style="text-align:right">Points</div>
+            <div style="text-align:right">Levels</div>
+        </div>
+    ` + ranked.map((p,i)=>`
+        <div class="board-row p${i+1}">
+            <div class="board-rank">${i+1}</div>
+            <div class="board-name">${p.name}<small>Hardest: ${p.hardestName}</small></div>
+            <div class="board-points">${p.points}</div>
+            <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
+        </div>
+    `).join("");
+}
+
+// ---------- Tabs ----------
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+        document.getElementById(`${btn.dataset.view}-view`).classList.add("active");
+    });
 });
 
 </script>
