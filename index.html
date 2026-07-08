@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
@@ -29,8 +29,8 @@ header h1{
 }
 
 header p{
-    opacity:.9;
     margin-top:10px;
+    opacity:.9;
 }
 
 .stats{
@@ -66,8 +66,8 @@ header p{
     margin-bottom:20px;
     border-radius:12px;
     overflow:hidden;
-    transition:.25s;
     cursor:pointer;
+    transition:.25s;
 }
 
 .level:hover{
@@ -89,18 +89,18 @@ header p{
 
 .rank{
     color:gold;
-    font-size:35px;
+    font-size:34px;
     font-weight:bold;
 }
 
 .name{
-    font-size:32px;
+    font-size:30px;
     margin-top:5px;
 }
 
 .creator{
-    margin-top:12px;
-    color:#aaa;
+    margin-top:10px;
+    color:#bbb;
 }
 
 .points{
@@ -125,13 +125,13 @@ header p{
     background:#333;
     padding:5px 10px;
     border-radius:8px;
-    margin:5px;
+    margin:5px 5px 0 0;
 }
 
 footer{
-    margin:50px;
     text-align:center;
-    color:#777;
+    margin:40px;
+    color:#666;
 }
 </style>
 </head>
@@ -144,22 +144,20 @@ footer{
 </header>
 
 <div class="stats">
+    <div class="stat">
+        <h2 id="levelCount">0</h2>
+        Levels
+    </div>
 
-<div class="stat">
-<h2>1</h2>
-Levels
-</div>
+    <div class="stat">
+        <h2 id="playerCount">0</h2>
+        Players
+    </div>
 
-<div class="stat">
-<h2>3</h2>
-Players
-</div>
-
-<div class="stat">
-<h2>1</h2>
-First Victors
-</div>
-
+    <div class="stat">
+        <h2 id="victorCount">0</h2>
+        First Victors
+    </div>
 </div>
 
 <div class="container" id="list"></div>
@@ -199,84 +197,28 @@ const levels = [
 
 ];
 
-document.querySelectorAll(".stat h2")[0].textContent = levels.length;
+// Stats
+document.getElementById("levelCount").textContent = levels.length;
 
 const players = new Set();
-levels.forEach(level => {
+
+levels.forEach(level=>{
     if(level.creator) players.add(level.creator);
     if(level.verifier) players.add(level.verifier);
     if(level.firstVictor) players.add(level.firstVictor);
-    level.victors.forEach(v => {
+
+    level.victors.forEach(v=>{
         if(v) players.add(v);
     });
 });
 
-document.querySelectorAll(".stat h2")[1].textContent = players.size;
+document.getElementById("playerCount").textContent = players.size;
 
-const firstVictors = levels.filter(level => level.firstVictor !== "").length;
-document.querySelectorAll(".stat h2")[2].textContent = firstVictors;
+document.getElementById("victorCount").textContent =
+levels.filter(level=>level.firstVictor !== "").length;
 
-const container = document.getElementById("list");
 
-levels.forEach(level => {
-
-    const card = document.createElement("div");
-    card.className = "level";
-
-    card.innerHTML = `
-
-    <img src="${level.image}" onerror="this.src='https://placehold.co/320x180/333333/FFFFFF?text=No+Image'">
-
-    <div class="info">
-
-        <div class="rank">#${level.rank}</div>
-
-        <div class="name">${level.name}</div>
-
-        <div class="creator">
-            Created by <b>${level.creator}</b>
-        </div>
-
-        <div class="points">
-            ⭐ ${level.points} Points
-        </div>
-
-        <div class="details">
-
-            <p><b>Verifier:</b> ${level.verifier || "None"}</p>
-
-            <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
-
-            <p><b>Victors:</b> ${
-                level.victors.length ? level.victors.join(", ") : "None"
-            }</p>
-
-            <br>
-
-            <span class="badge">#${level.rank}</span>
-            <span class="badge">✔ Verified</span>
-
-            ${
-                level.firstVictor
-                ? '<span class="badge">🏆 First Victor</span>'
-                : ""
-            }
-
-        </div>
-
-    </div>
-
-    `;
-
-    card.onclick = () => {
-        card.classList.toggle("open");
-    };
-
-    container.appendChild(card);
-
-});
-
-</script>
+// Cards
 const container=document.getElementById("list");
 
 levels.forEach(level=>{
@@ -286,7 +228,7 @@ card.className="level";
 
 card.innerHTML=`
 
-<img src="${level.image}" onerror="this.src='https://placehold.co/320x180/333333/FFFFFF?text=Upload+Image'">
+<img src="${level.image}" onerror="this.src='https://placehold.co/320x180?text=No+Image'">
 
 <div class="info">
 
@@ -304,17 +246,20 @@ Created by <b>${level.creator}</b>
 
 <div class="details">
 
-<p><b>Verifier:</b> ${level.verifier}</p>
+<p><b>Verifier:</b> ${level.verifier || "None"}</p>
 
-<p><b>First Victor:</b> ${level.firstVictor}</p>
+<p><b>First Victor:</b> ${level.firstVictor || "None Yet"}</p>
 
-<p><b>Victors:</b> ${level.victors.join(", ")}</p>
+<p><b>Victors:</b> ${
+level.victors.length ? level.victors.join(", ") : "None"
+}</p>
 
 <br>
 
-<span class="badge">🥇 Top 1</span>
+<span class="badge">#${level.rank}</span>
 <span class="badge">✔ Verified</span>
-<span class="badge">🏆 First Victor</span>
+
+${level.firstVictor ? '<span class="badge">🏆 First Victor</span>' : ""}
 
 </div>
 
@@ -322,9 +267,9 @@ Created by <b>${level.creator}</b>
 
 `;
 
-card.onclick=()=>{
-card.classList.toggle("open");
-};
+card.addEventListener("click",()=>{
+    card.classList.toggle("open");
+});
 
 container.appendChild(card);
 
