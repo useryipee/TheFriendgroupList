@@ -131,6 +131,35 @@ header p{
     border-color:transparent;
 }
 
+.subtabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:24px;
+}
+
+.subtab-btn{
+    font-family:var(--font-display);
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:transparent;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:8px 20px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.subtab-btn:hover{ color:var(--text); border-color:var(--magenta); }
+
+.subtab-btn.active{
+    color:#1a0410;
+    background:linear-gradient(90deg,var(--magenta),#ff7fb0);
+    border-color:transparent;
+}
+
 /* ---------- Stats ---------- */
 
 .stats{
@@ -167,6 +196,9 @@ header p{
 
 .view{ display:none; }
 .view.active{ display:block; }
+
+.board-view{ display:none; }
+.board-view.active{ display:block; }
 
 .container{
     width:92%;
@@ -298,7 +330,7 @@ header p{
 
 .badge.win{ border-color:var(--gold); color:var(--gold); }
 
-/* ---------- Leaderboard ---------- */
+/* ---------- Leaderboards ---------- */
 
 .board{
     background:var(--surface);
@@ -309,7 +341,7 @@ header p{
 
 .board-row{
     display:grid;
-    grid-template-columns:50px 1fr 80px 70px 70px 100px;
+    grid-template-columns:60px 1fr 100px 120px;
     align-items:center;
     padding:16px 22px;
     border-bottom:1px solid var(--border);
@@ -342,8 +374,9 @@ header p{
 .board-name small{ display:block; color:var(--muted); font-weight:400; font-size:13px; margin-top:2px; }
 
 .board-points{ font-family:var(--font-mono); color:var(--gold); text-align:right; font-weight:600; }
-.board-sub{ font-family:var(--font-mono); color:var(--muted); text-align:right; font-size:14px; }
 .board-count{ color:var(--muted); font-size:14px; text-align:right; }
+
+.board.creators .board-points{ color:var(--magenta); }
 
 .empty{
     text-align:center;
@@ -449,7 +482,7 @@ header p{
 
 .tm-heading{
     text-align:center;
-    margin:22px 0 30px;
+    margin:22px 0 24px;
     font-family:var(--font-mono);
     font-size:12px;
     letter-spacing:2px;
@@ -509,7 +542,7 @@ footer{
     .level{ flex-direction:column; }
     .level img{ width:100%; height:160px; }
     .board-row{ grid-template-columns:40px 1fr 70px; }
-    .board-sub, .board-count{ display:none; }
+    .board-count{ display:none; }
 }
 </style>
 </head>
@@ -541,7 +574,16 @@ footer{
     <div class="view active" id="levels-view"></div>
 
     <div class="view" id="leaderboard-view">
-        <div class="board" id="board"></div>
+        <div class="subtabs">
+            <button class="subtab-btn active" data-board="players">Players</button>
+            <button class="subtab-btn" data-board="creators">Creators</button>
+        </div>
+        <div class="board-view active" data-board="players">
+            <div class="board" id="board-players"></div>
+        </div>
+        <div class="board-view" data-board="creators">
+            <div class="board creators" id="board-creators"></div>
+        </div>
     </div>
 
     <div class="view" id="timemachine-view">
@@ -553,8 +595,16 @@ footer{
                 <div id="tm-levels-view"></div>
             </div>
             <div>
-                <div class="tm-subhead">Leaderboard</div>
-                <div class="board" id="tm-board"></div>
+                <div class="subtabs" style="margin-bottom:14px;">
+                    <button class="subtab-btn tm-subtab active" data-board="players">Players</button>
+                    <button class="subtab-btn tm-subtab" data-board="creators">Creators</button>
+                </div>
+                <div class="board-view active" data-board="players">
+                    <div class="board" id="tm-board-players"></div>
+                </div>
+                <div class="board-view" data-board="creators">
+                    <div class="board creators" id="tm-board-creators"></div>
+                </div>
             </div>
         </div>
         <div class="tm-note">Past dates are locked history. Today's snapshot always reflects the current list, and a new day locks in automatically once you host this page and revisit it.</div>
@@ -629,20 +679,20 @@ function ratingFor(points){
     return Math.max(1, Math.min(10, Math.round(points / 50)));
 }
 
-// Creator points are their own scale, not a mirror of completion points.
-// They scale with the SQUARE of difficulty, so building something hard
-// pays off disproportionately more than building something easy -
-// e.g. rating 10 is worth 2500, rating 5 is worth 625, rating 1 is worth 25.
-function creatorPointsFor(points){
-    const rating = ratingFor(points);
-    return rating * rating * 25;
-}
-
 function tierFor(rank){
     if(rank === 1) return "tier-1";
     if(rank === 2) return "tier-2";
     if(rank === 3) return "tier-3";
     return "";
+}
+
+// Creator points are their own scale, not completion points. They scale
+// with the SQUARE of difficulty, so building something hard is worth
+// disproportionately more than building something easy:
+// rating 1 -> 25, rating 5 -> 625, rating 10 -> 2500.
+function creatorPointsFor(points){
+    const rating = ratingFor(points);
+    return rating * rating * 25;
 }
 
 // ---------- Reusable renderers (used by Levels tab AND Time Machine) ----------
@@ -707,15 +757,10 @@ function renderLevelCards(container, levelsData){
     });
 }
 
-function computeLeaderboard(levelsData){
-    const map = new Map();
+// ---------- Leaderboard math: two independent boards ----------
 
-    function ensure(player){
-        if(!map.has(player)){
-            map.set(player, { name:player, points:0, creatorPoints:0, count:0, builtCount:0, hardestRank:Infinity, hardestName:"" });
-        }
-        return map.get(player);
-    }
+function computePlayerLeaderboard(levelsData){
+    const map = new Map();
 
     levelsData.filter(l=>!l.blank).forEach(level=>{
         const completers = new Set();
@@ -724,7 +769,10 @@ function computeLeaderboard(levelsData){
         level.victors.forEach(v=>{ if(v) completers.add(v); });
 
         completers.forEach(player=>{
-            const entry = ensure(player);
+            if(!map.has(player)){
+                map.set(player, { name:player, points:0, count:0, hardestRank:Infinity, hardestName:"" });
+            }
+            const entry = map.get(player);
             entry.points += level.points;
             entry.count += 1;
             if(level.rank < entry.hardestRank){
@@ -732,21 +780,34 @@ function computeLeaderboard(levelsData){
                 entry.hardestName = level.name;
             }
         });
+    });
 
-        if(level.creator){
-            const entry = ensure(level.creator);
-            entry.creatorPoints += creatorPointsFor(level.points);
-            entry.builtCount += 1;
+    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
+}
+
+function computeCreatorLeaderboard(levelsData){
+    const map = new Map();
+
+    levelsData.filter(l=>!l.blank).forEach(level=>{
+        if(!level.creator) return;
+
+        if(!map.has(level.creator)){
+            map.set(level.creator, { name:level.creator, points:0, count:0, hardestRank:Infinity, hardestName:"" });
+        }
+        const entry = map.get(level.creator);
+        entry.points += creatorPointsFor(level.points);
+        entry.count += 1;
+        if(level.rank < entry.hardestRank){
+            entry.hardestRank = level.rank;
+            entry.hardestName = level.name;
         }
     });
 
-    return Array.from(map.values())
-        .map(e => ({ ...e, total: e.points + e.creatorPoints }))
-        .sort((a,b)=> b.total - a.total);
+    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
 }
 
-function renderBoard(container, levelsData){
-    const ranked = computeLeaderboard(levelsData);
+function renderPlayerBoard(container, levelsData){
+    const ranked = computePlayerLeaderboard(levelsData);
 
     if(ranked.length === 0){
         container.innerHTML = `<div class="empty">No completions logged yet.</div>`;
@@ -757,39 +818,55 @@ function renderBoard(container, levelsData){
         <div class="board-row head">
             <div>#</div>
             <div>Player</div>
-            <div style="text-align:right">Total</div>
-            <div style="text-align:right">Won</div>
-            <div style="text-align:right">Built</div>
+            <div style="text-align:right">Points</div>
             <div style="text-align:right">Levels</div>
         </div>
-    ` + ranked.map((p,i)=>{
-        const sublabel = p.hardestName
-            ? `Hardest beaten: ${p.hardestName}`
-            : (p.builtCount ? `${p.builtCount} level${p.builtCount === 1 ? "" : "s"} built` : "");
-
-        return `
+    ` + ranked.map((p,i)=>`
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>${sublabel}</small></div>
-            <div class="board-points">${p.total}</div>
-            <div class="board-sub">${p.points}</div>
-            <div class="board-sub">${p.creatorPoints}</div>
+            <div class="board-name">${p.name}<small>Hardest beaten: ${p.hardestName}</small></div>
+            <div class="board-points">${p.points}</div>
             <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
         </div>
-    `;
-    }).join("");
+    `).join("");
+}
+
+function renderCreatorBoard(container, levelsData){
+    const ranked = computeCreatorLeaderboard(levelsData);
+
+    if(ranked.length === 0){
+        container.innerHTML = `<div class="empty">No levels built yet.</div>`;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="board-row head">
+            <div>#</div>
+            <div>Creator</div>
+            <div style="text-align:right">Points</div>
+            <div style="text-align:right">Built</div>
+        </div>
+    ` + ranked.map((p,i)=>`
+        <div class="board-row p${i+1}">
+            <div class="board-rank">${i+1}</div>
+            <div class="board-name">${p.name}<small>Hardest built: ${p.hardestName}</small></div>
+            <div class="board-points">${p.points}</div>
+            <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
+        </div>
+    `).join("");
 }
 
 // ---------- Render the live Levels + Leaderboard tabs ----------
 
 renderLevelCards(document.getElementById("levels-view"), levels);
-renderBoard(document.getElementById("board"), levels);
+renderPlayerBoard(document.getElementById("board-players"), levels);
+renderCreatorBoard(document.getElementById("board-creators"), levels);
 
 // ---------- Time Machine: build the snapshot list ----------
 // Seed history (hardcoded, locked) + anything saved from previous visits
 // (localStorage) + today's snapshot, which always mirrors the live data
 // above. This only persists across visits once the page is actually
-// hosted somewhere real — a Claude.ai preview sandbox won't remember it
+// hosted somewhere real - a Claude.ai preview sandbox won't remember it
 // between sessions, but a real deployed copy of this file will.
 
 const STORAGE_KEY = "fgl_time_machine_snapshots_v2";
@@ -829,7 +906,8 @@ const snapshots = Array.from(byDate.values()).sort((a,b)=> a.date.localeCompare(
 
 const timelineEl = document.getElementById("timeline");
 const tmLevelsView = document.getElementById("tm-levels-view");
-const tmBoard = document.getElementById("tm-board");
+const tmBoardPlayers = document.getElementById("tm-board-players");
+const tmBoardCreators = document.getElementById("tm-board-creators");
 const tmDateLabel = document.getElementById("tm-date-label");
 
 function formatDate(iso){
@@ -840,7 +918,8 @@ function formatDate(iso){
 function showSnapshot(snapshot, isLatest){
     tmDateLabel.textContent = isLatest ? `${formatDate(snapshot.date)} (Today)` : formatDate(snapshot.date);
     renderLevelCards(tmLevelsView, snapshot.levels);
-    renderBoard(tmBoard, snapshot.levels);
+    renderPlayerBoard(tmBoardPlayers, snapshot.levels);
+    renderCreatorBoard(tmBoardCreators, snapshot.levels);
 
     document.querySelectorAll(".timeline-node").forEach(n=>{
         n.classList.toggle("active", n.dataset.date === snapshot.date);
@@ -873,6 +952,21 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
 
         document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
         document.getElementById(`${btn.dataset.view}-view`).classList.add("active");
+    });
+});
+
+// ---------- Sub-tabs (Players vs Creators), shared by Leaderboard + Time Machine ----------
+
+document.querySelectorAll(".subtab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        const group = btn.closest(".view");
+
+        group.querySelectorAll(".subtab-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+
+        group.querySelectorAll(".board-view").forEach(v=>{
+            v.classList.toggle("active", v.dataset.board === btn.dataset.board);
+        });
     });
 });
 
