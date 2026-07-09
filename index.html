@@ -106,6 +106,7 @@ header p{
     justify-content:center;
     gap:12px;
     margin:32px 20px 0;
+    flex-wrap:wrap;
 }
 
 .tab-btn{
@@ -384,12 +385,123 @@ header p{
     color:var(--muted);
 }
 
+/* ---------- Time Machine ---------- */
+
+.timeline{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    position:relative;
+    margin:6px 20px 8px;
+    padding-top:12px;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    top:19px;
+    left:8%;
+    right:8%;
+    height:2px;
+    background:var(--border);
+    z-index:0;
+}
+
+.timeline-node{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    padding:0 22px;
+    background:var(--bg);
+}
+
+.timeline-node .dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:var(--surface-2);
+    border:2px solid var(--border);
+    transition:.2s;
+}
+
+.timeline-node:hover .dot{ border-color:var(--cyan); }
+
+.timeline-node.active .dot{
+    background:var(--cyan);
+    border-color:var(--cyan);
+    box-shadow:0 0 14px rgba(47,232,255,0.7);
+}
+
+.timeline-node .label{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:1px;
+}
+
+.timeline-node.active .label{ color:var(--text); }
+
+.tm-heading{
+    text-align:center;
+    margin:22px 0 30px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--muted);
+}
+
+.tm-heading b{
+    font-family:var(--font-display);
+    font-size:16px;
+    letter-spacing:0;
+    text-transform:none;
+    color:var(--cyan);
+    display:block;
+    margin-top:6px;
+}
+
+.tm-subhead{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:14px;
+}
+
+.tm-columns{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:28px;
+    align-items:start;
+}
+
+.tm-columns .level{ margin-bottom:14px; }
+
+.tm-note{
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    margin-top:30px;
+}
+
 footer{
     text-align:center;
     margin:20px 20px 50px;
     color:var(--muted);
     font-size:13px;
     font-family:var(--font-mono);
+}
+
+@media (max-width:800px){
+    .tm-columns{ grid-template-columns:1fr; }
 }
 
 @media (max-width:640px){
@@ -414,6 +526,7 @@ footer{
 <div class="tabs">
     <button class="tab-btn active" data-view="levels">Levels</button>
     <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
+    <button class="tab-btn" data-view="timemachine">Time Machine</button>
 </div>
 
 <div class="stats">
@@ -430,6 +543,22 @@ footer{
         <div class="board" id="board"></div>
     </div>
 
+    <div class="view" id="timemachine-view">
+        <div class="timeline" id="timeline"></div>
+        <div class="tm-heading">Viewing snapshot<b id="tm-date-label"></b></div>
+        <div class="tm-columns">
+            <div>
+                <div class="tm-subhead">Rankings</div>
+                <div id="tm-levels-view"></div>
+            </div>
+            <div>
+                <div class="tm-subhead">Leaderboard</div>
+                <div class="board" id="tm-board"></div>
+            </div>
+        </div>
+        <div class="tm-note">Past dates are locked history. Today's snapshot always reflects the current list, and a new day locks in automatically once you host this page and revisit it.</div>
+    </div>
+
 </div>
 
 <footer>FriendGroupList © 2026 &mdash; built by the crew, for the crew</footer>
@@ -437,68 +566,39 @@ footer{
 <script>
 
 const levels = [
+    { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
+    { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
+    { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
+    { rank:4, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"", victors:[], points:200, image:"Screenshot 2026-07-09 104405.png" },
+    { rank:5, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
+    { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:50, image:"Screenshot 2026-07-07 171312.png" }
+];
+
+// ---------- Time Machine: hardcoded seed history ----------
+// Reconstructed from the actual placement history. Each entry is the
+// FINAL state of the list at the end of that date. From today onward,
+// new snapshots are captured automatically further down this file.
+const SEED_SNAPSHOTS = [
     {
-        rank:1,
-        name:"Hearing Loss",
-        creator:"Useryipee",
-        verifier:"Cactusman9919",
-        firstVictor:"",
-        victors:[],
-        points:400,
-        image:"Screenshot 2026-07-08 214231.png"
+        date:"2026-07-07",
+        levels:[
+            { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
+            { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
+            { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
+            { rank:4, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
+            { rank:5, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:50, image:"Screenshot 2026-07-07 171312.png" }
+        ]
     },
     {
-        rank:2,
-        name:"Blue Overdrive",
-        creator:"Useryipee",
-        verifier:"Cactusman9919",
-        firstVictor:"",
-        victors:[],
-        points:300,
-        image:"Screenshot 2026-05-10 131531.png"
-    },
-    {
-        rank:3,
-        name:"Dingus Hell Infinity",
-        creator:"Cactusman9919",
-        verifier:"Cactusman9919",
-        firstVictor:"",
-        victors:[],
-        points:250,
-        image:"Screenshot 2026-07-08 221643.png"
-    },
-        {
-        rank:4,
-        name:"Easy FGL Points",
-        creator:"Useryipee",
-        verifier:"Useryipee",
-        firstVictor:"",
-        victors:[],
-        points:200,
-        image:"Screenshot 2026-07-09 104405.png"
-    },
-    {
-        rank:4,
-        name:"Dingus Evil Brother",
-        creator:"Cactusman9919",
-        verifier:"Cactusman9919",
-        firstVictor:"",
-        victors:[],
-        points:100,
-        image:"Screenshot 2026-07-08 221611.png"
-    },
-    {
-        rank:5,
-        name:"Dingus Unleashed",
-        creator:"Useryipee",
-        verifier:"Useryipee",
-        firstVictor:"Sirjefferson",
-        victors:[
-            "Sirjefferson",
-            "Cactusman9919"
-        ],
-        points:50,
-        image:"Screenshot 2026-07-07 171312.png"
+        date:"2026-07-08",
+        levels:[
+            { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
+            { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
+            { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
+            { rank:4, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"", victors:[], points:200, image:"Screenshot 2026-07-09 104405.png" },
+            { rank:5, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
+            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:50, image:"Screenshot 2026-07-07 171312.png" }
+        ]
     }
 ];
 
@@ -511,7 +611,7 @@ for(let i=0;i<50;i++){
     spikeRow.appendChild(s);
 }
 
-// ---------- Stats ----------
+// ---------- Stats (always reflect the live/current list) ----------
 
 document.getElementById("levelCount").textContent = levels.filter(l=>!l.blank).length;
 
@@ -540,72 +640,72 @@ function tierFor(rank){
     return "";
 }
 
-// ---------- Level cards ----------
+// ---------- Reusable renderers (used by Levels tab AND Time Machine) ----------
 
-const levelsView = document.getElementById("levels-view");
+function renderLevelCards(container, levelsData){
+    container.innerHTML = "";
 
-levels.forEach(level=>{
-    const card = document.createElement("div");
+    levelsData.forEach(level=>{
+        const card = document.createElement("div");
 
-    if(level.blank){
-        card.className = "level slot";
+        if(level.blank){
+            card.className = "level slot";
+            card.innerHTML = `
+                <div class="slot-inner">
+                    <div class="rank">#${level.rank}</div>
+                    <div class="slot-label">Open slot &mdash; awaiting submission</div>
+                </div>
+            `;
+            container.appendChild(card);
+            return;
+        }
+
+        card.className = `level ${tierFor(level.rank)}`;
+
+        const rating = ratingFor(level.points);
+        let spikesHtml = "";
+        for(let i=1;i<=10;i++){
+            spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
+        }
+
+        const victorsList = level.victors.filter(v=>v).length
+            ? level.victors.filter(v=>v).join(", ")
+            : "None yet";
+
         card.innerHTML = `
-            <div class="slot-inner">
-                <div class="rank">#${level.rank}</div>
-                <div class="slot-label">Open slot &mdash; awaiting submission</div>
-            </div>
-        `;
-        levelsView.appendChild(card);
-        return;
-    }
-
-    card.className = `level ${tierFor(level.rank)}`;
-
-    const rating = ratingFor(level.points);
-    let spikesHtml = "";
-    for(let i=1;i<=10;i++){
-        spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
-    }
-
-    const victorsList = level.victors.filter(v=>v).length
-        ? level.victors.filter(v=>v).join(", ")
-        : "None yet";
-
-    card.innerHTML = `
-        <img src="${level.image}" onerror="this.src='https://placehold.co/220x160/12152a/2fe8ff?text=No+Image'">
-        <div class="info">
-            <div class="level-top">
-                <div class="rank">#${level.rank}</div>
-                <div class="name">${level.name}</div>
-            </div>
-            <div class="creator">Created by <b>${level.creator}</b></div>
-            <div class="rating">
-                <div class="spikes">${spikesHtml}</div>
-                <div class="pts">${level.points} PTS</div>
-            </div>
-            <div class="details">
-                <p><b>Verifier:</b> ${level.verifier || "None"}</p>
-                <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
-                <p><b>Victors:</b> ${victorsList}</p>
-                <div class="badges">
-                    <span class="badge">RANK #${level.rank}</span>
-                    <span class="badge">VERIFIED</span>
-                    ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+            <img src="${level.image}" onerror="this.src='https://placehold.co/220x160/12152a/2fe8ff?text=No+Image'">
+            <div class="info">
+                <div class="level-top">
+                    <div class="rank">#${level.rank}</div>
+                    <div class="name">${level.name}</div>
+                </div>
+                <div class="creator">Created by <b>${level.creator}</b></div>
+                <div class="rating">
+                    <div class="spikes">${spikesHtml}</div>
+                    <div class="pts">${level.points} PTS</div>
+                </div>
+                <div class="details">
+                    <p><b>Verifier:</b> ${level.verifier || "None"}</p>
+                    <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
+                    <p><b>Victors:</b> ${victorsList}</p>
+                    <div class="badges">
+                        <span class="badge">RANK #${level.rank}</span>
+                        <span class="badge">VERIFIED</span>
+                        ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
-    card.addEventListener("click", ()=> card.classList.toggle("open"));
-    levelsView.appendChild(card);
-});
+        card.addEventListener("click", ()=> card.classList.toggle("open"));
+        container.appendChild(card);
+    });
+}
 
-// ---------- Leaderboard ----------
-
-function computeLeaderboard(){
+function computeLeaderboard(levelsData){
     const map = new Map();
 
-    levels.filter(l=>!l.blank).forEach(level=>{
+    levelsData.filter(l=>!l.blank).forEach(level=>{
         const completers = new Set();
         if(level.verifier) completers.add(level.verifier);
         if(level.firstVictor) completers.add(level.firstVictor);
@@ -628,13 +728,15 @@ function computeLeaderboard(){
     return Array.from(map.values()).sort((a,b)=> b.points - a.points);
 }
 
-const board = document.getElementById("board");
-const ranked = computeLeaderboard();
+function renderBoard(container, levelsData){
+    const ranked = computeLeaderboard(levelsData);
 
-if(ranked.length === 0){
-    board.innerHTML = `<div class="empty">No completions logged yet.</div>`;
-} else {
-    board.innerHTML = `
+    if(ranked.length === 0){
+        container.innerHTML = `<div class="empty">No completions logged yet.</div>`;
+        return;
+    }
+
+    container.innerHTML = `
         <div class="board-row head">
             <div>#</div>
             <div>Player</div>
@@ -650,6 +752,90 @@ if(ranked.length === 0){
         </div>
     `).join("");
 }
+
+// ---------- Render the live Levels + Leaderboard tabs ----------
+
+renderLevelCards(document.getElementById("levels-view"), levels);
+renderBoard(document.getElementById("board"), levels);
+
+// ---------- Time Machine: build the snapshot list ----------
+// Seed history (hardcoded, locked) + anything saved from previous visits
+// (localStorage) + today's snapshot, which always mirrors the live data
+// above. This only persists across visits once the page is actually
+// hosted somewhere real — a Claude.ai preview sandbox won't remember it
+// between sessions, but a real deployed copy of this file will.
+
+const STORAGE_KEY = "fgl_time_machine_snapshots";
+
+function todayISO(){
+    return new Date().toISOString().slice(0,10);
+}
+
+function loadStoredSnapshots(){
+    try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }catch(e){
+        return [];
+    }
+}
+
+function saveStoredSnapshots(list){
+    try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }catch(e){
+        // Storage unavailable in this environment - the time machine still
+        // works for this session, it just won't remember today's entry
+        // on the next visit.
+    }
+}
+
+let stored = loadStoredSnapshots();
+stored = stored.filter(s => s.date !== todayISO()); // today's entry is always rebuilt from the live list
+stored.push({ date: todayISO(), levels: JSON.parse(JSON.stringify(levels)) });
+saveStoredSnapshots(stored);
+
+const byDate = new Map();
+[...SEED_SNAPSHOTS, ...stored].forEach(s => byDate.set(s.date, s));
+const snapshots = Array.from(byDate.values()).sort((a,b)=> a.date.localeCompare(b.date));
+
+// ---------- Time Machine: UI ----------
+
+const timelineEl = document.getElementById("timeline");
+const tmLevelsView = document.getElementById("tm-levels-view");
+const tmBoard = document.getElementById("tm-board");
+const tmDateLabel = document.getElementById("tm-date-label");
+
+function formatDate(iso){
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
+}
+
+function showSnapshot(snapshot, isLatest){
+    tmDateLabel.textContent = isLatest ? `${formatDate(snapshot.date)} (Today)` : formatDate(snapshot.date);
+    renderLevelCards(tmLevelsView, snapshot.levels);
+    renderBoard(tmBoard, snapshot.levels);
+
+    document.querySelectorAll(".timeline-node").forEach(n=>{
+        n.classList.toggle("active", n.dataset.date === snapshot.date);
+    });
+}
+
+snapshots.forEach((snap, i)=>{
+    const node = document.createElement("div");
+    node.className = "timeline-node";
+    node.dataset.date = snap.date;
+    const isLatest = i === snapshots.length - 1;
+
+    node.innerHTML = `
+        <span class="label">${isLatest ? "Today" : formatDate(snap.date)}</span>
+        <div class="dot"></div>
+    `;
+
+    node.addEventListener("click", ()=> showSnapshot(snap, isLatest));
+    timelineEl.appendChild(node);
+});
+
+showSnapshot(snapshots[snapshots.length - 1], true);
 
 // ---------- Tabs ----------
 
