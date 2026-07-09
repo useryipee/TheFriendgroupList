@@ -309,7 +309,7 @@ header p{
 
 .board-row{
     display:grid;
-    grid-template-columns:60px 1fr 100px 140px;
+    grid-template-columns:50px 1fr 80px 70px 70px 100px;
     align-items:center;
     padding:16px 22px;
     border-bottom:1px solid var(--border);
@@ -341,7 +341,8 @@ header p{
 .board-name{ font-weight:600; font-size:17px; }
 .board-name small{ display:block; color:var(--muted); font-weight:400; font-size:13px; margin-top:2px; }
 
-.board-points{ font-family:var(--font-mono); color:var(--gold); text-align:right; }
+.board-points{ font-family:var(--font-mono); color:var(--gold); text-align:right; font-weight:600; }
+.board-sub{ font-family:var(--font-mono); color:var(--muted); text-align:right; font-size:14px; }
 .board-count{ color:var(--muted); font-size:14px; text-align:right; }
 
 .empty{
@@ -508,7 +509,7 @@ footer{
     .level{ flex-direction:column; }
     .level img{ width:100%; height:160px; }
     .board-row{ grid-template-columns:40px 1fr 70px; }
-    .board-count{ display:none; }
+    .board-sub, .board-count{ display:none; }
 }
 </style>
 </head>
@@ -571,7 +572,7 @@ const levels = [
     { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:250, image:"Screenshot 2026-07-08 221643.png" },
     { rank:4, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815"], points:200, image:"Screenshot 2026-07-07 171312.png" },
     { rank:5, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815"], points:100, image:"Screenshot 2026-07-09 104405.png" },
-    { rank:6, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee", "Samuri815"], points:50, image:"Screenshot 2026-07-08 221611.png" }
+    { rank:6, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:50, image:"Screenshot 2026-07-08 221611.png" }
 ];
 
 // ---------- Time Machine: hardcoded seed history ----------
@@ -626,6 +627,15 @@ document.getElementById("victorCount").textContent =
 
 function ratingFor(points){
     return Math.max(1, Math.min(10, Math.round(points / 50)));
+}
+
+// Creator points are their own scale, not a mirror of completion points.
+// They scale with the SQUARE of difficulty, so building something hard
+// pays off disproportionately more than building something easy -
+// e.g. rating 10 is worth 2500, rating 5 is worth 625, rating 1 is worth 25.
+function creatorPointsFor(points){
+    const rating = ratingFor(points);
+    return rating * rating * 25;
 }
 
 function tierFor(rank){
@@ -700,6 +710,13 @@ function renderLevelCards(container, levelsData){
 function computeLeaderboard(levelsData){
     const map = new Map();
 
+    function ensure(player){
+        if(!map.has(player)){
+            map.set(player, { name:player, points:0, creatorPoints:0, count:0, builtCount:0, hardestRank:Infinity, hardestName:"" });
+        }
+        return map.get(player);
+    }
+
     levelsData.filter(l=>!l.blank).forEach(level=>{
         const completers = new Set();
         if(level.verifier) completers.add(level.verifier);
@@ -707,10 +724,7 @@ function computeLeaderboard(levelsData){
         level.victors.forEach(v=>{ if(v) completers.add(v); });
 
         completers.forEach(player=>{
-            if(!map.has(player)){
-                map.set(player, { name:player, points:0, count:0, hardestRank:Infinity, hardestName:"" });
-            }
-            const entry = map.get(player);
+            const entry = ensure(player);
             entry.points += level.points;
             entry.count += 1;
             if(level.rank < entry.hardestRank){
@@ -718,9 +732,17 @@ function computeLeaderboard(levelsData){
                 entry.hardestName = level.name;
             }
         });
+
+        if(level.creator){
+            const entry = ensure(level.creator);
+            entry.creatorPoints += creatorPointsFor(level.points);
+            entry.builtCount += 1;
+        }
     });
 
-    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
+    return Array.from(map.values())
+        .map(e => ({ ...e, total: e.points + e.creatorPoints }))
+        .sort((a,b)=> b.total - a.total);
 }
 
 function renderBoard(container, levelsData){
@@ -735,17 +757,27 @@ function renderBoard(container, levelsData){
         <div class="board-row head">
             <div>#</div>
             <div>Player</div>
-            <div style="text-align:right">Points</div>
+            <div style="text-align:right">Total</div>
+            <div style="text-align:right">Won</div>
+            <div style="text-align:right">Built</div>
             <div style="text-align:right">Levels</div>
         </div>
-    ` + ranked.map((p,i)=>`
+    ` + ranked.map((p,i)=>{
+        const sublabel = p.hardestName
+            ? `Hardest beaten: ${p.hardestName}`
+            : (p.builtCount ? `${p.builtCount} level${p.builtCount === 1 ? "" : "s"} built` : "");
+
+        return `
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>Hardest: ${p.hardestName}</small></div>
-            <div class="board-points">${p.points}</div>
+            <div class="board-name">${p.name}<small>${sublabel}</small></div>
+            <div class="board-points">${p.total}</div>
+            <div class="board-sub">${p.points}</div>
+            <div class="board-sub">${p.creatorPoints}</div>
             <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
         </div>
-    `).join("");
+    `;
+    }).join("");
 }
 
 // ---------- Render the live Levels + Leaderboard tabs ----------
