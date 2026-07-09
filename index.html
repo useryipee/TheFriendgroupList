@@ -556,7 +556,7 @@ footer{
                 <div class="board" id="tm-board"></div>
             </div>
         </div>
-        <div class="tm-note">Past dates are locked history. Today's snapshot always reflects the current list, and a new day locks in automatically once you host this page and revisit it.</div>
+        <div class="tm-note">Scores on the time machine are innacurate because i forgot them.</div>
     </div>
 
 </div>
@@ -582,11 +582,7 @@ const SEED_SNAPSHOTS = [
     {
         date:"2026-07-07",
         levels:[
-            { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
-            { rank:4, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
-            { rank:5, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:50, image:"Screenshot 2026-07-07 171312.png" }
+            { rank:1, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson"], points:50, image:"Screenshot 2026-07-07 171312.png" }
         ]
     },
     {
@@ -595,9 +591,8 @@ const SEED_SNAPSHOTS = [
             { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
             { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
             { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
-            { rank:4, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"", victors:[], points:200, image:"Screenshot 2026-07-09 104405.png" },
-            { rank:5, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
-            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:50, image:"Screenshot 2026-07-07 171312.png" }
+            { rank:4, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
+            { rank:5, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson"], points:50, image:"Screenshot 2026-07-07 171312.png" }
         ]
     }
 ];
@@ -765,7 +760,7 @@ renderBoard(document.getElementById("board"), levels);
 // hosted somewhere real — a Claude.ai preview sandbox won't remember it
 // between sessions, but a real deployed copy of this file will.
 
-const STORAGE_KEY = "fgl_time_machine_snapshots";
+const STORAGE_KEY = "fgl_time_machine_snapshots_v2";
 
 function todayISO(){
     return new Date().toISOString().slice(0,10);
