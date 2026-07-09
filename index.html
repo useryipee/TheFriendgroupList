@@ -527,104 +527,6 @@ header p{
     margin-top:30px;
 }
 
-/* ---------- Submit Record ---------- */
-
-.submit-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:32px;
-    max-width:520px;
-    margin:0 auto;
-}
-
-.submit-card h3{
-    font-family:var(--font-display);
-    font-size:20px;
-    margin-bottom:8px;
-}
-
-.submit-card .submit-sub{
-    color:var(--muted);
-    font-size:14px;
-    margin-bottom:26px;
-    line-height:1.5;
-}
-
-.form-group{
-    margin-bottom:18px;
-}
-
-.form-group label{
-    display:block;
-    font-family:var(--font-mono);
-    font-size:11px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:8px;
-}
-
-.form-group input,
-.form-group select{
-    width:100%;
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    color:var(--text);
-    font-family:var(--font-body);
-    font-size:15px;
-    padding:12px 14px;
-    border-radius:8px;
-    outline:none;
-    transition:.2s;
-}
-
-.form-group input:focus,
-.form-group select:focus{
-    border-color:var(--cyan);
-    box-shadow:0 0 0 3px rgba(47,232,255,0.15);
-}
-
-.form-group input::placeholder{ color:#5b6488; }
-
-.submit-btn{
-    width:100%;
-    font-family:var(--font-display);
-    font-size:14px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:#04121a;
-    background:linear-gradient(90deg,var(--cyan),#7fd8ff);
-    border:none;
-    padding:14px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.2s;
-    margin-top:6px;
-}
-
-.submit-btn:hover{ filter:brightness(1.08); }
-
-.submit-msg{
-    margin-top:16px;
-    font-family:var(--font-mono);
-    font-size:13px;
-    text-align:center;
-    display:none;
-}
-
-.submit-msg.error{ color:var(--magenta); display:block; }
-.submit-msg.success{ color:var(--cyan); display:block; }
-
-.submit-note{
-    margin-top:24px;
-    padding-top:20px;
-    border-top:1px solid var(--border);
-    font-size:13px;
-    color:var(--muted);
-    line-height:1.5;
-}
-
 footer{
     text-align:center;
     margin:20px 20px 50px;
@@ -642,7 +544,6 @@ footer{
     .level img{ width:100%; height:160px; }
     .board-row{ grid-template-columns:40px 1fr 70px; }
     .board-count{ display:none; }
-    .submit-card{ padding:24px 20px; }
 }
 </style>
 </head>
@@ -661,7 +562,6 @@ footer{
     <button class="tab-btn active" data-view="levels">Levels</button>
     <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
     <button class="tab-btn" data-view="timemachine">Time Machine</button>
-    <button class="tab-btn" data-view="submit">Submit Record</button>
 </div>
 
 <div class="stats">
@@ -711,40 +611,6 @@ footer{
         <div class="tm-note">A new snapshot locks in automatically every time the list actually changes - not just once per day. Past snapshots are permanent; the latest one always mirrors the current list.</div>
     </div>
 
-    <div class="view" id="submit-view">
-        <div class="submit-card">
-            <h3>Submit a Record</h3>
-            <div class="submit-sub">Got a victory on the list? Fill this out with proof and it'll be sent over for approval before it's added.</div>
-
-            <form id="recordForm">
-                <div class="form-group">
-                    <label for="subUsername">Your Username</label>
-                    <input type="text" id="subUsername" placeholder="e.g. Samuri815" autocomplete="off">
-                </div>
-
-                <div class="form-group">
-                    <label for="subLevel">Level</label>
-                    <select id="subLevel"></select>
-                </div>
-
-                <div class="form-group">
-                    <label for="subPercent">Percent Achieved</label>
-                    <input type="number" id="subPercent" min="1" max="100" placeholder="e.g. 100">
-                </div>
-
-                <div class="form-group">
-                    <label for="subProof">Proof Link</label>
-                    <input type="text" id="subProof" placeholder="YouTube / Imgur / Discord / Drive link" autocomplete="off">
-                </div>
-
-                <button type="submit" class="submit-btn">Send for Approval</button>
-                <div class="submit-msg" id="submitMsg"></div>
-            </form>
-
-            <div class="submit-note">Submitting opens your email app with everything pre-filled and addressed to the list owner. Nothing gets added to the list automatically - it's just a heads up with proof attached. The owner still checks it and updates the list by hand.</div>
-        </div>
-    </div>
-
 </div>
 
 <footer>FriendGroupList © 2026 &mdash; built by the crew, for the crew</footer>
@@ -756,9 +622,9 @@ const levels = [
     { rank:2, name:"Scroodings Unnerfed", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:275, image:"Screenshot_2026-07-09_at_7.01.24_pm.png" },
     { rank:3, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:275, image:"Screenshot 2026-07-08 214231.png" },
     { rank:4, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:250, image:"Screenshot 2026-07-08 221643.png" },
-    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:200, image:"Screenshot 2026-07-09 211050.png" },
+    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson", "Hexaprism"], points:200, image:"Screenshot 2026-07-09 211050.png" },
     { rank:6, name:"Scroodings", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:175, image:"Screenshot 2026-07-09 184717.png" },
-    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
+    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815", "Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
     { rank:8, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:150, image:"IMG_7733.png" },
     { rank:9, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:100, image:"Screenshot 2026-07-09 104405.png" },
     { rank:10, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:75, image:"Screenshot 2026-07-08 221611.png" }
@@ -1111,66 +977,6 @@ snapshots.forEach((snap, i)=>{
 });
 
 showSnapshot(snapshots[snapshots.length - 1], true);
-
-// ---------- Submit Record ----------
-// No backend, so submissions can't be added to the list automatically.
-// Submitting opens the visitor's email app pre-filled and addressed to
-// the list owner. CHANGE THIS to your real email before hosting this page.
-const SUBMIT_TO_EMAIL = "thefriendgrouplist@proton.me";
-
-const levelSelect = document.getElementById("subLevel");
-levels.filter(l=>!l.blank).forEach(level=>{
-    const opt = document.createElement("option");
-    opt.value = level.name;
-    opt.textContent = `#${level.rank} - ${level.name}`;
-    levelSelect.appendChild(opt);
-});
-
-const recordForm = document.getElementById("recordForm");
-const submitMsg = document.getElementById("submitMsg");
-
-recordForm.addEventListener("submit", (e)=>{
-    e.preventDefault();
-
-    const username = document.getElementById("subUsername").value.trim();
-    const level = document.getElementById("subLevel").value;
-    const percent = document.getElementById("subPercent").value.trim();
-    const proof = document.getElementById("subProof").value.trim();
-
-    submitMsg.className = "submit-msg";
-
-    if(!username || !level || !percent || !proof){
-        submitMsg.textContent = "Fill in every field, including a proof link, before submitting.";
-        submitMsg.classList.add("error");
-        return;
-    }
-
-    const percentNum = Number(percent);
-    if(!Number.isFinite(percentNum) || percentNum < 1 || percentNum > 100){
-        submitMsg.textContent = "Percent has to be a number between 1 and 100.";
-        submitMsg.classList.add("error");
-        return;
-    }
-
-    const subject = `FGL Record Submission: ${level} - ${username} (${percentNum}%)`;
-    const body =
-        `New record submission\n\n` +
-        `Username: ${username}\n` +
-        `Level: ${level}\n` +
-        `Percent: ${percentNum}%\n` +
-        `Proof: ${proof}\n`;
-
-    const mailtoLink =
-        `mailto:${SUBMIT_TO_EMAIL}` +
-        `?subject=${encodeURIComponent(subject)}` +
-        `&body=${encodeURIComponent(body)}`;
-
-    window.location.href = mailtoLink;
-
-    submitMsg.textContent = "Opening your email app with the details filled in - just hit send.";
-    submitMsg.classList.add("success");
-    recordForm.reset();
-});
 
 // ---------- Tabs ----------
 
