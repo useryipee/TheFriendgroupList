@@ -608,7 +608,7 @@ footer{
                 </div>
             </div>
         </div>
-        <div class="tm-note">A new snapshot locks in automatically every time the list actually changes - not just once per day. Past snapshots are permanent; the latest one always mirrors the current list.</div>
+        <div class="tm-note">Every snapshot below is a locked-in day. "Latest" always mirrors the current list.</div>
     </div>
 
 </div>
@@ -622,20 +622,25 @@ const levels = [
     { rank:2, name:"Scroodings Unnerfed", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:275, image:"Screenshot_2026-07-09_at_7.01.24_pm.png" },
     { rank:3, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:275, image:"Screenshot 2026-07-08 214231.png" },
     { rank:4, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:250, image:"Screenshot 2026-07-08 221643.png" },
-    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson", "Hexaprism"], points:200, image:"Screenshot 2026-07-09 211050.png" },
+    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:200, image:"Screenshot 2026-07-09 211050.png" },
     { rank:6, name:"Scroodings", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:175, image:"Screenshot 2026-07-09 184717.png" },
-    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815", "Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
+    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
     { rank:8, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:150, image:"IMG_7733.png" },
     { rank:9, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:100, image:"Screenshot 2026-07-09 104405.png" },
     { rank:10, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:75, image:"Screenshot 2026-07-08 221611.png" }
 ];
 
-// ---------- Time Machine: hardcoded seed history ----------
-// Reconstructed from the actual placement history. Each entry is the
-// FINAL state of the list at the end of that date. From this point on,
-// new snapshots are captured automatically every time the list changes
-// (see the history-tracking block further down).
-const SEED_SNAPSHOTS = [
+// ---------- Time Machine: one plain list of dated snapshots ----------
+//
+// HOW TO ADD A NEW DAY'S HISTORY (this is the whole process now):
+// 1. Copy the "levels" array above (the one that's about to change).
+// 2. Paste it as a new object at the END of this list, just before the
+//    final "Latest" entry, with today's real date as the "date" field.
+// 3. Make your edits to the "levels" array above like normal.
+// That's it - no storage, no timestamps, no diffing. The "Latest" entry
+// below always automatically mirrors whatever "levels" currently is,
+// because it's a direct reference to the same array, not a copy.
+const SNAPSHOTS = [
     {
         date:"2026-07-07",
         levels:[
@@ -666,6 +671,10 @@ const SEED_SNAPSHOTS = [
             { rank:9, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815"], points:100, image:"Screenshot 2026-07-09 104405.png" },
             { rank:10, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:75, image:"Screenshot 2026-07-08 221611.png" }
         ]
+    },
+    {
+        date:"Latest",
+        levels:levels
     }
 ];
 
@@ -883,45 +892,6 @@ renderLevelCards(document.getElementById("levels-view"), levels);
 renderPlayerBoard(document.getElementById("board-players"), levels);
 renderCreatorBoard(document.getElementById("board-creators"), levels);
 
-// ---------- Time Machine: build the snapshot list ----------
-// Seed history (hardcoded, locked, dated) + a growing history of
-// timestamped snapshots that gets a NEW permanent entry every single
-// time the list actually changes - not just once per day. This only
-// accumulates across visits once the page is hosted somewhere real;
-// a Claude.ai preview sandbox won't remember it between sessions.
-
-const STORAGE_KEY = "fgl_time_machine_history_v3";
-
-function loadHistory(){
-    try{
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    }catch(e){
-        return [];
-    }
-}
-
-function saveHistory(list){
-    try{
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    }catch(e){
-        // Storage unavailable in this environment - the time machine still
-        // works for this session, it just won't remember this snapshot
-        // on the next visit.
-    }
-}
-
-let history = loadHistory();
-const knownSoFar = [...SEED_SNAPSHOTS, ...history].sort((a,b)=> a.date.localeCompare(b.date));
-const lastKnown = knownSoFar[knownSoFar.length - 1];
-const currentJSON = JSON.stringify(levels);
-
-if(!lastKnown || JSON.stringify(lastKnown.levels) !== currentJSON){
-    history.push({ date: new Date().toISOString(), levels: JSON.parse(JSON.stringify(levels)) });
-    saveHistory(history);
-}
-
-const snapshots = [...SEED_SNAPSHOTS, ...history].sort((a,b)=> a.date.localeCompare(b.date));
-
 // ---------- Time Machine: UI ----------
 
 const timelineEl = document.getElementById("timeline");
@@ -930,28 +900,20 @@ const tmBoardPlayers = document.getElementById("tm-board-players");
 const tmBoardCreators = document.getElementById("tm-board-creators");
 const tmDateLabel = document.getElementById("tm-date-label");
 
-// Seed dates are date-only strings ("2026-07-07"). Auto-captured entries
-// are full ISO timestamps. Format each appropriately.
-function hasTime(iso){
-    return iso.includes("T");
+function formatFull(dateStr){
+    if(dateStr === "Latest") return "Latest";
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
 }
 
-function formatFull(iso){
-    const d = hasTime(iso) ? new Date(iso) : new Date(iso + "T00:00:00");
-    return hasTime(iso)
-        ? d.toLocaleString(undefined, { month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit" })
-        : d.toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
+function formatShort(dateStr){
+    if(dateStr === "Latest") return "Latest";
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString(undefined, { month:"short", day:"numeric" });
 }
 
-function formatShort(iso){
-    const d = hasTime(iso) ? new Date(iso) : new Date(iso + "T00:00:00");
-    return hasTime(iso)
-        ? d.toLocaleString(undefined, { month:"short", day:"numeric", hour:"numeric", minute:"2-digit" })
-        : d.toLocaleDateString(undefined, { month:"short", day:"numeric" });
-}
-
-function showSnapshot(snapshot, isLatest){
-    tmDateLabel.textContent = isLatest ? `${formatFull(snapshot.date)} (Latest)` : formatFull(snapshot.date);
+function showSnapshot(snapshot){
+    tmDateLabel.textContent = formatFull(snapshot.date);
     renderLevelCards(tmLevelsView, snapshot.levels);
     renderPlayerBoard(tmBoardPlayers, snapshot.levels);
     renderCreatorBoard(tmBoardCreators, snapshot.levels);
@@ -961,22 +923,21 @@ function showSnapshot(snapshot, isLatest){
     });
 }
 
-snapshots.forEach((snap, i)=>{
+SNAPSHOTS.forEach(snap=>{
     const node = document.createElement("div");
     node.className = "timeline-node";
     node.dataset.date = snap.date;
-    const isLatest = i === snapshots.length - 1;
 
     node.innerHTML = `
-        <span class="label">${isLatest ? "Latest" : formatShort(snap.date)}</span>
+        <span class="label">${formatShort(snap.date)}</span>
         <div class="dot"></div>
     `;
 
-    node.addEventListener("click", ()=> showSnapshot(snap, isLatest));
+    node.addEventListener("click", ()=> showSnapshot(snap));
     timelineEl.appendChild(node);
 });
 
-showSnapshot(snapshots[snapshots.length - 1], true);
+showSnapshot(SNAPSHOTS[SNAPSHOTS.length - 1]);
 
 // ---------- Tabs ----------
 
