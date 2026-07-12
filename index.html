@@ -618,15 +618,15 @@ footer{
 <script>
 
 const levels = [
-    { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
-    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:350, image:"Screenshot 2026-07-08 214231.png" },
-    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
-    { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:250, image:"Screenshot 2026-07-09 211050.png" },
-    { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:200, image:"Screenshot 2026-06-10 164731.png" },
-    { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
-    { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
-    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:50, image:"Screenshot 2026-07-09 104405.png" },
-    { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:25, image:"Screenshot 2026-07-08 221611.png" }
+    { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:428, image:"Screenshot 2026-05-10 131531.png" },
+    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:379, image:"Screenshot 2026-07-08 214231.png" },
+    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:341, image:"Screenshot 2026-07-07 222809.png" },
+    { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:296, image:"Screenshot 2026-07-09 211050.png" },
+    { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:254, image:"Screenshot 2026-06-10 164731.png" },
+    { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:201, image:"Screenshot 2026-07-07 171312.png" },
+    { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:158, image:"IMG_7733.png" },
+    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:94, image:"Screenshot 2026-07-09 104405.png" },
+    { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:37, image:"Screenshot 2026-07-08 221611.png" }
 ];
 
 // ---------- Time Machine: one plain list of dated snapshots ----------
@@ -671,18 +671,32 @@ const SNAPSHOTS = [
             { rank:10, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:75, image:"Screenshot 2026-07-08 221611.png" }
         ]
     },
-        {
+    {
         date:"2026-07-10",
         levels:[
             { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
-    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:350, image:"Screenshot 2026-07-08 214231.png" },
-    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
-    { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:250, image:"Screenshot 2026-07-09 211050.png" },
-    { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:200, image:"Screenshot 2026-06-10 164731.png" },
-    { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
-    { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
-    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:50, image:"Screenshot 2026-07-09 104405.png" },
-    { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:25, image:"Screenshot 2026-07-08 221611.png" }
+            { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:350, image:"Screenshot 2026-07-08 214231.png" },
+            { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
+            { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:250, image:"Screenshot 2026-07-09 211050.png" },
+            { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:200, image:"Screenshot 2026-06-10 164731.png" },
+            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
+            { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
+            { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:50, image:"Screenshot 2026-07-09 104405.png" },
+            { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:25, image:"Screenshot 2026-07-08 221611.png" }
+        ]
+    },
+        {
+        date:"2026-07-11",
+        levels:[
+            { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
+            { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:["Samuri815"], points:350, image:"Screenshot 2026-07-08 214231.png" },
+            { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
+            { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Hexaprism"], points:250, image:"Screenshot 2026-07-09 211050.png" },
+            { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919"], points:200, image:"Screenshot 2026-06-10 164731.png" },
+            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:["Sirjefferson","Cactusman9919","Samuri815","Hexaprism"], points:150, image:"Screenshot 2026-07-07 171312.png" },
+            { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
+            { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:["Cactusman9919","Sirjefferson","Samuri815","Hexaprism"], points:50, image:"Screenshot 2026-07-09 104405.png" },
+            { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:["Useryipee","Samuri815"], points:25, image:"Screenshot 2026-07-08 221611.png" }
         ]
     },
     {
@@ -729,10 +743,8 @@ function tierFor(rank){
     return "";
 }
 
-// Creator points are their own scale, not completion points. They scale
-// with the SQUARE of difficulty, so building something hard is worth
-// disproportionately more than building something easy:
-// rating 1 -> 25, rating 5 -> 625, rating 10 -> 2500.
+// Creator points equal the level's own point value - same scale as the
+// player board, so both leaderboards feel comparable.
 function creatorPointsFor(points){
     return points;
 }
@@ -806,6 +818,7 @@ function computePlayerLeaderboard(levelsData){
 
     levelsData.filter(l=>!l.blank).forEach(level=>{
         const completers = new Set();
+        if(level.verifier) completers.add(level.verifier);
         if(level.firstVictor) completers.add(level.firstVictor);
         level.victors.forEach(v=>{ if(v) completers.add(v); });
 
