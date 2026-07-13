@@ -1,1030 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>FriendGroupList</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-<style>
-:root{
-    --bg:#090b14;
-    --surface:#12152a;
-    --surface-2:#1a1e3d;
-    --border:#262b52;
-    --cyan:#2fe8ff;
-    --magenta:#ff3d7f;
-    --gold:#ffce3d;
-    --text:#eef0fb;
-    --muted:#8892b8;
-    --font-display:'Orbitron',sans-serif;
-    --font-body:'Rajdhani',sans-serif;
-    --font-mono:'Share Tech Mono',monospace;
-}
+<link rel="stylesheet" href="style.css">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:
-        radial-gradient(circle at 15% 0%, rgba(47,232,255,0.07), transparent 40%),
-        radial-gradient(circle at 85% 10%, rgba(255,61,127,0.07), transparent 40%),
-        var(--bg);
-    color:var(--text);
-    font-family:var(--font-body);
-    min-height:100vh;
-}
-
-/* ---------- Header ---------- */
-
-header{
-    position:relative;
-    padding:56px 20px 0;
-    text-align:center;
-    background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 32px),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 32px),
-        linear-gradient(160deg,#0d1026,#171b3a 60%,#1a1440);
-    overflow:hidden;
-}
-
-header .eyebrow{
-    font-family:var(--font-mono);
-    letter-spacing:4px;
-    font-size:12px;
-    color:var(--cyan);
-    text-transform:uppercase;
-}
-
-header h1{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:clamp(34px,6vw,64px);
-    margin-top:14px;
-    letter-spacing:1px;
-    background:linear-gradient(90deg,var(--cyan),#7fd8ff 40%,var(--magenta));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    text-shadow:0 0 40px rgba(47,232,255,0.15);
-}
-
-header p{
-    margin:14px auto 40px;
-    max-width:480px;
-    color:var(--muted);
-    font-size:17px;
-    font-weight:500;
-}
-
-.spike-row{
-    display:flex;
-    width:100%;
-    height:16px;
-    line-height:0;
-}
-
-.spike-row .spike{
-    flex:1 0 auto;
-    height:100%;
-    clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.spike-row .spike:nth-child(3n){ background:var(--cyan); }
-.spike-row .spike:nth-child(3n+1){ background:var(--magenta); }
-.spike-row .spike:nth-child(3n+2){ background:var(--gold); }
-
-/* ---------- Tabs ---------- */
-
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    margin:32px 20px 0;
-    flex-wrap:wrap;
-}
-
-.tab-btn{
-    font-family:var(--font-display);
-    font-size:13px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    background:var(--surface);
-    color:var(--muted);
-    border:1px solid var(--border);
-    padding:12px 26px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.tab-btn:hover{ color:var(--text); border-color:var(--cyan); }
-
-.tab-btn.active{
-    color:#04121a;
-    background:linear-gradient(90deg,var(--cyan),#7fd8ff);
-    border-color:transparent;
-}
-
-.subtabs{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:24px;
-}
-
-.subtab-btn{
-    font-family:var(--font-display);
-    font-size:12px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    background:transparent;
-    color:var(--muted);
-    border:1px solid var(--border);
-    padding:8px 20px;
-    border-radius:20px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.subtab-btn:hover{ color:var(--text); border-color:var(--magenta); }
-
-.subtab-btn.active{
-    color:#1a0410;
-    background:linear-gradient(90deg,var(--magenta),#ff7fb0);
-    border-color:transparent;
-}
-
-/* ---------- Stats ---------- */
-
-.stats{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:18px;
-    margin:32px 20px;
-}
-
-.stat{
-    background:var(--surface);
-    border:1px solid var(--border);
-    width:170px;
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-}
-
-.stat h2{
-    font-family:var(--font-mono);
-    font-size:32px;
-    color:var(--gold);
-}
-
-.stat span{
-    font-size:13px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:1px;
-}
-
-/* ---------- Layout ---------- */
-
-.view{ display:none; }
-.view.active{ display:block; }
-
-.board-view{ display:none; }
-.board-view.active{ display:block; }
-
-.container{
-    width:92%;
-    max-width:1000px;
-    margin:0 auto 60px;
-}
-
-/* ---------- Level cards ---------- */
-
-.level{
-    display:flex;
-    gap:0;
-    background:var(--surface);
-    border:1px solid var(--border);
-    margin-bottom:18px;
-    border-radius:14px;
-    overflow:hidden;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.level:hover{
-    border-color:var(--cyan);
-    box-shadow:0 0 24px rgba(47,232,255,0.12);
-}
-
-.level.tier-1{ border-color:var(--magenta); }
-.level.tier-2{ border-color:var(--cyan); }
-.level.tier-3{ border-color:var(--gold); }
-
-.level img{
-    width:220px;
-    min-width:220px;
-    object-fit:cover;
-    background:var(--surface-2);
-}
-
-.info{
-    padding:22px 26px;
-    flex:1;
-}
-
-.level-top{
-    display:flex;
-    align-items:baseline;
-    gap:16px;
-    flex-wrap:wrap;
-}
-
-.rank{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:38px;
-    color:var(--muted);
-}
-
-.tier-1 .rank{ color:var(--magenta); text-shadow:0 0 18px rgba(255,61,127,0.5); }
-.tier-2 .rank{ color:var(--cyan); text-shadow:0 0 18px rgba(47,232,255,0.4); }
-.tier-3 .rank{ color:var(--gold); text-shadow:0 0 18px rgba(255,206,61,0.4); }
-
-.name{
-    font-family:var(--font-display);
-    font-weight:700;
-    font-size:24px;
-}
-
-.creator{
-    margin-top:8px;
-    color:var(--muted);
-    font-size:15px;
-}
-
-.creator b{ color:var(--text); }
-
-.rating{
-    margin-top:14px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.rating .spikes{ display:flex; gap:3px; }
-
-.rating .spikes i{
-    width:10px;
-    height:10px;
-    clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
-    background:var(--border);
-}
-
-.rating .spikes i.lit{ background:var(--gold); }
-
-.rating .pts{
-    font-family:var(--font-mono);
-    color:var(--gold);
-    font-size:14px;
-}
-
-.details{
-    max-height:0;
-    overflow:hidden;
-    transition:.3s ease;
-}
-
-.level.open .details{
-    max-height:400px;
-    margin-top:16px;
-}
-
-.details p{
-    font-size:15px;
-    color:var(--muted);
-    margin-bottom:6px;
-}
-
-.details p b{ color:var(--text); }
-
-.badges{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
-
-.badge{
-    display:inline-block;
-    font-family:var(--font-mono);
-    font-size:12px;
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    padding:5px 10px;
-    border-radius:6px;
-}
-
-.badge.win{ border-color:var(--gold); color:var(--gold); }
-
-/* ---------- Leaderboards ---------- */
-
-.board{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:14px;
-    overflow:hidden;
-}
-
-.board-row{
-    display:grid;
-    grid-template-columns:60px 1fr 100px 120px;
-    align-items:center;
-    padding:16px 22px;
-    border-bottom:1px solid var(--border);
-    gap:10px;
-}
-
-.board-row:last-child{ border-bottom:none; }
-
-.board-row.head{
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:1px;
-    background:var(--surface-2);
-}
-
-.board-rank{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:20px;
-    color:var(--muted);
-}
-
-.board-row.p1 .board-rank{ color:var(--magenta); }
-.board-row.p2 .board-rank{ color:var(--cyan); }
-.board-row.p3 .board-rank{ color:var(--gold); }
-
-.board-name{ font-weight:600; font-size:17px; }
-.board-name small{ display:block; color:var(--muted); font-weight:400; font-size:13px; margin-top:2px; }
-
-.board-points{ font-family:var(--font-mono); color:var(--gold); text-align:right; font-weight:600; }
-.board-count{ color:var(--muted); font-size:14px; text-align:right; }
-
-.board.creators .board-points{ color:var(--magenta); }
-
-.empty{
-    text-align:center;
-    padding:40px;
-    color:var(--muted);
-}
-
-.level.slot{
-    background:transparent;
-    border:1px dashed var(--border);
-    cursor:default;
-    align-items:center;
-    justify-content:center;
-    min-height:88px;
-    padding:0 26px;
-}
-
-.level.slot:hover{
-    border-color:var(--border);
-    box-shadow:none;
-}
-
-.slot-inner{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    width:100%;
-}
-
-.slot .rank{
-    color:var(--border);
-    text-shadow:none;
-}
-
-.slot-label{
-    font-family:var(--font-mono);
-    font-size:13px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--muted);
-}
-
-/* ---------- Time Machine ---------- */
-
-.timeline{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    position:relative;
-    margin:6px 20px 8px;
-    padding-top:12px;
-}
-
-.timeline::before{
-    content:"";
-    position:absolute;
-    top:19px;
-    left:8%;
-    right:8%;
-    height:2px;
-    background:var(--border);
-    z-index:0;
-}
-
-.timeline-node{
-    position:relative;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-    cursor:pointer;
-    padding:0 18px;
-    background:var(--bg);
-}
-
-.timeline-node .dot{
-    width:14px;
-    height:14px;
-    border-radius:50%;
-    background:var(--surface-2);
-    border:2px solid var(--border);
-    transition:.2s;
-}
-
-.timeline-node:hover .dot{ border-color:var(--cyan); }
-
-.timeline-node.active .dot{
-    background:var(--cyan);
-    border-color:var(--cyan);
-    box-shadow:0 0 14px rgba(47,232,255,0.7);
-}
-
-.timeline-node .label{
-    font-family:var(--font-mono);
-    font-size:11px;
-    color:var(--muted);
-    letter-spacing:.5px;
-    white-space:nowrap;
-}
-
-.timeline-node.active .label{ color:var(--text); }
-
-.tm-heading{
-    text-align:center;
-    margin:22px 0 24px;
-    font-family:var(--font-mono);
-    font-size:12px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--muted);
-}
-
-.tm-heading b{
-    font-family:var(--font-display);
-    font-size:16px;
-    letter-spacing:0;
-    text-transform:none;
-    color:var(--cyan);
-    display:block;
-    margin-top:6px;
-}
-
-.tm-subhead{
-    font-family:var(--font-mono);
-    font-size:12px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:14px;
-}
-
-.tm-columns{
-    display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:28px;
-    align-items:start;
-}
-
-.tm-columns .level{ margin-bottom:14px; }
-
-.tm-note{
-    text-align:center;
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--muted);
-    margin-top:30px;
-}
-
-footer{
-    text-align:center;
-    margin:20px 20px 50px;
-    color:var(--muted);
-    font-size:13px;
-    font-family:var(--font-mono);
-}
-
-@media (max-width:800px){
-    .tm-columns{ grid-template-columns:1fr; }
-}
-
-@media (max-width:640px){
-    .level{ flex-direction:column; }
-    .level img{ width:100%; height:160px; }
-    .board-row{ grid-template-columns:40px 1fr 70px; }
-    .board-count{ display:none; }
-}
-</style>
 </head>
 
 <body>
 
 <header>
-    <div class="eyebrow">Friend-verified &middot; Hardest to easiest</div>
-    <h1>FriendGroupList</h1>
-    <p>The hardest friend-made Geometry Dash levels, ranked by the people that beat them.</p>
+
+<div class="eyebrow">
+Friend Verified • Hardest to Easiest
+</div>
+
+<h1>FriendGroupList</h1>
+
+<p>
+The hardest friend-made Geometry Dash levels,
+ranked by the people that beat them.
+</p>
+
 </header>
 
 <div class="spike-row" id="spikeRow"></div>
 
 <div class="tabs">
-    <button class="tab-btn active" data-view="levels">Levels</button>
-    <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
-    <button class="tab-btn" data-view="timemachine">Time Machine</button>
+
+<button class="tab-btn active"
+data-view="levels">
+Levels
+</button>
+
+<button class="tab-btn"
+data-view="leaderboard">
+Leaderboard
+</button>
+
+<button class="tab-btn"
+data-view="timemachine">
+Time Machine
+</button>
+
 </div>
 
 <div class="stats">
-    <div class="stat"><h2 id="levelCount">0</h2><span>Levels</span></div>
-    <div class="stat"><h2 id="playerCount">0</h2><span>Players</span></div>
-    <div class="stat"><h2 id="victorCount">0</h2><span>First Victors</span></div>
+
+<div class="stat">
+<h2 id="levelCount">0</h2>
+<span>Levels</span>
+</div>
+
+<div class="stat">
+<h2 id="playerCount">0</h2>
+<span>Players</span>
+</div>
+
+<div class="stat">
+<h2 id="victorCount">0</h2>
+<span>First Victors</span>
+</div>
+
 </div>
 
 <div class="container">
 
-    <div class="view active" id="levels-view"></div>
+<div
+class="view active"
+id="levels-view">
+</div>
 
-    <div class="view" id="leaderboard-view">
-        <div class="subtabs">
-            <button class="subtab-btn active" data-board="players">Players</button>
-            <button class="subtab-btn" data-board="creators">Creators</button>
-        </div>
-        <div class="board-view active" data-board="players">
-            <div class="board" id="board-players"></div>
-        </div>
-        <div class="board-view" data-board="creators">
-            <div class="board creators" id="board-creators"></div>
-        </div>
-    </div>
+<div
+class="view"
+id="leaderboard-view">
 
-    <div class="view" id="timemachine-view">
-        <div class="timeline" id="timeline"></div>
-        <div class="tm-heading">Viewing snapshot<b id="tm-date-label"></b></div>
-        <div class="tm-columns">
-            <div>
-                <div class="tm-subhead">Rankings</div>
-                <div id="tm-levels-view"></div>
-            </div>
-            <div>
-                <div class="subtabs" style="margin-bottom:14px;">
-                    <button class="subtab-btn tm-subtab active" data-board="players">Players</button>
-                    <button class="subtab-btn tm-subtab" data-board="creators">Creators</button>
-                </div>
-                <div class="board-view active" data-board="players">
-                    <div class="board" id="tm-board-players"></div>
-                </div>
-                <div class="board-view" data-board="creators">
-                    <div class="board creators" id="tm-board-creators"></div>
-                </div>
-            </div>
-        </div>
-        <div class="tm-note">Every snapshot below is a locked-in day. "Latest" always mirrors the current list.</div>
-    </div>
+<div class="subtabs">
+
+<button
+class="subtab-btn active"
+data-board="players">
+Players
+</button>
+
+<button
+class="subtab-btn"
+data-board="creators">
+Creators
+</button>
 
 </div>
 
-<footer>FriendGroupList © 2026 &mdash; built by the crew, for the crew</footer>
+<div
+class="board-view active"
+data-board="players">
 
-<script>
+<div
+class="board"
+id="board-players">
+</div>
 
-// Victors now carry a percent (how much of the level they actually
-// completed). Points earned = level.points * (percent / 100).
-// Verifier and firstVictor are always full completions (100%).
-const levels = [
-    { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:428, image:"Screenshot 2026-05-10 131531.png" },
-    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:379, image:"Screenshot 2026-07-08 214231.png" },
-    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:341, image:"Screenshot 2026-07-07 222809.png" },
-    { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:296, image:"Screenshot 2026-07-09 211050.png" },
-    { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:254, image:"Screenshot 2026-06-10 164731.png" },
-    { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:201, image:"Screenshot 2026-07-07 171312.png" },
-    { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:158, image:"IMG_7733.png" },
-    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:94, image:"Screenshot 2026-07-09 104405.png" },
-    ];
-//
-// HOW TO ADD A NEW DAY'S HISTORY (this is the whole process now):
-// 1. Copy the "levels" array above (the one that's about to change).
-// 2. Paste it as a new object at the END of this list, just before the
-//    final "Latest" entry, with today's real date as the "date" field.
-// 3. Make your edits to the "levels" array above like normal.
-// That's it - no storage, no timestamps, no diffing. The "Latest" entry
-// below always automatically mirrors whatever "levels" currently is,
-// because it's a direct reference to the same array, not a copy.
-const SNAPSHOTS = [
-    {
-        date:"2026-07-07",
-        levels:[
-            { rank:1, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:50, image:"Screenshot 2026-07-07 171312.png" }
-        ]
-    },
-    {
-        date:"2026-07-08",
-        levels:[
-            { rank:1, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:2, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:3, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:250, image:"Screenshot 2026-07-08 221643.png" },
-            { rank:4, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"Screenshot 2026-07-08 221611.png" },
-            { rank:5, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:50, image:"Screenshot 2026-07-07 171312.png" }
-        ]
-    },
-    {
-        date:"2026-07-09",
-        levels:[
-            { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:2, name:"Scroodings Unnerfed", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:275, image:"Screenshot_2026-07-09_at_7.01.24_pm.png" },
-            { rank:3, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:275, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:4, name:"Dingus Hell Infinity", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:250, image:"Screenshot 2026-07-08 221643.png" },
-            { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100}], points:200, image:"Screenshot 2026-07-09 211050.png" },
-            { rank:6, name:"Scroodings", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"", victors:[], points:175, image:"Screenshot 2026-07-09 184717.png" },
-            { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100}], points:150, image:"Screenshot 2026-07-07 171312.png" },
-            { rank:8, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:150, image:"level.jpe" },
-            { rank:9, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100}], points:100, image:"Screenshot 2026-07-09 104405.png" },
-            { rank:10, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:[{name:"Useryipee",percent:100},{name:"Samuri815",percent:100}], points:75, image:"Screenshot 2026-07-08 221611.png" }
-        ]
-    },
-    {
-        date:"2026-07-10",
-        levels:[
-            { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:350, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
-            { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:250, image:"Screenshot 2026-07-09 211050.png" },
-            { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:200, image:"Screenshot 2026-06-10 164731.png" },
-            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:150, image:"Screenshot 2026-07-07 171312.png" },
-            { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
-            { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:50, image:"Screenshot 2026-07-09 104405.png" },
-            { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:[{name:"Useryipee",percent:100},{name:"Samuri815",percent:100}], points:25, image:"Screenshot 2026-07-08 221611.png" }
-        ]
-    },
-    {
-        date:"2026-07-11",
-        levels:[
-            { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:350, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
-            { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:250, image:"Screenshot 2026-07-09 211050.png" },
-            { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:200, image:"Screenshot 2026-06-10 164731.png" },
-            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:150, image:"Screenshot 2026-07-07 171312.png" },
-            { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
-            { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:50, image:"Screenshot 2026-07-09 104405.png" },
-            { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:[{name:"Useryipee",percent:100},{name:"Samuri815",percent:100}], points:25, image:"Screenshot 2026-07-08 221611.png" }
-        ]
-    },
-        {
-        date:"2026-07-12",
-        levels:[
-            { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:400, image:"Screenshot 2026-05-10 131531.png" },
-            { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:350, image:"Screenshot 2026-07-08 214231.png" },
-            { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:300, image:"Screenshot 2026-07-07 222809.png" },
-            { rank:4, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:250, image:"Screenshot 2026-07-09 211050.png" },
-            { rank:5, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:200, image:"Screenshot 2026-06-10 164731.png" },
-            { rank:6, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:150, image:"Screenshot 2026-07-07 171312.png" },
-            { rank:7, name:"Dingus Bingus Chingu", creator:"Guynamedhayden", verifier:"Cactusman9919", firstVictor:"", victors:[], points:100, image:"IMG_7733.png" },
-            { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:50, image:"Screenshot 2026-07-09 104405.png" },
-            { rank:9, name:"Dingus Evil Brother", creator:"Cactusman9919", verifier:"Cactusman9919", firstVictor:"Useryipee", victors:[{name:"Useryipee",percent:100},{name:"Samuri815",percent:100}], points:25, image:"Screenshot 2026-07-08 221611.png" }
-        ]
-    },
-    {
-        date:"Latest",
-        levels:levels
-    }
-];
+</div>
 
-// ---------- Signature spike divider ----------
+<div
+class="board-view"
+data-board="creators">
 
-const spikeRow = document.getElementById("spikeRow");
-for(let i=0;i<50;i++){
-    const s = document.createElement("div");
-    s.className = "spike";
-    spikeRow.appendChild(s);
-}
+<div
+class="board creators"
+id="board-creators">
+</div>
 
-// ---------- Stats (always reflect the live/current list) ----------
+</div>
 
-document.getElementById("levelCount").textContent = levels.filter(l=>!l.blank).length;
+</div>
 
-const allPlayers = new Set();
-levels.filter(l=>!l.blank).forEach(level=>{
-    if(level.creator) allPlayers.add(level.creator);
-    if(level.verifier) allPlayers.add(level.verifier);
-    if(level.firstVictor) allPlayers.add(level.firstVictor);
-    level.victors.forEach(v=>{ if(v && v.name) allPlayers.add(v.name); });
-});
+<div
+class="view"
+id="timemachine-view">
 
-document.getElementById("playerCount").textContent = allPlayers.size;
-document.getElementById("victorCount").textContent =
-    levels.filter(level=>!level.blank && level.firstVictor !== "").length;
+<div
+class="timeline"
+id="timeline">
+</div>
 
-// ---------- Difficulty rating (derived from points, 1-10 spikes) ----------
+<div class="tm-heading">
 
-function ratingFor(points){
-    return Math.max(1, Math.min(10, Math.round(points / 50)));
-}
+Viewing snapshot
 
-function tierFor(rank){
-    if(rank === 1) return "tier-1";
-    if(rank === 2) return "tier-2";
-    if(rank === 3) return "tier-3";
-    return "";
-}
+<b id="tm-date-label"></b>
 
-// Creator points equal the level's own point value - same scale as the
-// player board, so both leaderboards feel comparable.
-function creatorPointsFor(points){
-    return points;
-}
+</div>
 
-// ---------- Reusable renderers (used by Levels tab AND Time Machine) ----------
+<div class="tm-columns">
 
-function renderLevelCards(container, levelsData){
-    container.innerHTML = "";
+<div>
 
-    levelsData.forEach(level=>{
-        const card = document.createElement("div");
+<div class="tm-subhead">
+Rankings
+</div>
 
-        if(level.blank){
-            card.className = "level slot";
-            card.innerHTML = `
-                <div class="slot-inner">
-                    <div class="rank">#${level.rank}</div>
-                    <div class="slot-label">Open slot &mdash; awaiting submission</div>
-                </div>
-            `;
-            container.appendChild(card);
-            return;
-        }
+<div id="tm-levels-view"></div>
 
-        card.className = `level ${tierFor(level.rank)}`;
+</div>
 
-        const rating = ratingFor(level.points);
-        let spikesHtml = "";
-        for(let i=1;i<=10;i++){
-            spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
-        }
+<div>
 
-        const victorsList = level.victors.length
-            ? level.victors.map(v=> `${v.name} (${v.percent}%)`).join(", ")
-            : "None yet";
+<div
+class="subtabs"
+style="margin-bottom:14px;">
 
-        card.innerHTML = `
-            <img src="${level.image}" onerror="this.src='https://placehold.co/220x160/12152a/2fe8ff?text=No+Image'">
-            <div class="info">
-                <div class="level-top">
-                    <div class="rank">#${level.rank}</div>
-                    <div class="name">${level.name}</div>
-                </div>
-                <div class="creator">Created by <b>${level.creator}</b></div>
-                <div class="rating">
-                    <div class="spikes">${spikesHtml}</div>
-                    <div class="pts">${level.points} PTS</div>
-                </div>
-                <div class="details">
-                    <p><b>Verifier:</b> ${level.verifier || "None"}</p>
-                    <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
-                    <p><b>Victors:</b> ${victorsList}</p>
-                    <div class="badges">
-                        <span class="badge">RANK #${level.rank}</span>
-                        <span class="badge">VERIFIED</span>
-                        ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
-                    </div>
-                </div>
-            </div>
-        `;
+<button
+class="subtab-btn tm-subtab active"
+data-board="players">
 
-        card.addEventListener("click", ()=> card.classList.toggle("open"));
-        container.appendChild(card);
-    });
-}
+Players
 
-// ---------- Leaderboard math: two independent boards ----------
+</button>
 
-// For a given level, figure out the best completion fraction each
-// person earned - verifier and firstVictor are always 1.0 (100%),
-// victors use their own percent. If someone shows up in more than one
-// role on the same level, they only get credited once, at whichever
-// fraction is highest.
-function creditFractionsFor(level){
-    const fractions = new Map();
+<button
+class="subtab-btn tm-subtab"
+data-board="creators">
 
-    function offer(name, fraction){
-        if(!name) return;
-        const current = fractions.get(name) || 0;
-        if(fraction > current) fractions.set(name, fraction);
-    }
+Creators
 
-    offer(level.verifier, 1);
-    offer(level.firstVictor, 1);
-    level.victors.forEach(v=>{
-        if(v && v.name) offer(v.name, (v.percent || 0) / 100);
-    });
+</button>
 
-    return fractions;
-}
+</div>
 
-function computePlayerLeaderboard(levelsData){
-    const map = new Map();
+<div
+class="board-view active"
+data-board="players">
 
-    levelsData.filter(l=>!l.blank).forEach(level=>{
-        const fractions = creditFractionsFor(level);
+<div
+class="board"
+id="tm-board-players">
+</div>
 
-        fractions.forEach((fraction, player)=>{
-            if(!map.has(player)){
-                map.set(player, { name:player, points:0, count:0, hardestRank:Infinity, hardestName:"" });
-            }
-            const entry = map.get(player);
-            entry.points += Math.round(level.points * fraction);
-            entry.count += 1;
-            if(level.rank < entry.hardestRank){
-                entry.hardestRank = level.rank;
-                entry.hardestName = level.name;
-            }
-        });
-    });
+</div>
 
-    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
-}
+<div
+class="board-view"
+data-board="creators">
 
-function computeCreatorLeaderboard(levelsData){
-    const map = new Map();
+<div
+class="board creators"
+id="tm-board-creators">
+</div>
 
-    levelsData.filter(l=>!l.blank).forEach(level=>{
-        if(!level.creator) return;
+</div>
 
-        if(!map.has(level.creator)){
-            map.set(level.creator, { name:level.creator, points:0, count:0, hardestRank:Infinity, hardestName:"" });
-        }
-        const entry = map.get(level.creator);
-        entry.points += creatorPointsFor(level.points);
-        entry.count += 1;
-        if(level.rank < entry.hardestRank){
-            entry.hardestRank = level.rank;
-            entry.hardestName = level.name;
-        }
-    });
+</div>
 
-    return Array.from(map.values()).sort((a,b)=> b.points - a.points);
-}
+</div>
 
-function renderPlayerBoard(container, levelsData){
-    const ranked = computePlayerLeaderboard(levelsData);
+<div class="tm-note">
 
-    if(ranked.length === 0){
-        container.innerHTML = `<div class="empty">No completions logged yet.</div>`;
-        return;
-    }
+Every snapshot is permanently saved.
 
-    container.innerHTML = `
-        <div class="board-row head">
-            <div>#</div>
-            <div>Player</div>
-            <div style="text-align:right">Points</div>
-            <div style="text-align:right">Levels</div>
-        </div>
-    ` + ranked.map((p,i)=>`
-        <div class="board-row p${i+1}">
-            <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>Hardest beaten: ${p.hardestName}</small></div>
-            <div class="board-points">${p.points}</div>
-            <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
-        </div>
-    `).join("");
-}
+Latest always reflects the live list.
 
-function renderCreatorBoard(container, levelsData){
-    const ranked = computeCreatorLeaderboard(levelsData);
+</div>
 
-    if(ranked.length === 0){
-        container.innerHTML = `<div class="empty">No levels built yet.</div>`;
-        return;
-    }
+</div>
 
-    container.innerHTML = `
-        <div class="board-row head">
-            <div>#</div>
-            <div>Creator</div>
-            <div style="text-align:right">Points</div>
-            <div style="text-align:right">Built</div>
-        </div>
-    ` + ranked.map((p,i)=>`
-        <div class="board-row p${i+1}">
-            <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>Hardest built: ${p.hardestName}</small></div>
-            <div class="board-points">${p.points}</div>
-            <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
-        </div>
-    `).join("");
-}
+</div>
 
-// ---------- Render the live Levels + Leaderboard tabs ----------
+<footer>
 
-renderLevelCards(document.getElementById("levels-view"), levels);
-renderPlayerBoard(document.getElementById("board-players"), levels);
-renderCreatorBoard(document.getElementById("board-creators"), levels);
+FriendGroupList © 2026
 
-// ---------- Time Machine: UI ----------
+</footer>
 
-const timelineEl = document.getElementById("timeline");
-const tmLevelsView = document.getElementById("tm-levels-view");
-const tmBoardPlayers = document.getElementById("tm-board-players");
-const tmBoardCreators = document.getElementById("tm-board-creators");
-const tmDateLabel = document.getElementById("tm-date-label");
-
-function formatFull(dateStr){
-    if(dateStr === "Latest") return "Latest";
-    const d = new Date(dateStr + "T00:00:00");
-    return d.toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
-}
-
-function formatShort(dateStr){
-    if(dateStr === "Latest") return "Latest";
-    const d = new Date(dateStr + "T00:00:00");
-    return d.toLocaleDateString(undefined, { month:"short", day:"numeric" });
-}
-
-function showSnapshot(snapshot){
-    tmDateLabel.textContent = formatFull(snapshot.date);
-    renderLevelCards(tmLevelsView, snapshot.levels);
-    renderPlayerBoard(tmBoardPlayers, snapshot.levels);
-    renderCreatorBoard(tmBoardCreators, snapshot.levels);
-
-    document.querySelectorAll(".timeline-node").forEach(n=>{
-        n.classList.toggle("active", n.dataset.date === snapshot.date);
-    });
-}
-
-SNAPSHOTS.forEach(snap=>{
-    const node = document.createElement("div");
-    node.className = "timeline-node";
-    node.dataset.date = snap.date;
-
-    node.innerHTML = `
-        <span class="label">${formatShort(snap.date)}</span>
-        <div class="dot"></div>
-    `;
-
-    node.addEventListener("click", ()=> showSnapshot(snap));
-    timelineEl.appendChild(node);
-});
-
-showSnapshot(SNAPSHOTS[SNAPSHOTS.length - 1]);
-
-// ---------- Tabs ----------
-
-document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-
-        document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-        document.getElementById(`${btn.dataset.view}-view`).classList.add("active");
-    });
-});
-
-// ---------- Sub-tabs (Players vs Creators), shared by Leaderboard + Time Machine ----------
-
-document.querySelectorAll(".subtab-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        const group = btn.closest(".view");
-
-        group.querySelectorAll(".subtab-btn").forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-
-        group.querySelectorAll(".board-view").forEach(v=>{
-            v.classList.toggle("active", v.dataset.board === btn.dataset.board);
-        });
-    });
-});
-
-</script>
+<script src="script.js"></script>
 
 </body>
+
 </html>
