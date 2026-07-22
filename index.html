@@ -567,8 +567,58 @@ function tierFor(rank){
     return "";
 }
 
+function tierColorFor(rank){
+    if(rank === 1) return "#ff3d7f";
+    if(rank === 2) return "#2fe8ff";
+    if(rank === 3) return "#ffce3d";
+    return "#5b6488";
+}
+
 function creatorPointsFor(points){
     return points;
+}
+
+function escapeXml(str){
+    return String(str).replace(/[&<>"']/g, ch=>({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&apos;"
+    }[ch]));
+}
+
+// Builds a themed cover image on the fly (rank, name, gradient, spike
+// strip) for any level that doesn't have a real screenshot yet. Drop a
+// real filename into level.image and it takes over automatically.
+function generateCover(level){
+    const color = tierColorFor(level.rank);
+    const spikeCount = 13;
+    const spikeW = 260 / spikeCount;
+    let spikes = "";
+    for(let i=0;i<spikeCount;i++){
+        const x = i * spikeW;
+        const fill = i % 2 === 0 ? color : "#12152a";
+        spikes += `<polygon points="${x},300 ${x+spikeW/2},278 ${x+spikeW},300" fill="${fill}"/>`;
+    }
+
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="260" height="300" viewBox="0 0 260 300">
+            <defs>
+                <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#171b3a"/>
+                    <stop offset="100%" stop-color="#0d1026"/>
+                </linearGradient>
+            </defs>
+            <rect width="260" height="300" fill="url(#bg)"/>
+            <g opacity="0.06" stroke="#ffffff">
+                ${Array.from({length:8}, (_,i)=>`<line x1="0" y1="${i*38}" x2="260" y2="${i*38}"/>`).join("")}
+            </g>
+            <circle cx="130" cy="118" r="58" fill="none" stroke="${color}" stroke-width="2" opacity="0.4"/>
+            <text x="130" y="135" font-family="Orbitron, sans-serif" font-weight="900" font-size="56" fill="${color}" text-anchor="middle">#${level.rank}</text>
+            <text x="130" y="200" font-family="Rajdhani, sans-serif" font-weight="700" font-size="19" fill="#eef0fb" text-anchor="middle">${escapeXml(level.name)}</text>
+            <text x="130" y="222" font-family="Share Tech Mono, monospace" font-size="13" fill="${color}" text-anchor="middle">${level.points} PTS</text>
+            ${spikes}
+        </svg>
+    `;
+
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 }
 
 // ---------- Levels: sidebar + detail ----------
@@ -589,7 +639,7 @@ function renderDetail(level){
 
     detail.innerHTML = `
         <div class="level ${tierFor(level.rank)}">
-            <img src="${level.image}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
+            <img src="${level.image || generateCover(level)}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
             <div class="info">
                 <div class="level-top">
                     <div class="rank">#${level.rank}</div>
