@@ -517,6 +517,62 @@ header p{
     margin-top:6px;
 }
 
+/* ---------- Guidelines ---------- */
+
+.guidelines-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:30px 34px;
+}
+
+.guidelines-card h2{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:22px;
+    margin-bottom:6px;
+}
+
+.guidelines-card .guidelines-sub{
+    color:var(--muted);
+    font-size:15px;
+    margin-bottom:24px;
+}
+
+.guidelines-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.guidelines-list li{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:15px;
+    line-height:1.5;
+    color:var(--muted);
+}
+
+.guidelines-list li .rule-icon{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:14px;
+    color:var(--cyan);
+    background:var(--surface);
+    border:1px solid var(--cyan);
+    border-radius:6px;
+    padding:4px 9px;
+    flex-shrink:0;
+}
+
+.guidelines-list li b{ color:var(--text); }
+
 /* ---------- Leaderboards ---------- */
 
 .board{
@@ -607,6 +663,7 @@ footer{
 <div class="tabs">
     <button class="tab-btn active" data-view="levels">Levels</button>
     <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
+    <button class="tab-btn" data-view="guidelines">Guidelines</button>
 </div>
 
 <div class="stats">
@@ -637,6 +694,23 @@ footer{
         </div>
     </div>
 
+    <div class="view" id="guidelines-view">
+        <div class="guidelines-card">
+            <h2>List Guidelines</h2>
+            <div class="guidelines-sub">Read before submitting a record or picking a flag.</div>
+            <ul class="guidelines-list">
+                <li>
+                    <span class="rule-icon">01</span>
+                    <span><b>All records must be approved by Useryipee.</b> Submit your run (with proof) and wait for it to be reviewed and approved before it's added to the list. Unapproved runs won't be counted on the leaderboard.</span>
+                </li>
+                <li>
+                    <span class="rule-icon">02</span>
+                    <span><b>Your flag must reflect your own heritage.</b> Pick the country you're actually from or connected to by birth, citizenship, or family - not just a flag you think looks cool.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <!-- Dedicated full-page view for a single level, opened via "Open Level Page" -->
     <div class="view" id="level-view"></div>
 
@@ -661,10 +735,11 @@ const levels = [
     { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:379, image:"", firstPlaced:1, song:"Variat666 - SG (remake)", songNgId:"510563", levelID:"144413229" },
     { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:341, image:"", firstPlaced:3, song:"Purgatori", songNgId:"895761", levelID:"144345699" },
     { rank:4, name:"Tactile Erosion", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:296, image:"", firstPlaced:4, song:"Dark Matter", songNgId:"645828", levelID:"145162695" },
-    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:254, image:"", firstPlaced:5, song:"Tidal Wave(Shiawase VIP rmx)", songNgId:"1266014", levelID:"144483829" },
-    { rank:6, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:201, image:"", firstPlaced:5, song:"", songNgId:"", levelID:"" },
-    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:158, image:"", firstPlaced:1, song:"KzX - Stalemate", songNgId:"482872", levelID:"144332883" },
-    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:74, image:"", firstPlaced:4, song:"Daru", songNgId:"1590555", levelID:"144460364" }
+    { rank:5, name:"Cyne Ways", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:254, image:"", firstPlaced:5, song:"NK - Sine Wavs", songNgId:"512976", levelID:"145526268" },
+    { rank:6, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:201, image:"", firstPlaced:5, song:"Tidal Wave(Shiawase VIP rmx)", songNgId:"1266014", levelID:"144483829" },
+    { rank:7, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:158, image:"", firstPlaced:5, song:"", songNgId:"", levelID:"" },
+    { rank:8, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:74, image:"", firstPlaced:1, song:"KzX - Stalemate", songNgId:"482872", levelID:"144332883" },
+    { rank:9, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:62, image:"", firstPlaced:4, song:"Daru", songNgId:"1590555", levelID:"144460364" }
 ];
 
 // Flag emoji shown next to each player's name. Every name below is set
@@ -672,11 +747,11 @@ const levels = [
 // for that person (e.g. "🇺🇸", "🇬🇧", "🇦🇺", "🇨🇦"...).
 const defaultFlag = "🏳️";
 const playerFlags = {
-    "Useryipee": "🇦🇺",
-    "Cactusman9919": "🇦🇺",
+    "Useryipee": "🇦🇺 🇬🇧",
+    "Cactusman9919": "🇦🇺 🇮🇹",
     "Samuri815": "🇦🇺",
-    "Sirjefferson": "🇦🇺",
-    "Hexaprism": "🇦🇺"
+    "Sirjefferson": "🇦🇺 🇨🇳",
+    "Hexaprism": "🇦🇺 🇮🇪"
 };
 
 function flagFor(name){
@@ -1009,8 +1084,9 @@ document.querySelectorAll(".subtab-btn").forEach(btn=>{
 
 // ---------- Overlay pages: dedicated level page + player page ----------
 
-// Remembers which top-level tab (Levels / Leaderboard) was showing before
-// a level or player page was opened, so the back button can return to it.
+// Remembers which top-level tab (Levels / Leaderboard / Guidelines) was
+// showing before a level or player page was opened, so the back button
+// can return to it.
 let lastMainViewId = "levels-view";
 
 function openOverlay(viewId){
