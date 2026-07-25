@@ -390,6 +390,133 @@ header p{
 .badge.win{ border-color:var(--gold); color:var(--gold); }
 .badge.debut{ border-color:var(--cyan); color:var(--cyan); }
 
+.page-link-row{ margin-top:18px; }
+
+.page-link-btn{
+    font-family:var(--font-display);
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:transparent;
+    color:var(--cyan);
+    border:1px solid var(--cyan);
+    padding:9px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.page-link-btn:hover{
+    background:var(--cyan);
+    color:#04121a;
+}
+
+/* ---------- Player / level links (inline, clickable names) ---------- */
+
+.player-link{
+    color:var(--cyan);
+    cursor:pointer;
+    text-decoration:underline dotted rgba(47,232,255,0.5);
+    text-underline-offset:3px;
+}
+
+.player-link:hover{ color:#7fd8ff; }
+
+.level-text-link{
+    color:var(--magenta);
+    cursor:pointer;
+    text-decoration:underline dotted rgba(255,61,127,0.5);
+    text-underline-offset:3px;
+}
+
+.level-text-link:hover{ color:#ff7fb0; }
+
+.flag{ margin-right:2px; }
+
+/* ---------- Overlay pages: level page + player page ---------- */
+
+.back-btn{
+    font-family:var(--font-display);
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--surface);
+    color:var(--text);
+    border:1px solid var(--border);
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-bottom:20px;
+    transition:.2s;
+}
+
+.back-btn:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+.player-header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:30px;
+}
+
+.player-flag{ font-size:44px; line-height:1; }
+
+.player-name{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(26px,4vw,40px);
+}
+
+.player-section{ margin-bottom:34px; }
+
+.player-section h3{
+    font-family:var(--font-display);
+    font-size:14px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--border);
+}
+
+.mini-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:12px;
+}
+
+.mini-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.mini-card:hover{ border-color:var(--cyan); background:var(--surface-2); }
+
+.mini-rank{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:14px;
+    color:var(--muted);
+}
+
+.mini-name{
+    font-size:16px;
+    font-weight:600;
+    margin-top:2px;
+}
+
+.mini-percent{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--gold);
+    margin-top:6px;
+}
+
 /* ---------- Leaderboards ---------- */
 
 .board{
@@ -510,6 +637,12 @@ footer{
         </div>
     </div>
 
+    <!-- Dedicated full-page view for a single level, opened via "Open Level Page" -->
+    <div class="view" id="level-view"></div>
+
+    <!-- Dedicated full-page view for a single player, opened by clicking any player name -->
+    <div class="view" id="player-view"></div>
+
 </div>
 
 <footer>FriendGroupList © 2026 &mdash; built by the crew, for the crew</footer>
@@ -518,16 +651,37 @@ footer{
 
 // firstPlaced = the rank this level debuted at when it was first added
 // to the list, before anything else got reshuffled around it.
+//
+// song / songNgId / levelID are new fields for the level's own page.
+// They're left blank below - fill in the real Newgrounds song title,
+// its Newgrounds ID, and the level's Geometry Dash level ID for each
+// level and the level page will pick them up automatically.
 const levels = [
-    { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:428, image:"", firstPlaced:2 },
-    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:379, image:"", firstPlaced:1 },
-    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:341, image:"", firstPlaced:3 },
-    { rank:4, name:"Tactile Erosion", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:296, image:"", firstPlaced:4 },
-    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:254, image:"", firstPlaced:5 },
-    { rank:6, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:201, image:"", firstPlaced:5 },
-    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:158, image:"", firstPlaced:1 },
-    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:74, image:"", firstPlaced:4 }
+    { rank:1, name:"Blue Overdrive", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:428, image:"", firstPlaced:2, song:"At the speed of Light", songNgId:"467339", levelID:"139714418" },
+    { rank:2, name:"Hearing Loss", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"Samuri815", victors:[{name:"Samuri815",percent:100}], points:379, image:"", firstPlaced:1, song:"Variat666 - SG (remake)", songNgId:"510563", levelID:"144413229" },
+    { rank:3, name:"One Last Thing", creator:"Useryipee", verifier:"Cactusman9919", firstVictor:"", victors:[], points:341, image:"", firstPlaced:3, song:"Purgatori", songNgId:"895761", levelID:"144345699" },
+    { rank:4, name:"Tactile Erosion", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100}], points:296, image:"", firstPlaced:4, song:"Dark Matter", songNgId:"645828", levelID:"145162695" },
+    { rank:5, name:"Flash Flood", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Hexaprism",percent:100}], points:254, image:"", firstPlaced:5, song:"Tidal Wave(Shiawase VIP rmx)", songNgId:"1266014", levelID:"144483829" },
+    { rank:6, name:"Night Opener", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100}], points:201, image:"", firstPlaced:5, song:"", songNgId:"", levelID:"" },
+    { rank:7, name:"Dingus Unleashed", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Sirjefferson", victors:[{name:"Sirjefferson",percent:100},{name:"Cactusman9919",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:158, image:"", firstPlaced:1, song:"KzX - Stalemate", songNgId:"482872", levelID:"144332883" },
+    { rank:8, name:"Easy FGL Points", creator:"Useryipee", verifier:"Useryipee", firstVictor:"Cactusman9919", victors:[{name:"Cactusman9919",percent:100},{name:"Sirjefferson",percent:100},{name:"Samuri815",percent:100},{name:"Hexaprism",percent:100}], points:74, image:"", firstPlaced:4, song:"Daru", songNgId:"1590555", levelID:"144460364" }
 ];
+
+// Flag emoji shown next to each player's name. Every name below is set
+// to a placeholder white flag - swap each one for the real emoji flag
+// for that person (e.g. "🇺🇸", "🇬🇧", "🇦🇺", "🇨🇦"...).
+const defaultFlag = "🏳️";
+const playerFlags = {
+    "Useryipee": "🇦🇺",
+    "Cactusman9919": "🇦🇺",
+    "Samuri815": "🇦🇺",
+    "Sirjefferson": "🇦🇺",
+    "Hexaprism": "🇦🇺"
+};
+
+function flagFor(name){
+    return playerFlags[name] || defaultFlag;
+}
 
 // ---------- Signature spike divider ----------
 
@@ -621,6 +775,18 @@ function generateCover(level){
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 }
 
+// ---------- Inline link builders (clickable names -> pages) ----------
+
+function playerLink(name){
+    if(!name) return "None";
+    return `<span class="player-link" data-player="${escapeXml(name)}">${flagFor(name)} ${escapeXml(name)}</span>`;
+}
+
+function levelTextLink(level){
+    if(!level) return "";
+    return `<span class="level-text-link" data-level-rank="${level.rank}">${escapeXml(level.name)}</span>`;
+}
+
 // ---------- Levels: sidebar + detail ----------
 
 const sidebar = document.getElementById("levelsSidebar");
@@ -633,8 +799,8 @@ function renderDetail(level){
         spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
     }
 
-    const victorsList = level.victors.length
-        ? level.victors.map(v=> `${v.name}${v.percent < 100 ? ` (${v.percent}%)` : ""}`).join(", ")
+    const victorsHtml = level.victors.length
+        ? level.victors.map(v=> `${playerLink(v.name)}${v.percent < 100 ? ` (${v.percent}%)` : ""}`).join(", ")
         : "None yet";
 
     detail.innerHTML = `
@@ -645,21 +811,24 @@ function renderDetail(level){
                     <div class="rank">#${level.rank}</div>
                     <div class="name">${level.name}</div>
                 </div>
-                <div class="creator">Created by <b>${level.creator}</b></div>
+                <div class="creator">Created by ${playerLink(level.creator)}</div>
                 <div class="rating">
                     <div class="spikes">${spikesHtml}</div>
                     <div class="pts">${level.points} PTS</div>
                 </div>
                 <div class="details">
-                    <p><b>Verifier:</b> ${level.verifier || "None"}</p>
-                    <p><b>First Victor:</b> ${level.firstVictor || "None yet"}</p>
-                    <p><b>Victors:</b> ${victorsList}</p>
+                    <p><b>Verifier:</b> ${playerLink(level.verifier)}</p>
+                    <p><b>First Victor:</b> ${level.firstVictor ? playerLink(level.firstVictor) : "None yet"}</p>
+                    <p><b>Victors:</b> ${victorsHtml}</p>
                 </div>
                 <div class="badges">
                     <span class="badge">CURRENT RANK #${level.rank}</span>
                     <span class="badge debut">FIRST PLACED AT #${level.firstPlaced}</span>
                     <span class="badge">VERIFIED</span>
                     ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                </div>
+                <div class="page-link-row">
+                    <button class="page-link-btn" data-level-rank="${level.rank}">Open Level Page &rarr;</button>
                 </div>
             </div>
         </div>
@@ -770,7 +939,10 @@ function renderPlayerBoard(container, levelsData){
     ` + ranked.map((p,i)=>`
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>Hardest beaten: ${p.hardestName}</small></div>
+            <div class="board-name">
+                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <small>Hardest beaten: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
+            </div>
             <div class="board-points">${p.points}</div>
             <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
         </div>
@@ -795,7 +967,10 @@ function renderCreatorBoard(container, levelsData){
     ` + ranked.map((p,i)=>`
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
-            <div class="board-name">${p.name}<small>Hardest built: ${p.hardestName}</small></div>
+            <div class="board-name">
+                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <small>Hardest built: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
+            </div>
             <div class="board-points">${p.points}</div>
             <div class="board-count">${p.count} level${p.count === 1 ? "" : "s"}</div>
         </div>
@@ -830,6 +1005,149 @@ document.querySelectorAll(".subtab-btn").forEach(btn=>{
             v.classList.toggle("active", v.dataset.board === btn.dataset.board);
         });
     });
+});
+
+// ---------- Overlay pages: dedicated level page + player page ----------
+
+// Remembers which top-level tab (Levels / Leaderboard) was showing before
+// a level or player page was opened, so the back button can return to it.
+let lastMainViewId = "levels-view";
+
+function openOverlay(viewId){
+    const activeView = document.querySelector(".view.active");
+    if(activeView && activeView.id !== "level-view" && activeView.id !== "player-view"){
+        lastMainViewId = activeView.id;
+    }
+    document.querySelectorAll(".view").forEach(v=> v.classList.remove("active"));
+    document.getElementById(viewId).classList.add("active");
+    window.scrollTo({ top:0, behavior:"instant" in window ? "instant" : "auto" });
+}
+
+function closeOverlay(){
+    document.querySelectorAll(".view").forEach(v=> v.classList.remove("active"));
+    document.getElementById(lastMainViewId).classList.add("active");
+}
+
+function openLevelPage(rank){
+    const level = levels.find(l=> l.rank === rank);
+    if(!level) return;
+    renderLevelPage(level);
+    openOverlay("level-view");
+}
+
+function openPlayerPage(name){
+    if(!allPlayers.has(name)) return;
+    renderPlayerPage(name);
+    openOverlay("player-view");
+}
+
+function renderLevelPage(level){
+    const view = document.getElementById("level-view");
+    const rating = ratingFor(level.points);
+    let spikesHtml = "";
+    for(let i=1;i<=10;i++){
+        spikesHtml += `<i class="${i<=rating ? 'lit' : ''}"></i>`;
+    }
+
+    const victorsHtml = level.victors.length
+        ? level.victors.map(v=> `${playerLink(v.name)}${v.percent < 100 ? ` (${v.percent}%)` : ""}`).join(", ")
+        : "None yet";
+
+    view.innerHTML = `
+        <button class="back-btn">&larr; Back</button>
+        <div class="level ${tierFor(level.rank)}">
+            <img src="${level.image || generateCover(level)}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
+            <div class="info">
+                <div class="level-top">
+                    <div class="rank">#${level.rank}</div>
+                    <div class="name">${level.name}</div>
+                </div>
+                <div class="creator">Created by ${playerLink(level.creator)}</div>
+                <div class="rating">
+                    <div class="spikes">${spikesHtml}</div>
+                    <div class="pts">${level.points} PTS</div>
+                </div>
+                <div class="details">
+                    <p><b>Verifier:</b> ${playerLink(level.verifier)}</p>
+                    <p><b>First Victor:</b> ${level.firstVictor ? playerLink(level.firstVictor) : "None yet"}</p>
+                    <p><b>Victors:</b> ${victorsHtml}</p>
+                    <p><b>Newgrounds Song:</b> ${level.song ? escapeXml(level.song) : "Not set yet"}${level.songNgId ? ` &middot; NG ID ${escapeXml(level.songNgId)}` : ""}</p>
+                    <p><b>Level ID:</b> ${level.levelID ? escapeXml(String(level.levelID)) : "Not set yet"}</p>
+                </div>
+                <div class="badges">
+                    <span class="badge">CURRENT RANK #${level.rank}</span>
+                    <span class="badge debut">FIRST PLACED AT #${level.firstPlaced}</span>
+                    <span class="badge">VERIFIED</span>
+                    ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function levelMiniCard(level, percent){
+    return `
+        <div class="mini-card" data-level-rank="${level.rank}">
+            <div class="mini-rank">#${level.rank}</div>
+            <div class="mini-name">${escapeXml(level.name)}</div>
+            ${percent != null && percent < 100 ? `<div class="mini-percent">${percent}%</div>` : ""}
+        </div>
+    `;
+}
+
+function percentFor(level, name){
+    if(level.verifier === name || level.firstVictor === name) return 100;
+    const v = level.victors.find(v=> v.name === name);
+    return v ? v.percent : null;
+}
+
+function renderPlayerPage(name){
+    const view = document.getElementById("player-view");
+
+    const created = levels.filter(l=> l.creator === name);
+    const beaten = levels.filter(l=>
+        l.verifier === name || l.firstVictor === name || l.victors.some(v=> v.name === name)
+    );
+    const fullyBeaten = beaten.filter(l=> percentFor(l, name) === 100);
+    const hardest = fullyBeaten.slice().sort((a,b)=> a.rank - b.rank)[0];
+
+    view.innerHTML = `
+        <button class="back-btn">&larr; Back</button>
+        <div class="player-header">
+            <div class="player-flag">${flagFor(name)}</div>
+            <div class="player-name">${escapeXml(name)}</div>
+        </div>
+
+        <div class="player-section">
+            <h3>Hardest Level Beaten</h3>
+            ${hardest ? `<div class="mini-grid">${levelMiniCard(hardest)}</div>` : `<div class="empty">No full completions logged yet.</div>`}
+        </div>
+
+        <div class="player-section">
+            <h3>Levels Created (${created.length})</h3>
+            ${created.length ? `<div class="mini-grid">${created.map(l=> levelMiniCard(l)).join("")}</div>` : `<div class="empty">Hasn't built anything on the list yet.</div>`}
+        </div>
+
+        <div class="player-section">
+            <h3>Levels Beaten (${beaten.length})</h3>
+            ${beaten.length
+                ? `<div class="mini-grid">${beaten.slice().sort((a,b)=> a.rank-b.rank).map(l=> levelMiniCard(l, percentFor(l, name))).join("")}</div>`
+                : `<div class="empty">No completions logged yet.</div>`}
+        </div>
+    `;
+}
+
+// Single delegated click handler: catches every player link, level link,
+// "Open Level Page" button, and back button, wherever they're rendered.
+document.addEventListener("click", (e)=>{
+    const backBtn = e.target.closest(".back-btn");
+    if(backBtn){ closeOverlay(); return; }
+
+    const playerEl = e.target.closest("[data-player]");
+    if(playerEl){ openPlayerPage(playerEl.dataset.player); return; }
+
+    const levelEl = e.target.closest("[data-level-rank]");
+    if(levelEl){ openLevelPage(Number(levelEl.dataset.levelRank)); return; }
 });
 
 </script>
