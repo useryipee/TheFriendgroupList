@@ -413,7 +413,15 @@ header p{
 
 /* ---------- Player / level links (inline, clickable names) ---------- */
 
-.player-link{
+.gd-icon{
+    width:24px;
+    height:24px;
+    image-rendering:pixelated;
+    vertical-align:middle;
+    margin-right:6px;
+    border-radius:4px;
+}
+    .player-link{
     color:var(--cyan);
     cursor:pointer;
     text-decoration:underline dotted rgba(47,232,255,0.5);
@@ -757,6 +765,9 @@ const playerFlags = {
 
 function flagFor(name){
     return playerFlags[name] || defaultFlag;
+    function getGDIcon(username) {
+    return `https://gdprwserver.7m.pl/icon/${encodeURIComponent(username)}?size=64`;
+}
 }
 
 // ---------- Signature spike divider ----------
@@ -852,10 +863,14 @@ function generateCover(level){
 }
 
 // ---------- Inline link builders (clickable names -> pages) ----------
-
 function playerLink(name){
     if(!name) return "None";
-    return `<span class="player-link" data-player="${escapeXml(name)}">${flagFor(name)} ${escapeXml(name)}</span>`;
+    return `
+        <span class="player-link" data-player="${escapeXml(name)}">
+            <img class="gd-icon" src="${getGDIcon(name)}" alt="${escapeXml(name)}">
+            ${flagFor(name)} ${escapeXml(name)}
+        </span>
+    `;
 }
 
 function levelTextLink(level){
@@ -1016,7 +1031,8 @@ function renderPlayerBoard(container, levelsData){
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}">
+${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest beaten: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
@@ -1044,7 +1060,8 @@ function renderCreatorBoard(container, levelsData){
         <div class="board-row p${i+1}">
             <div class="board-rank">${i+1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}">
+${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest built: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
