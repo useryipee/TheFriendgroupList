@@ -75,6 +75,19 @@
         text-transform: uppercase;
       }
 
+      header {
+        animation: gridDrift 22s linear infinite;
+      }
+
+      @keyframes gridDrift {
+        from {
+          background-position: 0 0, 0 0, 0 0;
+        }
+        to {
+          background-position: 32px 0, 0 32px, 0 0;
+        }
+      }
+
       header h1 {
         font-family: var(--font-display);
         font-weight: 900;
@@ -86,6 +99,17 @@
         background-clip: text;
         color: transparent;
         text-shadow: 0 0 40px rgba(47, 232, 255, 0.15);
+        animation: headerGlow 3.2s ease-in-out infinite;
+      }
+
+      @keyframes headerGlow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 6px rgba(47, 232, 255, 0.2));
+        }
+        50% {
+          filter: drop-shadow(0 0 16px rgba(255, 61, 127, 0.3));
+        }
       }
 
       header p {
@@ -115,6 +139,10 @@
 
       .discord-link:hover {
         filter: brightness(1.1);
+      }
+
+      .discord-link:active {
+        transform: scale(0.96);
       }
 
       .spike-row {
@@ -169,6 +197,10 @@
         border-color: var(--cyan);
       }
 
+      .tab-btn:active {
+        transform: scale(0.95);
+      }
+
       .tab-btn.active {
         color: #04121a;
         background: linear-gradient(90deg, var(--cyan), #7fd8ff);
@@ -199,6 +231,10 @@
       .subtab-btn:hover {
         color: var(--text);
         border-color: var(--magenta);
+      }
+
+      .subtab-btn:active {
+        transform: scale(0.95);
       }
 
       .subtab-btn.active {
@@ -488,16 +524,12 @@
         color: #04121a;
       }
 
+      .page-link-btn:active {
+        transform: scale(0.95);
+      }
+
       /* ---------- Player / level links (inline, clickable names) ---------- */
 
-      .gd-icon {
-        width: 24px;
-        height: 24px;
-        image-rendering: pixelated;
-        vertical-align: middle;
-        margin-right: 6px;
-        border-radius: 4px;
-      }
       .player-link {
         color: var(--cyan);
         cursor: pointer;
@@ -544,6 +576,10 @@
       .back-btn:hover {
         border-color: var(--cyan);
         color: var(--cyan);
+      }
+
+      .back-btn:active {
+        transform: scale(0.95);
       }
 
       .player-header {
@@ -597,6 +633,11 @@
       .mini-card:hover {
         border-color: var(--cyan);
         background: var(--surface-2);
+        transform: translateY(-2px);
+      }
+
+      .mini-card:active {
+        transform: scale(0.97);
       }
 
       .mini-rank {
@@ -892,6 +933,151 @@
         font-family: var(--font-mono);
       }
 
+      /* ---------- Loading screen ---------- */
+
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at 15% 0%, rgba(47, 232, 255, 0.1), transparent 40%),
+          radial-gradient(circle at 85% 10%, rgba(255, 61, 127, 0.1), transparent 40%),
+          var(--bg);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+
+      .loading-screen.hide {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .loading-inner {
+        width: min(340px, 80vw);
+        text-align: center;
+      }
+
+      .loading-title {
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 26px;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, var(--cyan), #7fd8ff 40%, var(--magenta));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 26px;
+        animation: titlePulse 1.6s ease-in-out infinite;
+      }
+
+      @keyframes titlePulse {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 6px rgba(47, 232, 255, 0.25));
+        }
+        50% {
+          filter: drop-shadow(0 0 16px rgba(255, 61, 127, 0.35));
+        }
+      }
+
+      .loading-bar-track {
+        position: relative;
+        height: 8px;
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .loading-bar-fill {
+        position: absolute;
+        inset: 0;
+        width: 0%;
+        background: linear-gradient(90deg, var(--magenta), var(--cyan));
+        border-radius: 6px;
+        animation: loadBar 1.1s ease forwards;
+      }
+
+      @keyframes loadBar {
+        from {
+          width: 0%;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      .loading-spike-row {
+        display: flex;
+        width: 100%;
+        height: 8px;
+        line-height: 0;
+        margin-top: 10px;
+        opacity: 0.8;
+      }
+
+      .loading-spike-row .spike {
+        flex: 1 0 auto;
+        height: 100%;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        animation: spikeChase 1.1s ease-in-out infinite;
+      }
+
+      .loading-spike-row .spike:nth-child(3n) {
+        background: var(--cyan);
+        animation-delay: 0.1s;
+      }
+      .loading-spike-row .spike:nth-child(3n + 1) {
+        background: var(--magenta);
+        animation-delay: 0s;
+      }
+      .loading-spike-row .spike:nth-child(3n + 2) {
+        background: var(--gold);
+        animation-delay: 0.2s;
+      }
+
+      @keyframes spikeChase {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scaleY(0.6);
+        }
+        50% {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+      }
+
+      .loading-status {
+        margin-top: 16px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      /* ---------- Fade-in entrance effects ---------- */
+
+      .fade-in {
+        animation: fadeInUp 0.4s ease both;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @media (max-width: 800px) {
         .levels-layout {
           flex-direction: column;
@@ -921,6 +1107,17 @@
   </head>
 
   <body>
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-inner">
+        <div class="loading-title">FriendGroupList</div>
+        <div class="loading-bar-track">
+          <div class="loading-bar-fill"></div>
+        </div>
+        <div class="loading-spike-row" id="loadingSpikeRow"></div>
+        <div class="loading-status" id="loadingStatus">Loading levels...</div>
+      </div>
+    </div>
+
     <header>
       <div class="eyebrow">Friend-verified · Hardest to easiest</div>
       <h1>FriendGroupList</h1>
@@ -1201,12 +1398,6 @@
         return playerFlags[name] || defaultFlag;
       }
 
-      // Builds the URL for a player's in-game Geometry Dash icon.
-      // Kept at the top level (not nested) so every function below can use it.
-      function getGDIcon(username) {
-        return `https://gdprwserver.7m.pl/icon/${encodeURIComponent(username)}?size=64`;
-      }
-
       // ---------- Signature spike divider ----------
 
       const spikeRow = document.getElementById("spikeRow");
@@ -1214,6 +1405,13 @@
         const s = document.createElement("div");
         s.className = "spike";
         spikeRow.appendChild(s);
+      }
+
+      const loadingSpikeRow = document.getElementById("loadingSpikeRow");
+      for (let i = 0; i < 24; i++) {
+        const s = document.createElement("div");
+        s.className = "spike";
+        loadingSpikeRow.appendChild(s);
       }
 
       // Same spike-strip treatment for the Guidelines card divider.
@@ -1321,7 +1519,6 @@
         if (!name) return "None";
         return `
         <span class="player-link" data-player="${escapeXml(name)}">
-            <img class="gd-icon" src="${getGDIcon(name)}" alt="${escapeXml(name)}" onerror="this.style.display='none'">
             ${flagFor(name)} ${escapeXml(name)}
         </span>
     `;
@@ -1349,7 +1546,7 @@
           : "None yet";
 
         detail.innerHTML = `
-        <div class="level ${tierFor(level.rank)}">
+        <div class="level fade-in ${tierFor(level.rank)}">
             <img src="${level.image || generateCover(level)}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
             <div class="info">
                 <div class="level-top">
@@ -1495,8 +1692,7 @@
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}" onerror="this.style.display='none'">
-${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest beaten: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
@@ -1530,8 +1726,7 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}" onerror="this.style.display='none'">
-${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest built: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
@@ -1547,13 +1742,27 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
 
       // ---------- Tabs ----------
 
+      // Small reusable fade+rise transition played whenever a view becomes visible.
+      function playViewTransition(el) {
+        if (!el || !el.animate) return;
+        el.animate(
+          [
+            { opacity: 0, transform: "translateY(8px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 320, easing: "cubic-bezier(.2,.8,.2,1)" },
+        );
+      }
+
       document.querySelectorAll(".tab-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
 
           document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-          document.getElementById(`${btn.dataset.view}-view`).classList.add("active");
+          const nextView = document.getElementById(`${btn.dataset.view}-view`);
+          nextView.classList.add("active");
+          playViewTransition(nextView);
         });
       });
 
@@ -1567,7 +1776,9 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
           btn.classList.add("active");
 
           group.querySelectorAll(".board-view").forEach((v) => {
-            v.classList.toggle("active", v.dataset.board === btn.dataset.board);
+            const isActive = v.dataset.board === btn.dataset.board;
+            v.classList.toggle("active", isActive);
+            if (isActive) playViewTransition(v);
           });
         });
       });
@@ -1585,13 +1796,17 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
           lastMainViewId = activeView.id;
         }
         document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-        document.getElementById(viewId).classList.add("active");
+        const nextView = document.getElementById(viewId);
+        nextView.classList.add("active");
+        playViewTransition(nextView);
         window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
       }
 
       function closeOverlay() {
         document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-        document.getElementById(lastMainViewId).classList.add("active");
+        const nextView = document.getElementById(lastMainViewId);
+        nextView.classList.add("active");
+        playViewTransition(nextView);
       }
 
       function openLevelPage(rank) {
@@ -1621,7 +1836,7 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
 
         view.innerHTML = `
         <button class="back-btn">&larr; Back</button>
-        <div class="level ${tierFor(level.rank)}">
+        <div class="level fade-in ${tierFor(level.rank)}">
             <img src="${level.image || generateCover(level)}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
             <div class="info">
                 <div class="level-top">
@@ -1679,23 +1894,22 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
 
         view.innerHTML = `
         <button class="back-btn">&larr; Back</button>
-        <div class="player-header">
-            <img class="gd-icon" style="width:44px;height:44px;margin-right:0" src="${getGDIcon(name)}" onerror="this.style.display='none'">
+        <div class="player-header fade-in">
             <div class="player-flag">${flagFor(name)}</div>
             <div class="player-name">${escapeXml(name)}</div>
         </div>
 
-        <div class="player-section">
+        <div class="player-section fade-in">
             <h3>Hardest Level Beaten</h3>
             ${hardest ? `<div class="mini-grid">${levelMiniCard(hardest)}</div>` : `<div class="empty">No full completions logged yet.</div>`}
         </div>
 
-        <div class="player-section">
+        <div class="player-section fade-in">
             <h3>Levels Created (${created.length})</h3>
             ${created.length ? `<div class="mini-grid">${created.map((l) => levelMiniCard(l)).join("")}</div>` : `<div class="empty">Hasn't built anything on the list yet.</div>`}
         </div>
 
-        <div class="player-section">
+        <div class="player-section fade-in">
             <h3>Levels Beaten (${beaten.length})</h3>
             ${
               beaten.length
@@ -1731,6 +1945,36 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
           return;
         }
       });
+
+      // ---------- Loading screen ----------
+
+      // Cycles through a couple of status lines while the bar animates, then
+      // fades the whole screen out once everything (fonts included) is ready
+      // and a minimum show time has elapsed, so it doesn't just flash by.
+      const loadingScreen = document.getElementById("loadingScreen");
+      const loadingStatus = document.getElementById("loadingStatus");
+      const loadingMessages = ["Loading levels...", "Syncing leaderboard...", "Almost there..."];
+      let loadingMessageIndex = 0;
+
+      const loadingMessageInterval = setInterval(() => {
+        loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
+        if (loadingStatus) loadingStatus.textContent = loadingMessages[loadingMessageIndex];
+      }, 420);
+
+      function hideLoadingScreen() {
+        clearInterval(loadingMessageInterval);
+        if (!loadingScreen) return;
+        loadingScreen.classList.add("hide");
+        setTimeout(() => loadingScreen.remove(), 600);
+      }
+
+      window.addEventListener("load", () => {
+        setTimeout(hideLoadingScreen, 850);
+      });
+
+      // Fallback in case the load event is slow to fire (e.g. blocked font
+      // request) - never leave the loading screen up for more than 4s.
+      setTimeout(hideLoadingScreen, 4000);
     </script>
   </body>
 </html>
