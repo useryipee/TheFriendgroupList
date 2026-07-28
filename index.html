@@ -622,59 +622,184 @@
       /* ---------- Guidelines ---------- */
 
       .guidelines-card {
-        background: var(--surface);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(165deg, var(--surface), var(--surface-2) 85%);
         border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 30px 34px;
+        border-radius: 20px;
+        padding: 44px 44px 40px;
+      }
+
+      .guidelines-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 92% 0%, rgba(255, 61, 127, 0.1), transparent 45%),
+          radial-gradient(circle at 4% 100%, rgba(47, 232, 255, 0.1), transparent 45%);
+        pointer-events: none;
+      }
+
+      .guidelines-eyebrow {
+        position: relative;
+        font-family: var(--font-mono);
+        letter-spacing: 4px;
+        font-size: 12px;
+        color: var(--magenta);
+        text-transform: uppercase;
       }
 
       .guidelines-card h2 {
+        position: relative;
         font-family: var(--font-display);
-        font-weight: 800;
-        font-size: 22px;
-        margin-bottom: 6px;
+        font-weight: 900;
+        font-size: clamp(26px, 4vw, 38px);
+        margin-top: 12px;
+        letter-spacing: 0.5px;
+        background: linear-gradient(90deg, var(--cyan), #7fd8ff 40%, var(--magenta));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 40px rgba(47, 232, 255, 0.12);
       }
 
       .guidelines-card .guidelines-sub {
+        position: relative;
         color: var(--muted);
-        font-size: 15px;
-        margin-bottom: 24px;
+        font-size: 15.5px;
+        max-width: 540px;
+        margin-top: 12px;
+      }
+
+      .guidelines-spike-row {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 10px;
+        line-height: 0;
+        margin: 28px 0 30px;
+        opacity: 0.85;
+      }
+
+      .guidelines-spike-row .spike {
+        flex: 1 0 auto;
+        height: 100%;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      }
+
+      .guidelines-spike-row .spike:nth-child(3n) {
+        background: var(--cyan);
+      }
+      .guidelines-spike-row .spike:nth-child(3n + 1) {
+        background: var(--magenta);
+      }
+      .guidelines-spike-row .spike:nth-child(3n + 2) {
+        background: var(--gold);
       }
 
       .guidelines-list {
+        position: relative;
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 18px;
       }
 
       .guidelines-list li {
-        display: flex;
-        gap: 14px;
-        align-items: flex-start;
-        background: var(--surface-2);
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 20px;
+        align-items: center;
+        background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 16px 18px;
-        font-size: 15px;
-        line-height: 1.5;
+        border-radius: 14px;
+        padding: 22px 26px;
+        transition: 0.2s;
+      }
+
+      .guidelines-list li:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      }
+
+      .guidelines-list li:nth-child(1) {
+        border-left: 3px solid var(--magenta);
+      }
+      .guidelines-list li:nth-child(1):hover {
+        border-color: var(--magenta);
+      }
+      .guidelines-list li:nth-child(2) {
+        border-left: 3px solid var(--cyan);
+      }
+      .guidelines-list li:nth-child(2):hover {
+        border-color: var(--cyan);
+      }
+
+      .rule-num {
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 40px;
+        text-align: center;
         color: var(--muted);
       }
 
-      .guidelines-list li .rule-icon {
-        font-family: var(--font-display);
-        font-weight: 900;
-        font-size: 14px;
+      .guidelines-list li:nth-child(1) .rule-num {
+        color: var(--magenta);
+        text-shadow: 0 0 18px rgba(255, 61, 127, 0.5);
+      }
+      .guidelines-list li:nth-child(2) .rule-num {
         color: var(--cyan);
-        background: var(--surface);
-        border: 1px solid var(--cyan);
-        border-radius: 6px;
-        padding: 4px 9px;
-        flex-shrink: 0;
+        text-shadow: 0 0 18px rgba(47, 232, 255, 0.4);
       }
 
-      .guidelines-list li b {
+      .rule-body b {
+        display: block;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 16.5px;
         color: var(--text);
+        margin-bottom: 6px;
+        letter-spacing: 0.2px;
+      }
+
+      .rule-body span {
+        display: block;
+        color: var(--muted);
+        font-size: 14.5px;
+        line-height: 1.55;
+      }
+
+      .rule-tag {
+        display: inline-block;
+        margin-top: 12px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-radius: 6px;
+        padding: 4px 10px;
+      }
+
+      .guidelines-list li:nth-child(1) .rule-tag {
+        border: 1px solid var(--magenta);
+        color: var(--magenta);
+      }
+      .guidelines-list li:nth-child(2) .rule-tag {
+        border: 1px solid var(--cyan);
+        color: var(--cyan);
+      }
+
+      @media (max-width: 560px) {
+        .guidelines-card {
+          padding: 30px 24px;
+        }
+        .guidelines-list li {
+          grid-template-columns: 1fr;
+          text-align: left;
+        }
+        .rule-num {
+          text-align: left;
+        }
       }
 
       /* ---------- Leaderboards ---------- */
@@ -851,24 +976,32 @@
 
       <div class="view" id="guidelines-view">
         <div class="guidelines-card">
+          <div class="guidelines-eyebrow">Official Ruleset &middot; Non-negotiable</div>
           <h2>List Guidelines</h2>
-          <div class="guidelines-sub">Read before submitting a record or picking a flag.</div>
+          <div class="guidelines-sub">Every submission and every flag on this site is held to these two rules.</div>
+          <div class="guidelines-spike-row" id="guidelinesSpikeRow"></div>
           <ul class="guidelines-list">
             <li>
-              <span class="rule-icon">01</span>
-              <span>
-                <b>All records must be approved by Useryipee.</b>
-                Submit your run (with proof) and wait for it to be reviewed and approved before it's added to the list.
-                Unapproved runs won't be counted on the leaderboard.
-              </span>
+              <div class="rule-num">01</div>
+              <div class="rule-body">
+                <b>All records must be approved by Useryipee</b>
+                <span
+                  >Submit your run with proof and wait for it to be reviewed. Unapproved runs are not added to the
+                  list and won't count on the leaderboard.</span
+                >
+                <span class="rule-tag">Required for every submission</span>
+              </div>
             </li>
             <li>
-              <span class="rule-icon">02</span>
-              <span>
-                <b>Your flag must reflect your own heritage.</b>
-                Pick the country you're actually from or connected to by birth, citizenship, or family - not just a flag
-                you think looks cool.
-              </span>
+              <div class="rule-num">02</div>
+              <div class="rule-body">
+                <b>Your flag(s) must reflect your own heritage</b>
+                <span
+                  >Pick the country or countries you're actually from or connected to by birth, citizenship, or
+                  family - not just a flag you think looks cool.</span
+                >
+                <span class="rule-tag">Applies to every profile</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -1052,8 +1185,9 @@
       ];
 
       // Flag emoji shown next to each player's name. Every name below is set
-      // to a placeholder white flag - swap each one for the real emoji flag
-      // for that person (e.g. "🇺🇸", "🇬🇧", "🇦🇺", "🇨🇦"...).
+      // to a placeholder white flag - swap each one for the real emoji flag(s)
+      // for that person (e.g. "🇺🇸", "🇬🇧", "🇦🇺", "🇨🇦"...). Multiple flags
+      // in one string (e.g. "🇦🇺 🇬🇧") are supported for mixed heritage.
       const defaultFlag = "🏳️";
       const playerFlags = {
         Useryipee: "🇦🇺 🇬🇧",
@@ -1065,9 +1199,12 @@
 
       function flagFor(name) {
         return playerFlags[name] || defaultFlag;
-        function getGDIcon(username) {
-          return `https://gdprwserver.7m.pl/icon/${encodeURIComponent(username)}?size=64`;
-        }
+      }
+
+      // Builds the URL for a player's in-game Geometry Dash icon.
+      // Kept at the top level (not nested) so every function below can use it.
+      function getGDIcon(username) {
+        return `https://gdprwserver.7m.pl/icon/${encodeURIComponent(username)}?size=64`;
       }
 
       // ---------- Signature spike divider ----------
@@ -1077,6 +1214,14 @@
         const s = document.createElement("div");
         s.className = "spike";
         spikeRow.appendChild(s);
+      }
+
+      // Same spike-strip treatment for the Guidelines card divider.
+      const guidelinesSpikeRow = document.getElementById("guidelinesSpikeRow");
+      for (let i = 0; i < 30; i++) {
+        const s = document.createElement("div");
+        s.className = "spike";
+        guidelinesSpikeRow.appendChild(s);
       }
 
       // ---------- Stats ----------
@@ -1176,7 +1321,7 @@
         if (!name) return "None";
         return `
         <span class="player-link" data-player="${escapeXml(name)}">
-            <img class="gd-icon" src="${getGDIcon(name)}" alt="${escapeXml(name)}">
+            <img class="gd-icon" src="${getGDIcon(name)}" alt="${escapeXml(name)}" onerror="this.style.display='none'">
             ${flagFor(name)} ${escapeXml(name)}
         </span>
     `;
@@ -1350,7 +1495,7 @@
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}">
+                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}" onerror="this.style.display='none'">
 ${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest beaten: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
@@ -1385,7 +1530,7 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}">
+                <span class="player-link" data-player="${escapeXml(p.name)}"><img class="gd-icon" src="${getGDIcon(p.name)}" onerror="this.style.display='none'">
 ${flagFor(p.name)} ${escapeXml(p.name)}</span>
                 <small>Hardest built: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
@@ -1535,6 +1680,7 @@ ${flagFor(p.name)} ${escapeXml(p.name)}</span>
         view.innerHTML = `
         <button class="back-btn">&larr; Back</button>
         <div class="player-header">
+            <img class="gd-icon" style="width:44px;height:44px;margin-right:0" src="${getGDIcon(name)}" onerror="this.style.display='none'">
             <div class="player-flag">${flagFor(name)}</div>
             <div class="player-name">${escapeXml(name)}</div>
         </div>
