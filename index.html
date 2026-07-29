@@ -501,6 +501,48 @@
         color: var(--cyan);
       }
 
+      .badge.new-tag {
+        border-color: var(--magenta);
+        color: #04121a;
+        background: linear-gradient(90deg, var(--magenta), #ff7fb0);
+        font-weight: 700;
+        animation: newPulse 1.8s ease-in-out infinite;
+      }
+
+      @keyframes newPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 rgba(255, 61, 127, 0);
+        }
+        50% {
+          box-shadow: 0 0 12px rgba(255, 61, 127, 0.55);
+        }
+      }
+
+      .sidebar-new-tag {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.5px;
+        color: #04121a;
+        background: linear-gradient(90deg, var(--magenta), #ff7fb0);
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .mini-new-tag {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        color: #04121a;
+        background: linear-gradient(90deg, var(--magenta), #ff7fb0);
+        padding: 2px 7px;
+        border-radius: 4px;
+        margin-top: 6px;
+      }
+
       .page-link-row {
         margin-top: 18px;
       }
@@ -586,7 +628,49 @@
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-bottom: 30px;
+        margin-bottom: 24px;
+      }
+
+      .player-stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 34px;
+      }
+
+      .player-stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 18px;
+        min-width: 110px;
+        text-align: center;
+      }
+
+      .player-stat-value {
+        display: block;
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 22px;
+        color: var(--gold);
+      }
+
+      .player-stat.rank-player .player-stat-value {
+        color: var(--cyan);
+      }
+
+      .player-stat.rank-creator .player-stat-value {
+        color: var(--magenta);
+      }
+
+      .player-stat-label {
+        display: block;
+        margin-top: 4px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
       }
 
       .player-flag {
@@ -763,16 +847,16 @@
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
       }
 
-      .guidelines-list li:nth-child(1) {
+      .guidelines-list li:nth-child(odd) {
         border-left: 3px solid var(--magenta);
       }
-      .guidelines-list li:nth-child(1):hover {
+      .guidelines-list li:nth-child(odd):hover {
         border-color: var(--magenta);
       }
-      .guidelines-list li:nth-child(2) {
+      .guidelines-list li:nth-child(even) {
         border-left: 3px solid var(--cyan);
       }
-      .guidelines-list li:nth-child(2):hover {
+      .guidelines-list li:nth-child(even):hover {
         border-color: var(--cyan);
       }
 
@@ -784,11 +868,11 @@
         color: var(--muted);
       }
 
-      .guidelines-list li:nth-child(1) .rule-num {
+      .guidelines-list li:nth-child(odd) .rule-num {
         color: var(--magenta);
         text-shadow: 0 0 18px rgba(255, 61, 127, 0.5);
       }
-      .guidelines-list li:nth-child(2) .rule-num {
+      .guidelines-list li:nth-child(even) .rule-num {
         color: var(--cyan);
         text-shadow: 0 0 18px rgba(47, 232, 255, 0.4);
       }
@@ -821,11 +905,11 @@
         padding: 4px 10px;
       }
 
-      .guidelines-list li:nth-child(1) .rule-tag {
+      .guidelines-list li:nth-child(odd) .rule-tag {
         border: 1px solid var(--magenta);
         color: var(--magenta);
       }
-      .guidelines-list li:nth-child(2) .rule-tag {
+      .guidelines-list li:nth-child(even) .rule-tag {
         border: 1px solid var(--cyan);
         color: var(--cyan);
       }
@@ -1175,7 +1259,7 @@
         <div class="guidelines-card">
           <div class="guidelines-eyebrow">Official Ruleset &middot; Non-negotiable</div>
           <h2>List Guidelines</h2>
-          <div class="guidelines-sub">Every submission and every flag on this site is held to these two rules.</div>
+          <div class="guidelines-sub">Every submission, run, and profile on this site is held to these four rules.</div>
           <div class="guidelines-spike-row" id="guidelinesSpikeRow"></div>
           <ul class="guidelines-list">
             <li>
@@ -1191,6 +1275,28 @@
             </li>
             <li>
               <div class="rule-num">02</div>
+              <div class="rule-body">
+                <b>Proof is mandatory</b>
+                <span
+                  >A raw, unedited clip or screenshot showing the completion (attempt count and progress visible)
+                  must come with every submission. No proof means no record, no exceptions.</span
+                >
+                <span class="rule-tag">No proof, no record</span>
+              </div>
+            </li>
+            <li>
+              <div class="rule-num">03</div>
+              <div class="rule-body">
+                <b>Legit runs only</b>
+                <span
+                  >No hacks, noclip, speedhacks, or any form of cheating. Getting caught voids every record you've
+                  ever submitted and gets you banned from future submissions.</span
+                >
+                <span class="rule-tag">Zero tolerance</span>
+              </div>
+            </li>
+            <li>
+              <div class="rule-num">04</div>
               <div class="rule-body">
                 <b>Your flag(s) must reflect your own heritage</b>
                 <span
@@ -1221,6 +1327,10 @@
       // They're left blank below - fill in the real Newgrounds song title,
       // its Newgrounds ID, and the level's Geometry Dash level ID for each
       // level and the level page will pick them up automatically.
+      //
+      // isNew: set this to true on any level you want tagged with a glowing
+      // "NEW" badge (sidebar, detail card, level page, and player pages).
+      // Just flip it back to false once it's not new anymore.
       const levels = [
         {
           rank: 1,
@@ -1235,6 +1345,7 @@
           song: "Tennobyte - Fly Away",
           songNgId: "945695",
           levelID: "145666706",
+          isNew: true,
         },
         {
           rank: 2,
@@ -1249,6 +1360,7 @@
           song: "Variat666 - SG (remake)",
           songNgId: "510563",
           levelID: "144413229",
+          isNew: false,
         },
         {
           rank: 3,
@@ -1263,6 +1375,7 @@
           song: "Purgatori",
           songNgId: "895761",
           levelID: "144345699",
+          isNew: false,
         },
         {
           rank: 4,
@@ -1277,6 +1390,7 @@
           song: "Dark Matter",
           songNgId: "645828",
           levelID: "145162695",
+          isNew: false,
         },
         {
           rank: 5,
@@ -1291,6 +1405,7 @@
           song: "NK - Sine Wavs",
           songNgId: "512976",
           levelID: "145526268",
+          isNew: false,
         },
         {
           rank: 6,
@@ -1309,6 +1424,7 @@
           song: "Tidal Wave(Shiawase VIP rmx)",
           songNgId: "1266014",
           levelID: "144483829",
+          isNew: false,
         },
         {
           rank: 7,
@@ -1323,6 +1439,7 @@
           song: "Summer",
           songNgId: "1303104",
           levelID: "141042999",
+          isNew: false,
         },
         {
           rank: 8,
@@ -1340,6 +1457,7 @@
           song: "At the speed of Light",
           songNgId: "467339",
           levelID: "142408074",
+          isNew: false,
         },
         {
           rank: 9,
@@ -1359,6 +1477,7 @@
           song: "KzX - Stalemate",
           songNgId: "482872",
           levelID: "144332883",
+          isNew: false,
         },
         {
           rank: 10,
@@ -1378,6 +1497,7 @@
           song: "Daru",
           songNgId: "1590555",
           levelID: "144460364",
+          isNew: false,
         },
       ];
 
@@ -1568,6 +1688,7 @@
                     <span class="badge debut">FIRST PLACED AT #${level.firstPlaced}</span>
                     <span class="badge">VERIFIED</span>
                     ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                    ${level.isNew ? '<span class="badge new-tag">NEW</span>' : ""}
                 </div>
                 <div class="page-link-row">
                     <button class="page-link-btn" data-level-rank="${level.rank}">Open Level Page &rarr;</button>
@@ -1586,6 +1707,7 @@
           item.innerHTML = `
             <span class="sidebar-rank">#${level.rank}</span>
             <span class="sidebar-name">${level.name}</span>
+            ${level.isNew ? '<span class="sidebar-new-tag">NEW</span>' : ""}
         `;
           item.addEventListener("click", () => {
             document.querySelectorAll(".sidebar-item").forEach((el) => el.classList.remove("active"));
@@ -1860,6 +1982,7 @@
                     <span class="badge debut">FIRST PLACED AT #${level.firstPlaced}</span>
                     <span class="badge">VERIFIED</span>
                     ${level.firstVictor ? '<span class="badge win">FIRST VICTOR</span>' : ""}
+                    ${level.isNew ? '<span class="badge new-tag">NEW</span>' : ""}
                 </div>
             </div>
         </div>
@@ -1872,6 +1995,7 @@
             <div class="mini-rank">#${level.rank}</div>
             <div class="mini-name">${escapeXml(level.name)}</div>
             ${percent != null && percent < 100 ? `<div class="mini-percent">${percent}%</div>` : ""}
+            ${level.isNew ? '<span class="mini-new-tag">NEW</span>' : ""}
         </div>
     `;
       }
@@ -1890,7 +2014,28 @@
           (l) => l.verifier === name || l.firstVictor === name || l.victors.some((v) => v.name === name),
         );
         const fullyBeaten = beaten.filter((l) => percentFor(l, name) === 100);
-        const hardest = fullyBeaten.slice().sort((a, b) => a.rank - b.rank)[0];
+        const hardestBeaten = fullyBeaten.slice().sort((a, b) => a.rank - b.rank)[0];
+        const hardestCreated = created.slice().sort((a, b) => a.rank - b.rank)[0];
+
+        const playerBoard = computePlayerLeaderboard(levels);
+        const creatorBoard = computeCreatorLeaderboard(levels);
+        const playerRankIdx = playerBoard.findIndex((p) => p.name === name);
+        const creatorRankIdx = creatorBoard.findIndex((p) => p.name === name);
+        const playerEntry = playerRankIdx !== -1 ? playerBoard[playerRankIdx] : null;
+
+        const statCards = [
+          playerRankIdx !== -1
+            ? `<div class="player-stat rank-player"><span class="player-stat-value">#${playerRankIdx + 1}</span><span class="player-stat-label">Player Rank</span></div>`
+            : "",
+          creatorRankIdx !== -1
+            ? `<div class="player-stat rank-creator"><span class="player-stat-value">#${creatorRankIdx + 1}</span><span class="player-stat-label">Creator Rank</span></div>`
+            : "",
+          `<div class="player-stat"><span class="player-stat-value">${playerEntry ? playerEntry.points : 0}</span><span class="player-stat-label">Points</span></div>`,
+          `<div class="player-stat"><span class="player-stat-value">${beaten.length}</span><span class="player-stat-label">Levels Beaten</span></div>`,
+          `<div class="player-stat"><span class="player-stat-value">${created.length}</span><span class="player-stat-label">Levels Created</span></div>`,
+        ]
+          .filter(Boolean)
+          .join("");
 
         view.innerHTML = `
         <button class="back-btn">&larr; Back</button>
@@ -1899,14 +2044,21 @@
             <div class="player-name">${escapeXml(name)}</div>
         </div>
 
+        <div class="player-stats-row fade-in">${statCards}</div>
+
         <div class="player-section fade-in">
             <h3>Hardest Level Beaten</h3>
-            ${hardest ? `<div class="mini-grid">${levelMiniCard(hardest)}</div>` : `<div class="empty">No full completions logged yet.</div>`}
+            ${hardestBeaten ? `<div class="mini-grid">${levelMiniCard(hardestBeaten)}</div>` : `<div class="empty">No full completions logged yet.</div>`}
+        </div>
+
+        <div class="player-section fade-in">
+            <h3>Hardest Level Created</h3>
+            ${hardestCreated ? `<div class="mini-grid">${levelMiniCard(hardestCreated)}</div>` : `<div class="empty">Hasn't built anything on the list yet.</div>`}
         </div>
 
         <div class="player-section fade-in">
             <h3>Levels Created (${created.length})</h3>
-            ${created.length ? `<div class="mini-grid">${created.map((l) => levelMiniCard(l)).join("")}</div>` : `<div class="empty">Hasn't built anything on the list yet.</div>`}
+            ${created.length ? `<div class="mini-grid">${created.slice().sort((a, b) => a.rank - b.rank).map((l) => levelMiniCard(l)).join("")}</div>` : `<div class="empty">Hasn't built anything on the list yet.</div>`}
         </div>
 
         <div class="player-section fade-in">
