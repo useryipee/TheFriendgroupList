@@ -1047,13 +1047,13 @@
       .loading-title {
         font-family: var(--font-display);
         font-weight: 900;
-        font-size: 26px;
+        font-size: 15px;
         letter-spacing: 1px;
         background: linear-gradient(90deg, var(--cyan), #7fd8ff 40%, var(--magenta));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        margin-bottom: 26px;
+        margin-bottom: 16px;
         animation: titlePulse 1.6s ease-in-out infinite;
       }
 
@@ -1064,6 +1064,93 @@
         }
         50% {
           filter: drop-shadow(0 0 16px rgba(255, 61, 127, 0.35));
+        }
+      }
+
+      .coffin-scene {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .coffin-svg {
+        width: 100px;
+        height: 138px;
+        filter: drop-shadow(0 0 14px rgba(255, 61, 127, 0.35));
+        animation: coffinDrop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+      }
+
+      @keyframes coffinDrop {
+        from {
+          transform: translateY(-60px) rotate(-4deg);
+          opacity: 0;
+        }
+        60% {
+          transform: translateY(6px) rotate(2deg);
+          opacity: 1;
+        }
+        to {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+      }
+
+      .epitaph {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .epitaph-line {
+        opacity: 0;
+        animation: epitaphFade 0.5s ease forwards;
+      }
+
+      .epitaph-line.rip {
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--magenta);
+        text-shadow: 0 0 14px rgba(255, 61, 127, 0.5);
+        animation-delay: 0.9s;
+      }
+
+      .epitaph-line.name {
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        margin-top: 6px;
+        animation-delay: 1.3s;
+      }
+
+      .epitaph-line.years {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+        letter-spacing: 1px;
+        animation-delay: 1.7s;
+      }
+
+      .epitaph-line.cause {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--gold);
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        animation-delay: 2.1s;
+      }
+
+      @keyframes epitaphFade {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
@@ -1083,7 +1170,7 @@
         width: 0%;
         background: linear-gradient(90deg, var(--magenta), var(--cyan));
         border-radius: 6px;
-        animation: loadBar 1.1s ease forwards;
+        animation: loadBar 2.6s ease forwards;
       }
 
       @keyframes loadBar {
@@ -1194,11 +1281,35 @@
     <div class="loading-screen" id="loadingScreen">
       <div class="loading-inner">
         <div class="loading-title">FriendGroupList</div>
+        <div class="coffin-scene">
+          <svg class="coffin-svg" viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
+            <polygon
+              points="60,10 100,10 130,60 130,170 100,210 60,210 30,170 30,60"
+              fill="#1a1e3d"
+              stroke="#ff3d7f"
+              stroke-width="3"
+            />
+            <polygon
+              points="70,30 90,30 108,60 108,160 90,190 70,190 52,160 52,60"
+              fill="#12152a"
+              stroke="#2fe8ff"
+              stroke-width="1.5"
+              opacity="0.6"
+            />
+            <circle cx="80" cy="100" r="14" fill="none" stroke="#ffce3d" stroke-width="2" opacity="0.7" />
+          </svg>
+        </div>
+        <div class="epitaph">
+          <div class="epitaph-line rip">R.I.P.</div>
+          <div class="epitaph-line name">Hexaprism's Records</div>
+          <div class="epitaph-line years">2026 &ndash; 2026</div>
+          <div class="epitaph-line cause">Cause of Death: Hacking Lost</div>
+        </div>
         <div class="loading-bar-track">
           <div class="loading-bar-fill"></div>
         </div>
         <div class="loading-spike-row" id="loadingSpikeRow"></div>
-        <div class="loading-status" id="loadingStatus">Loading levels...</div>
+        <div class="loading-status" id="loadingStatus">Digging up receipts...</div>
       </div>
     </div>
 
@@ -1345,7 +1456,7 @@
           song: "Tennobyte - Fly Away",
           songNgId: "945695",
           levelID: "145666706",
-          isNew: true,
+          isNew: false,
         },
         {
           rank: 2,
@@ -1416,7 +1527,6 @@
           victors: [
             { name: "Cactusman9919", percent: 100 },
             { name: "Sirjefferson", percent: 100 },
-            { name: "Hexaprism", percent: 100 },
           ],
           points: 253,
           image: "",
@@ -1469,7 +1579,6 @@
             { name: "Sirjefferson", percent: 100 },
             { name: "Cactusman9919", percent: 100 },
             { name: "Samuri815", percent: 100 },
-            { name: "Hexaprism", percent: 100 },
           ],
           points: 207,
           image: "",
@@ -1489,7 +1598,6 @@
             { name: "Cactusman9919", percent: 100 },
             { name: "Sirjefferson", percent: 100 },
             { name: "Samuri815", percent: 100 },
-            { name: "Hexaprism", percent: 100 },
           ],
           points: 194,
           image: "",
@@ -1511,7 +1619,6 @@
         Cactusman9919: "🇦🇺 🇮🇹",
         Samuri815: "🇦🇺",
         Sirjefferson: "🇦🇺 🇨🇳",
-        Hexaprism: "🇦🇺 🇮🇪",
       };
 
       function flagFor(name) {
@@ -2105,13 +2212,18 @@
       // and a minimum show time has elapsed, so it doesn't just flash by.
       const loadingScreen = document.getElementById("loadingScreen");
       const loadingStatus = document.getElementById("loadingStatus");
-      const loadingMessages = ["Loading levels...", "Syncing leaderboard...", "Almost there..."];
+      const loadingMessages = [
+        "Digging up receipts...",
+        "Lowering the casket...",
+        "Reading the epitaph...",
+        "Paying respects...",
+      ];
       let loadingMessageIndex = 0;
 
       const loadingMessageInterval = setInterval(() => {
         loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
         if (loadingStatus) loadingStatus.textContent = loadingMessages[loadingMessageIndex];
-      }, 420);
+      }, 650);
 
       function hideLoadingScreen() {
         clearInterval(loadingMessageInterval);
@@ -2121,12 +2233,12 @@
       }
 
       window.addEventListener("load", () => {
-        setTimeout(hideLoadingScreen, 850);
+        setTimeout(hideLoadingScreen, 2800);
       });
 
       // Fallback in case the load event is slow to fire (e.g. blocked font
-      // request) - never leave the loading screen up for more than 4s.
-      setTimeout(hideLoadingScreen, 4000);
+      // request) - never leave the loading screen up for more than 6.5s.
+      setTimeout(hideLoadingScreen, 6500);
     </script>
   </body>
 </html>
