@@ -1031,6 +1031,7 @@
           radial-gradient(circle at 85% 10%, rgba(255, 61, 127, 0.1), transparent 40%),
           var(--bg);
         transition: opacity 0.5s ease, visibility 0.5s ease;
+        overflow: hidden;
       }
 
       .loading-screen.hide {
@@ -1039,7 +1040,127 @@
         pointer-events: none;
       }
 
+      /* Floating background particles that drift around randomly behind the
+         coffin scene. Each one gets its own random path/duration/delay from
+         JS via --dx/--dy/--dx2/--dy2/--dur/--delay/--peak-opacity. */
+      .loading-particles {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .loading-icons {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .loading-particle {
+        position: absolute;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        animation-name: floatAround;
+        animation-duration: var(--dur, 6s);
+        animation-delay: var(--delay, 0s);
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        opacity: 0;
+      }
+
+      /* Bigger drifting Geometry Dash icons (cube / spike / ball / ship)
+         layered on top of the tiny particle field for more character. */
+      .loading-icon {
+        position: absolute;
+        animation-name: floatAround;
+        animation-duration: var(--dur, 7s);
+        animation-delay: var(--delay, 0s);
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        opacity: 0;
+      }
+
+      .loading-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      @keyframes floatAround {
+        0% {
+          transform: translate(0, 0) rotate(0deg) scale(0.75);
+          opacity: 0;
+        }
+        15% {
+          opacity: var(--peak-opacity, 0.5);
+        }
+        50% {
+          transform: translate(var(--dx, 40px), var(--dy, -30px)) rotate(180deg) scale(1.15);
+          opacity: var(--peak-opacity, 0.5);
+        }
+        85% {
+          opacity: var(--peak-opacity, 0.5);
+        }
+        100% {
+          transform: translate(var(--dx2, -30px), var(--dy2, 40px)) rotate(360deg) scale(0.75);
+          opacity: 0;
+        }
+      }
+
+      /* A couple of slow-spinning orbit rings around the coffin, layered
+         behind it for extra motion. */
+      .loading-orbits {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .loading-orbit {
+        position: absolute;
+        border-radius: 50%;
+        border: 1px dashed;
+        opacity: 0.28;
+      }
+
+      .loading-orbit.ring-1 {
+        width: 220px;
+        height: 220px;
+        border-color: var(--cyan);
+        animation: orbitSpin 9s linear infinite;
+      }
+
+      .loading-orbit.ring-2 {
+        width: 300px;
+        height: 300px;
+        border-color: var(--magenta);
+        animation: orbitSpin 14s linear infinite reverse;
+      }
+
+      .loading-orbit.ring-3 {
+        width: 380px;
+        height: 380px;
+        border-color: var(--gold);
+        animation: orbitSpin 20s linear infinite;
+      }
+
+      @keyframes orbitSpin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
       .loading-inner {
+        position: relative;
+        z-index: 1;
         width: min(340px, 80vw);
         text-align: center;
       }
@@ -1232,6 +1353,292 @@
         text-transform: uppercase;
       }
 
+      /* ---------- Loading screen variant: HUD / attempt counter ---------- */
+
+      .hud-scene {
+        position: relative;
+        height: 90px;
+        margin-bottom: 14px;
+      }
+
+      .hud-track {
+        position: absolute;
+        bottom: 14px;
+        left: 8%;
+        right: 8%;
+        height: 2px;
+        background: var(--border);
+      }
+
+      .hud-cube-wrap {
+        position: absolute;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 42px;
+        height: 42px;
+        animation: hudJump 0.7s ease-in-out infinite;
+      }
+
+      @keyframes hudJump {
+        0%,
+        100% {
+          transform: translate(-50%, 0) rotate(0deg);
+        }
+        40% {
+          transform: translate(-50%, -34px) rotate(80deg);
+        }
+        55% {
+          transform: translate(-50%, -34px) rotate(90deg);
+        }
+        100% {
+          transform: translate(-50%, 0) rotate(180deg);
+        }
+      }
+
+      .hud-spike {
+        position: absolute;
+        bottom: 14px;
+        width: 0;
+        height: 0;
+        border-left: 11px solid transparent;
+        border-right: 11px solid transparent;
+        border-bottom: 24px solid var(--magenta);
+        filter: drop-shadow(0 0 8px rgba(255, 61, 127, 0.5));
+      }
+
+      .hud-spike.s1 {
+        left: 20%;
+      }
+      .hud-spike.s2 {
+        right: 20%;
+      }
+
+      .hud-readout {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 14px;
+      }
+
+      .hud-attempt-label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      .hud-attempt-number,
+      .hud-percent-number {
+        display: block;
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 24px;
+        color: var(--gold);
+        margin-top: 2px;
+      }
+
+      .hud-percent-number {
+        color: var(--cyan);
+      }
+
+      /* ---------- Loading screen variant: terminal ---------- */
+
+      .terminal-window {
+        text-align: left;
+        background: #060810;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(47, 232, 255, 0.08);
+        margin-bottom: 16px;
+      }
+
+      .terminal-bar {
+        display: flex;
+        gap: 6px;
+        padding: 8px 10px;
+        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .terminal-bar span {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--border);
+      }
+
+      .terminal-bar span:nth-child(1) {
+        background: var(--magenta);
+      }
+      .terminal-bar span:nth-child(2) {
+        background: var(--gold);
+      }
+      .terminal-bar span:nth-child(3) {
+        background: var(--cyan);
+      }
+
+      .terminal-body {
+        padding: 14px 16px 18px;
+        min-height: 128px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        line-height: 1.7;
+        color: #9ff7c6;
+      }
+
+      .terminal-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .terminal-line .prompt {
+        color: var(--cyan);
+      }
+
+      .terminal-cursor {
+        display: inline-block;
+        width: 7px;
+        height: 13px;
+        background: var(--cyan);
+        margin-left: 2px;
+        vertical-align: -2px;
+        animation: cursorBlink 0.9s steps(1) infinite;
+      }
+
+      @keyframes cursorBlink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* ---------- Loading screen variant: radar ---------- */
+
+      .radar-scene {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin: 0 auto 16px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(47, 232, 255, 0.06), transparent 70%);
+        overflow: hidden;
+      }
+
+      .radar-ring {
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(47, 232, 255, 0.25);
+        border-radius: 50%;
+      }
+
+      .radar-ring.r2 {
+        inset: 20px;
+      }
+      .radar-ring.r3 {
+        inset: 40px;
+      }
+      .radar-ring.r4 {
+        inset: 60px;
+      }
+
+      .radar-sweep {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, rgba(47, 232, 255, 0.55), transparent 55%);
+        animation: radarSpin 2.4s linear infinite;
+      }
+
+      @keyframes radarSpin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .radar-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gold);
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 8px rgba(255, 206, 61, 0.8);
+      }
+
+      .radar-blip {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--magenta);
+        animation: radarBlip 1.6s ease-out forwards;
+      }
+
+      @keyframes radarBlip {
+        0% {
+          transform: scale(0.4);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
+
+      /* ---------- Loading screen variant: icon carousel ---------- */
+
+      .carousel-scene {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .carousel-icon-wrap {
+        width: 76px;
+        height: 76px;
+        perspective: 400px;
+        margin-bottom: 10px;
+      }
+
+      .carousel-icon {
+        width: 100%;
+        height: 100%;
+        animation: carouselFlip 0.5s ease;
+      }
+
+      @keyframes carouselFlip {
+        from {
+          transform: rotateY(90deg);
+          opacity: 0.2;
+        }
+        to {
+          transform: rotateY(0deg);
+          opacity: 1;
+        }
+      }
+
+      .carousel-label {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
       /* ---------- Fade-in entrance effects ---------- */
 
       .fade-in {
@@ -1279,38 +1686,14 @@
 
   <body>
     <div class="loading-screen" id="loadingScreen">
-      <div class="loading-inner">
-        <div class="loading-title">FriendGroupList</div>
-        <div class="coffin-scene">
-          <svg class="coffin-svg" viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
-            <polygon
-              points="60,10 100,10 130,60 130,170 100,210 60,210 30,170 30,60"
-              fill="#1a1e3d"
-              stroke="#ff3d7f"
-              stroke-width="3"
-            />
-            <polygon
-              points="70,30 90,30 108,60 108,160 90,190 70,190 52,160 52,60"
-              fill="#12152a"
-              stroke="#2fe8ff"
-              stroke-width="1.5"
-              opacity="0.6"
-            />
-            <circle cx="80" cy="100" r="14" fill="none" stroke="#ffce3d" stroke-width="2" opacity="0.7" />
-          </svg>
-        </div>
-        <div class="epitaph">
-          <div class="epitaph-line rip">R.I.P.</div>
-          <div class="epitaph-line name">Hexaprism's Records</div>
-          <div class="epitaph-line years">2026 &ndash; 2026</div>
-          <div class="epitaph-line cause">Cause of Death: Hacking Lost</div>
-        </div>
-        <div class="loading-bar-track">
-          <div class="loading-bar-fill"></div>
-        </div>
-        <div class="loading-spike-row" id="loadingSpikeRow"></div>
-        <div class="loading-status" id="loadingStatus">Digging up receipts...</div>
+      <div class="loading-particles" id="loadingParticles"></div>
+      <div class="loading-icons" id="loadingIcons"></div>
+      <div class="loading-orbits" id="loadingOrbits">
+        <div class="loading-orbit ring-1"></div>
+        <div class="loading-orbit ring-2"></div>
+        <div class="loading-orbit ring-3"></div>
       </div>
+      <div class="loading-inner" id="loadingInner"></div>
     </div>
 
     <header>
@@ -1634,12 +2017,6 @@
         spikeRow.appendChild(s);
       }
 
-      const loadingSpikeRow = document.getElementById("loadingSpikeRow");
-      for (let i = 0; i < 24; i++) {
-        const s = document.createElement("div");
-        s.className = "spike";
-        loadingSpikeRow.appendChild(s);
-      }
 
       // Same spike-strip treatment for the Guidelines card divider.
       const guidelinesSpikeRow = document.getElementById("guidelinesSpikeRow");
@@ -2207,26 +2584,399 @@
 
       // ---------- Loading screen ----------
 
-      // Cycles through a couple of status lines while the bar animates, then
-      // fades the whole screen out once everything (fonts included) is ready
-      // and a minimum show time has elapsed, so it doesn't just flash by.
-      const loadingScreen = document.getElementById("loadingScreen");
-      const loadingStatus = document.getElementById("loadingStatus");
-      const loadingMessages = [
-        "Digging up receipts...",
-        "Lowering the casket...",
-        "Reading the epitaph...",
-        "Paying respects...",
+      // Scatters a handful of small spikes/orbs around the loading screen,
+      // each one drifting off on its own random path (random start position,
+      // random distance/direction, random duration/delay) so every reload
+      // looks a little different. Runs behind whichever variant gets picked
+      // below.
+      const loadingParticles = document.getElementById("loadingParticles");
+      if (loadingParticles) {
+        const particleColors = ["#2fe8ff", "#ff3d7f", "#ffce3d"];
+        const particleCount = 18;
+
+        for (let i = 0; i < particleCount; i++) {
+          const p = document.createElement("div");
+          p.className = "loading-particle";
+
+          const isSpike = Math.random() < 0.55;
+          if (!isSpike) {
+            p.style.clipPath = "circle(50% at 50% 50%)";
+          }
+
+          const size = 5 + Math.random() * 11;
+          const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+          const startX = Math.random() * 100;
+          const startY = Math.random() * 100;
+          const dx = (Math.random() - 0.5) * 180;
+          const dy = (Math.random() - 0.5) * 180;
+          const dx2 = (Math.random() - 0.5) * 180;
+          const dy2 = (Math.random() - 0.5) * 180;
+          const dur = 3.5 + Math.random() * 5;
+          const delay = Math.random() * 4;
+          const peakOpacity = 0.2 + Math.random() * 0.45;
+
+          p.style.left = `${startX}%`;
+          p.style.top = `${startY}%`;
+          p.style.width = `${size}px`;
+          p.style.height = `${size}px`;
+          p.style.background = color;
+          p.style.setProperty("--dx", `${dx}px`);
+          p.style.setProperty("--dy", `${dy}px`);
+          p.style.setProperty("--dx2", `${dx2}px`);
+          p.style.setProperty("--dy2", `${dy2}px`);
+          p.style.setProperty("--dur", `${dur}s`);
+          p.style.setProperty("--delay", `${delay}s`);
+          p.style.setProperty("--peak-opacity", peakOpacity);
+
+          loadingParticles.appendChild(p);
+        }
+      }
+
+      // Builds a little outline-style Geometry Dash icon (cube / spike /
+      // ball / ship) as inline SVG. Used both by the drifting background
+      // icons below and by the icon-carousel loading variant.
+      function gdIconSvg(type, color) {
+        if (type === "cube") {
+          return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="5" y="5" width="30" height="30" rx="7" fill="none" stroke="${color}" stroke-width="3"/>
+                      <circle cx="15" cy="17" r="2.4" fill="${color}"/>
+                      <circle cx="25" cy="17" r="2.4" fill="${color}"/>
+                      <path d="M13 24 Q20 30 27 24" stroke="${color}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                  </svg>`;
+        }
+        if (type === "spike") {
+          return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                      <polygon points="20,4 36,36 4,36" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>
+                  </svg>`;
+        }
+        if (type === "ball") {
+          return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="20" cy="20" r="16" fill="none" stroke="${color}" stroke-width="3"/>
+                      <circle cx="14" cy="16" r="2.4" fill="${color}"/>
+                      <circle cx="26" cy="16" r="2.4" fill="${color}"/>
+                      <path d="M13 24 Q20 29 27 24" stroke="${color}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                  </svg>`;
+        }
+        // ship
+        return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 25 L20 12 L36 25 L27 25 L20 32 L13 25 Z" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>
+              </svg>`;
+      }
+
+      // Scatters a few bigger, recognizable Geometry Dash icons (cube, spike,
+      // ball, ship) around the loading screen, drifting on their own random
+      // paths just like the tiny particles above but larger and slower.
+      const loadingIcons = document.getElementById("loadingIcons");
+      if (loadingIcons) {
+        const iconColors = ["#2fe8ff", "#ff3d7f", "#ffce3d"];
+        const iconTypes = ["cube", "spike", "ball", "ship"];
+        const iconCount = 6;
+
+        for (let i = 0; i < iconCount; i++) {
+          const el = document.createElement("div");
+          el.className = "loading-icon";
+
+          const type = iconTypes[i % iconTypes.length];
+          const color = iconColors[Math.floor(Math.random() * iconColors.length)];
+          el.innerHTML = gdIconSvg(type, color);
+
+          const size = 26 + Math.random() * 20;
+          const startX = Math.random() * 100;
+          const startY = Math.random() * 100;
+          const dx = (Math.random() - 0.5) * 220;
+          const dy = (Math.random() - 0.5) * 220;
+          const dx2 = (Math.random() - 0.5) * 220;
+          const dy2 = (Math.random() - 0.5) * 220;
+          const dur = 5 + Math.random() * 6;
+          const delay = Math.random() * 4;
+          const peakOpacity = 0.35 + Math.random() * 0.35;
+
+          el.style.left = `${startX}%`;
+          el.style.top = `${startY}%`;
+          el.style.width = `${size}px`;
+          el.style.height = `${size}px`;
+          el.style.setProperty("--dx", `${dx}px`);
+          el.style.setProperty("--dy", `${dy}px`);
+          el.style.setProperty("--dx2", `${dx2}px`);
+          el.style.setProperty("--dy2", `${dy2}px`);
+          el.style.setProperty("--dur", `${dur}s`);
+          el.style.setProperty("--delay", `${delay}s`);
+          el.style.setProperty("--peak-opacity", peakOpacity);
+
+          loadingIcons.appendChild(el);
+        }
+      }
+
+      function buildSpikeRowHTML(count) {
+        let out = "";
+        for (let i = 0; i < count; i++) out += '<div class="spike"></div>';
+        return out;
+      }
+
+      // Five completely different loading-screen scenes. One is picked at
+      // random on every page load, each with its own animation, visuals,
+      // and pool of status messages - the tombstone one is just one of many.
+      const loadingVariants = [
+        {
+          id: "tombstone",
+          messages: [
+            "Digging up receipts...",
+            "Lowering the casket...",
+            "Reading the epitaph...",
+            "Paying respects...",
+            "Counting the spikes...",
+            "Sorting the tombstones...",
+          ],
+          render(container) {
+            container.innerHTML = `
+              <div class="loading-title">FriendGroupList</div>
+              <div class="coffin-scene">
+                <svg class="coffin-svg" viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="60,10 100,10 130,60 130,170 100,210 60,210 30,170 30,60" fill="#1a1e3d" stroke="#ff3d7f" stroke-width="3"/>
+                  <polygon points="70,30 90,30 108,60 108,160 90,190 70,190 52,160 52,60" fill="#12152a" stroke="#2fe8ff" stroke-width="1.5" opacity="0.6"/>
+                  <circle cx="80" cy="100" r="14" fill="none" stroke="#ffce3d" stroke-width="2" opacity="0.7"/>
+                </svg>
+              </div>
+              <div class="epitaph">
+                <div class="epitaph-line rip">R.I.P.</div>
+                <div class="epitaph-line name">Hexaprism's Records</div>
+                <div class="epitaph-line years">2026 &ndash; 2026</div>
+                <div class="epitaph-line cause">Cause of Death: Hacking Lost</div>
+              </div>
+              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+              <div class="loading-spike-row">${buildSpikeRowHTML(24)}</div>
+              <div class="loading-status" id="loadingStatus"></div>
+            `;
+          },
+        },
+        {
+          id: "hud",
+          messages: [
+            "Just jump bro, it's not that hard...",
+            "Recalibrating the cube...",
+            "Un-nerfing the spike hitbox...",
+            "Blaming input lag...",
+            "Practice mode won't save you...",
+            "Spamming the space bar...",
+            "It's just timing bro...",
+            "Re-hitting the orb (probably)...",
+          ],
+          render(container) {
+            container.innerHTML = `
+              <div class="loading-title">FriendGroupList</div>
+              <div class="hud-scene">
+                <div class="hud-spike s1"></div>
+                <div class="hud-spike s2"></div>
+                <div class="hud-track"></div>
+                <div class="hud-cube-wrap">${gdIconSvg("cube", "#2fe8ff")}</div>
+              </div>
+              <div class="hud-readout">
+                <div>
+                  <span class="hud-attempt-label">Attempt</span>
+                  <span class="hud-attempt-number" id="hudAttemptNumber">1</span>
+                </div>
+                <div>
+                  <span class="hud-attempt-label">Progress</span>
+                  <span class="hud-percent-number" id="hudPercentNumber">0%</span>
+                </div>
+              </div>
+              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+              <div class="loading-spike-row">${buildSpikeRowHTML(24)}</div>
+              <div class="loading-status" id="loadingStatus"></div>
+            `;
+          },
+          init(extraIntervals) {
+            const attemptEl = document.getElementById("hudAttemptNumber");
+            const percentEl = document.getElementById("hudPercentNumber");
+            let attempt = 1;
+            let percent = 0;
+            extraIntervals.push(
+              setInterval(() => {
+                percent += Math.random() * 14;
+                if (percent >= 97 || Math.random() < 0.12) {
+                  attempt += 1;
+                  percent = Math.random() * 8;
+                  if (attemptEl) attemptEl.textContent = attempt.toLocaleString();
+                }
+                if (percentEl) percentEl.textContent = `${Math.min(99, Math.floor(percent))}%`;
+              }, 180),
+            );
+          },
+        },
+        {
+          id: "terminal",
+          messages: [
+            "Bypassing gauntlet security...",
+            "Decrypting spike hitboxes...",
+            "Establishing uplink...",
+            "Compiling salt...",
+            "Requesting elevated privileges...",
+          ],
+          render(container) {
+            container.innerHTML = `
+              <div class="loading-title">FriendGroupList</div>
+              <div class="terminal-window">
+                <div class="terminal-bar"><span></span><span></span><span></span></div>
+                <div class="terminal-body" id="terminalBody"></div>
+              </div>
+              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+              <div class="loading-status" id="loadingStatus"></div>
+            `;
+          },
+          init(extraIntervals) {
+            const body = document.getElementById("terminalBody");
+            if (!body) return;
+            const lines = [
+              "booting FriendGroupList.exe",
+              "bypassing gauntlet security...",
+              "decrypting spike hitboxes...",
+              "pinging Useryipee...",
+              "ACCESS GRANTED",
+            ];
+            let lineIndex = 0;
+            let charIndex = 0;
+            let currentLineEl = null;
+
+            function typeStep() {
+              if (lineIndex >= lines.length) return;
+              if (charIndex === 0) {
+                currentLineEl = document.createElement("div");
+                currentLineEl.className = "terminal-line";
+                body.appendChild(currentLineEl);
+              }
+              const line = lines[lineIndex];
+              if (charIndex < line.length) {
+                currentLineEl.innerHTML =
+                  '<span class="prompt">&gt; </span>' +
+                  escapeXml(line.slice(0, charIndex + 1)) +
+                  '<span class="terminal-cursor"></span>';
+                charIndex += 1;
+              } else {
+                currentLineEl.innerHTML = '<span class="prompt">&gt; </span>' + escapeXml(line);
+                lineIndex += 1;
+                charIndex = 0;
+              }
+            }
+
+            extraIntervals.push(setInterval(typeStep, 55));
+          },
+        },
+        {
+          id: "radar",
+          messages: [
+            "Scanning for rage quits...",
+            "Locating nearest checkpoint...",
+            "Pinging Sirjefferson...",
+            "Triangulating the death count...",
+            "Searching for a fair nerf...",
+          ],
+          render(container) {
+            container.innerHTML = `
+              <div class="loading-title">FriendGroupList</div>
+              <div class="radar-scene">
+                <div class="radar-ring"></div>
+                <div class="radar-ring r2"></div>
+                <div class="radar-ring r3"></div>
+                <div class="radar-ring r4"></div>
+                <div class="radar-sweep"></div>
+                <div class="radar-center"></div>
+                <div class="radar-blips" id="radarBlips"></div>
+              </div>
+              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+              <div class="loading-status" id="loadingStatus"></div>
+            `;
+          },
+          init(extraIntervals) {
+            const blips = document.getElementById("radarBlips");
+            if (!blips) return;
+            extraIntervals.push(
+              setInterval(() => {
+                const b = document.createElement("div");
+                b.className = "radar-blip";
+                const angle = Math.random() * Math.PI * 2;
+                const r = 20 + Math.random() * 55;
+                b.style.left = `${80 + Math.cos(angle) * r - 4}px`;
+                b.style.top = `${80 + Math.sin(angle) * r - 4}px`;
+                blips.appendChild(b);
+                setTimeout(() => b.remove(), 1600);
+              }, 420),
+            );
+          },
+        },
+        {
+          id: "carousel",
+          messages: [
+            "Selecting an icon...",
+            "Auditioning cubes...",
+            "Trying on a ship...",
+            "Testing gravity settings...",
+            "Picking a trail color...",
+          ],
+          render(container) {
+            container.innerHTML = `
+              <div class="loading-title">FriendGroupList</div>
+              <div class="carousel-scene">
+                <div class="carousel-icon-wrap" id="carouselIconWrap"></div>
+                <div class="carousel-label" id="carouselLabel">cube</div>
+              </div>
+              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+              <div class="loading-status" id="loadingStatus"></div>
+            `;
+          },
+          init(extraIntervals) {
+            const wrap = document.getElementById("carouselIconWrap");
+            const label = document.getElementById("carouselLabel");
+            if (!wrap) return;
+            const icons = ["cube", "ship", "ball", "spike"];
+            const colors = ["#2fe8ff", "#ff3d7f", "#ffce3d"];
+            let i = 0;
+            function paint() {
+              const type = icons[i % icons.length];
+              const color = colors[i % colors.length];
+              wrap.innerHTML = `<div class="carousel-icon">${gdIconSvg(type, color)}</div>`;
+              if (label) label.textContent = type;
+              i += 1;
+            }
+            paint();
+            extraIntervals.push(setInterval(paint, 550));
+          },
+        },
       ];
+
+      const loadingScreen = document.getElementById("loadingScreen");
+      const loadingInner = document.getElementById("loadingInner");
+      const extraLoadingIntervals = [];
+
+      const chosenVariant = loadingVariants[Math.floor(Math.random() * loadingVariants.length)];
+      if (loadingInner) {
+        chosenVariant.render(loadingInner);
+        if (chosenVariant.init) chosenVariant.init(extraLoadingIntervals);
+      }
+
+      // Cycles through the chosen variant's status lines (shuffled into a
+      // random order on every load) while the bar animates, then fades the
+      // whole screen out once everything (fonts included) is ready and a
+      // minimum show time has elapsed, so it doesn't just flash by.
+      const loadingStatus = document.getElementById("loadingStatus");
+      const loadingMessages = chosenVariant.messages.slice();
+
+      for (let i = loadingMessages.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [loadingMessages[i], loadingMessages[j]] = [loadingMessages[j], loadingMessages[i]];
+      }
+
       let loadingMessageIndex = 0;
+      if (loadingStatus) loadingStatus.textContent = loadingMessages[0];
 
       const loadingMessageInterval = setInterval(() => {
         loadingMessageIndex = (loadingMessageIndex + 1) % loadingMessages.length;
-        if (loadingStatus) loadingStatus.textContent = loadingMessages[loadingMessageIndex];
+        const statusEl = document.getElementById("loadingStatus");
+        if (statusEl) statusEl.textContent = loadingMessages[loadingMessageIndex];
       }, 650);
 
       function hideLoadingScreen() {
         clearInterval(loadingMessageInterval);
+        extraLoadingIntervals.forEach((id) => clearInterval(id));
         if (!loadingScreen) return;
         loadingScreen.classList.add("hide");
         setTimeout(() => loadingScreen.remove(), 600);
