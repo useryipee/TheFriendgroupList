@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&amp;family=Rajdhani:wght@400;500;600;700&amp;family=Share+Tech+Mono&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
 
@@ -65,6 +65,7 @@
           ),
           linear-gradient(160deg, #0d1026, #171b3a 60%, #1a1440);
         overflow: hidden;
+        animation: gridDrift 22s linear infinite;
       }
 
       header .eyebrow {
@@ -73,10 +74,6 @@
         font-size: 12px;
         color: var(--cyan);
         text-transform: uppercase;
-      }
-
-      header {
-        animation: gridDrift 22s linear infinite;
       }
 
       @keyframes gridDrift {
@@ -168,13 +165,135 @@
         background: var(--gold);
       }
 
+      /* ---------- Search ---------- */
+
+      .search-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 28px 20px 0;
+      }
+
+      .search-box {
+        position: relative;
+        width: min(520px, 92%);
+      }
+
+      .search-box input {
+        width: 100%;
+        font-family: var(--font-body);
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px 14px 46px;
+        outline: none;
+        transition: 0.2s;
+      }
+
+      .search-box input::placeholder {
+        color: var(--muted);
+      }
+
+      .search-box input:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(47, 232, 255, 0.12);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        pointer-events: none;
+        opacity: 0.55;
+      }
+
+      .search-results {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        max-height: 340px;
+        overflow-y: auto;
+        z-index: 50;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .search-results.open {
+        display: block;
+      }
+
+      .search-result {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border);
+        transition: 0.15s;
+      }
+
+      .search-result:last-child {
+        border-bottom: none;
+      }
+
+      .search-result:hover {
+        background: var(--surface-2);
+      }
+
+      .search-result-type {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 7px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+
+      .search-result-type.level {
+        color: var(--magenta);
+        border: 1px solid var(--magenta);
+      }
+
+      .search-result-type.player {
+        color: var(--cyan);
+        border: 1px solid var(--cyan);
+      }
+
+      .search-result-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .search-result-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-left: auto;
+      }
+
+      .search-empty {
+        padding: 20px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
       /* ---------- Tabs ---------- */
 
       .tabs {
         display: flex;
         justify-content: center;
         gap: 12px;
-        margin: 32px 20px 0;
+        margin: 28px 20px 0;
         flex-wrap: wrap;
       }
 
@@ -570,7 +689,7 @@
         transform: scale(0.95);
       }
 
-      /* ---------- Player / level links (inline, clickable names) ---------- */
+      /* ---------- Player / level links ---------- */
 
       .player-link {
         color: var(--cyan);
@@ -598,7 +717,7 @@
         margin-right: 2px;
       }
 
-      /* ---------- Overlay pages: level page + player page ---------- */
+      /* ---------- Overlay pages ---------- */
 
       .back-btn {
         font-family: var(--font-display);
@@ -628,14 +747,15 @@
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
       }
 
       .player-stats-row {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin-bottom: 34px;
+        margin-bottom: 28px;
       }
 
       .player-stat {
@@ -697,6 +817,102 @@
         margin-bottom: 14px;
         padding-bottom: 10px;
         border-bottom: 1px solid var(--border);
+      }
+
+      /* ---------- Profile achievement badges ---------- */
+
+      .profile-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+
+      .ach-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 16px;
+        min-width: 180px;
+        transition: 0.2s;
+      }
+
+      .ach-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .ach-badge .ach-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .ach-badge .ach-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .ach-badge .ach-title {
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .ach-badge .ach-desc {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .ach-badge.gold {
+        border-color: rgba(255, 206, 61, 0.45);
+      }
+      .ach-badge.gold .ach-icon {
+        background: rgba(255, 206, 61, 0.15);
+      }
+      .ach-badge.gold .ach-title {
+        color: var(--gold);
+      }
+
+      .ach-badge.cyan {
+        border-color: rgba(47, 232, 255, 0.45);
+      }
+      .ach-badge.cyan .ach-icon {
+        background: rgba(47, 232, 255, 0.15);
+      }
+      .ach-badge.cyan .ach-title {
+        color: var(--cyan);
+      }
+
+      .ach-badge.magenta {
+        border-color: rgba(255, 61, 127, 0.45);
+      }
+      .ach-badge.magenta .ach-icon {
+        background: rgba(255, 61, 127, 0.15);
+      }
+      .ach-badge.magenta .ach-title {
+        color: var(--magenta);
+      }
+
+      .ach-badge.purple {
+        border-color: rgba(167, 139, 250, 0.45);
+      }
+      .ach-badge.purple .ach-icon {
+        background: rgba(167, 139, 250, 0.15);
+      }
+      .ach-badge.purple .ach-title {
+        color: #a78bfa;
       }
 
       .mini-grid {
@@ -1017,6 +1233,343 @@
         font-family: var(--font-mono);
       }
 
+      /* ---------- FGL Roulette ---------- */
+
+      .roulette-card {
+        background: linear-gradient(165deg, var(--surface), var(--surface-2) 85%);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 36px 36px 32px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .roulette-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 90% 10%, rgba(255, 61, 127, 0.1), transparent 45%),
+          radial-gradient(circle at 8% 90%, rgba(47, 232, 255, 0.1), transparent 45%);
+        pointer-events: none;
+      }
+
+      .roulette-eyebrow {
+        position: relative;
+        font-family: var(--font-mono);
+        letter-spacing: 4px;
+        font-size: 12px;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+
+      .roulette-card h2 {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: clamp(24px, 4vw, 34px);
+        margin-top: 10px;
+        background: linear-gradient(90deg, var(--cyan), #7fd8ff 40%, var(--magenta));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .roulette-sub {
+        position: relative;
+        color: var(--muted);
+        font-size: 15px;
+        max-width: 560px;
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+
+      .roulette-rules {
+        position: relative;
+        margin: 22px 0 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+
+      .roulette-rule {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .roulette-rule b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--cyan);
+        margin-bottom: 6px;
+      }
+
+      .roulette-start-row {
+        position: relative;
+        margin-top: 28px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .roulette-btn {
+        font-family: var(--font-display);
+        font-size: 13px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 8px;
+        padding: 13px 24px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .roulette-btn.primary {
+        color: #04121a;
+        background: linear-gradient(90deg, var(--gold), #ffe08a);
+      }
+
+      .roulette-btn.primary:hover {
+        filter: brightness(1.08);
+      }
+
+      .roulette-btn.danger {
+        color: #04121a;
+        background: linear-gradient(90deg, var(--magenta), #ff7fb0);
+      }
+
+      .roulette-btn.secondary {
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--border);
+      }
+
+      .roulette-btn:active {
+        transform: scale(0.96);
+      }
+
+      .roulette-btn:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .roulette-active {
+        position: relative;
+        margin-top: 28px;
+        display: none;
+      }
+
+      .roulette-active.show {
+        display: block;
+      }
+
+      .roulette-progress-bar {
+        height: 10px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 18px;
+      }
+
+      .roulette-progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--magenta), var(--cyan));
+        border-radius: 6px;
+        transition: width 0.35s ease;
+      }
+
+      .roulette-hud {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .roulette-hud-item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        text-align: center;
+      }
+
+      .roulette-hud-value {
+        display: block;
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--gold);
+      }
+
+      .roulette-hud-item.target .roulette-hud-value {
+        color: var(--magenta);
+      }
+
+      .roulette-hud-item.streak .roulette-hud-value {
+        color: var(--cyan);
+      }
+
+      .roulette-hud-label {
+        display: block;
+        margin-top: 4px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .roulette-level-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+      }
+
+      .roulette-level-card .rl-rank {
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 18px;
+        color: var(--muted);
+      }
+
+      .roulette-level-card .rl-name {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 24px;
+        margin-top: 4px;
+      }
+
+      .roulette-level-card .rl-meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .roulette-level-card .rl-target {
+        margin-top: 14px;
+        font-family: var(--font-display);
+        font-size: 15px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+
+      .roulette-level-card .rl-target span {
+        color: var(--magenta);
+        font-size: 22px;
+      }
+
+      .roulette-input-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .roulette-input-row input {
+        width: 120px;
+        font-family: var(--font-mono);
+        font-size: 18px;
+        color: var(--text);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
+        outline: none;
+        text-align: center;
+      }
+
+      .roulette-input-row input:focus {
+        border-color: var(--cyan);
+      }
+
+      .roulette-feedback {
+        margin-top: 14px;
+        font-size: 15px;
+        min-height: 24px;
+      }
+
+      .roulette-feedback.ok {
+        color: var(--cyan);
+      }
+      .roulette-feedback.fail {
+        color: var(--magenta);
+      }
+      .roulette-feedback.win {
+        color: var(--gold);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .roulette-history {
+        margin-top: 24px;
+      }
+
+      .roulette-history h3 {
+        font-family: var(--font-display);
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+
+      .roulette-history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .roulette-history-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .roulette-history-item .rh-target {
+        font-family: var(--font-mono);
+        color: var(--gold);
+        min-width: 48px;
+      }
+
+      .roulette-history-item .rh-got {
+        font-family: var(--font-mono);
+        color: var(--cyan);
+        min-width: 48px;
+      }
+
+      .roulette-history-item .rh-level {
+        flex: 1;
+        font-weight: 600;
+      }
+
+      .roulette-history-item.pass {
+        border-left: 3px solid var(--cyan);
+      }
+      .roulette-history-item.fail {
+        border-left: 3px solid var(--magenta);
+        opacity: 0.7;
+      }
+
       /* ---------- Loading screen ---------- */
 
       .loading-screen {
@@ -1040,9 +1593,6 @@
         pointer-events: none;
       }
 
-      /* Floating background particles that drift around randomly behind the
-         coffin scene. Each one gets its own random path/duration/delay from
-         JS via --dx/--dy/--dx2/--dy2/--dur/--delay/--peak-opacity. */
       .loading-particles {
         position: absolute;
         inset: 0;
@@ -1070,8 +1620,6 @@
         opacity: 0;
       }
 
-      /* Bigger drifting Geometry Dash icons (cube / spike / ball / ship)
-         layered on top of the tiny particle field for more character. */
       .loading-icon {
         position: absolute;
         animation-name: floatAround;
@@ -1109,8 +1657,6 @@
         }
       }
 
-      /* A couple of slow-spinning orbit rings around the coffin, layered
-         behind it for extra motion. */
       .loading-orbits {
         position: absolute;
         inset: 0;
@@ -1185,93 +1731,6 @@
         }
         50% {
           filter: drop-shadow(0 0 16px rgba(255, 61, 127, 0.35));
-        }
-      }
-
-      .coffin-scene {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 16px;
-      }
-
-      .coffin-svg {
-        width: 100px;
-        height: 138px;
-        filter: drop-shadow(0 0 14px rgba(255, 61, 127, 0.35));
-        animation: coffinDrop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
-      }
-
-      @keyframes coffinDrop {
-        from {
-          transform: translateY(-60px) rotate(-4deg);
-          opacity: 0;
-        }
-        60% {
-          transform: translateY(6px) rotate(2deg);
-          opacity: 1;
-        }
-        to {
-          transform: translateY(0) rotate(0deg);
-          opacity: 1;
-        }
-      }
-
-      .epitaph {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .epitaph-line {
-        opacity: 0;
-        animation: epitaphFade 0.5s ease forwards;
-      }
-
-      .epitaph-line.rip {
-        font-family: var(--font-display);
-        font-size: 22px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        color: var(--magenta);
-        text-shadow: 0 0 14px rgba(255, 61, 127, 0.5);
-        animation-delay: 0.9s;
-      }
-
-      .epitaph-line.name {
-        font-family: var(--font-display);
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--text);
-        margin-top: 6px;
-        animation-delay: 1.3s;
-      }
-
-      .epitaph-line.years {
-        font-family: var(--font-mono);
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 4px;
-        letter-spacing: 1px;
-        animation-delay: 1.7s;
-      }
-
-      .epitaph-line.cause {
-        font-family: var(--font-mono);
-        font-size: 10.5px;
-        color: var(--gold);
-        margin-top: 10px;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        animation-delay: 2.1s;
-      }
-
-      @keyframes epitaphFade {
-        from {
-          opacity: 0;
-          transform: translateY(6px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
         }
       }
 
@@ -1353,7 +1812,7 @@
         text-transform: uppercase;
       }
 
-      /* ---------- Loading screen variant: HUD / attempt counter ---------- */
+      /* HUD loading variant */
 
       .hud-scene {
         position: relative;
@@ -1444,7 +1903,7 @@
         color: var(--cyan);
       }
 
-      /* ---------- Loading screen variant: terminal ---------- */
+      /* Terminal loading */
 
       .terminal-window {
         text-align: left;
@@ -1520,7 +1979,7 @@
         }
       }
 
-      /* ---------- Loading screen variant: radar ---------- */
+      /* Radar loading */
 
       .radar-scene {
         position: relative;
@@ -1598,7 +2057,7 @@
         }
       }
 
-      /* ---------- Loading screen variant: icon carousel ---------- */
+      /* Carousel loading */
 
       .carousel-scene {
         display: flex;
@@ -1639,7 +2098,7 @@
         text-transform: uppercase;
       }
 
-      /* ---------- Fade-in entrance effects ---------- */
+      /* Fade-in */
 
       .fade-in {
         animation: fadeInUp 0.4s ease both;
@@ -1680,6 +2139,9 @@
         .board-count {
           display: none;
         }
+        .roulette-card {
+          padding: 24px 20px;
+        }
       }
     </style>
   </head>
@@ -1707,9 +2169,21 @@
 
     <div class="spike-row" id="spikeRow"></div>
 
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#8892b8" stroke-width="2.2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3.5-3.5" stroke-linecap="round" />
+        </svg>
+        <input type="search" id="searchInput" placeholder="Search levels or players..." autocomplete="off" />
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+
     <div class="tabs">
       <button class="tab-btn active" data-view="levels">Levels</button>
       <button class="tab-btn" data-view="leaderboard">Leaderboard</button>
+      <button class="tab-btn" data-view="roulette">FGL Roulette</button>
       <button class="tab-btn" data-view="guidelines">Guidelines</button>
     </div>
 
@@ -1749,9 +2223,72 @@
         </div>
       </div>
 
+      <div class="view" id="roulette-view">
+        <div class="roulette-card">
+          <div class="roulette-eyebrow">Challenge Mode</div>
+          <h2>FGL Roulette</h2>
+          <p class="roulette-sub">
+            A random level is picked. Start at <b style="color: var(--gold)">1%</b>. Hit the target, type what you got,
+            and the next random level needs one more percent. Climb all the way to 100%.
+          </p>
+          <div class="roulette-rules">
+            <div class="roulette-rule">
+              <b>Step 1</b>
+              Get at least the target % on the random level.
+            </div>
+            <div class="roulette-rule">
+              <b>Step 2</b>
+              Enter the % you actually reached.
+            </div>
+            <div class="roulette-rule">
+              <b>Step 3</b>
+              Next level needs previous target + 1%. Repeat until 100%.
+            </div>
+          </div>
+          <div class="roulette-start-row" id="rouletteStartRow">
+            <button class="roulette-btn primary" id="rouletteStartBtn">Start Roulette</button>
+          </div>
+
+          <div class="roulette-active" id="rouletteActive">
+            <div class="roulette-progress-bar">
+              <div class="roulette-progress-fill" id="rouletteProgressFill"></div>
+            </div>
+            <div class="roulette-hud">
+              <div class="roulette-hud-item target">
+                <span class="roulette-hud-value" id="rouletteTarget">1%</span>
+                <span class="roulette-hud-label">Target</span>
+              </div>
+              <div class="roulette-hud-item streak">
+                <span class="roulette-hud-value" id="rouletteStreak">0</span>
+                <span class="roulette-hud-label">Cleared</span>
+              </div>
+              <div class="roulette-hud-item">
+                <span class="roulette-hud-value" id="rouletteFails">0</span>
+                <span class="roulette-hud-label">Fails</span>
+              </div>
+            </div>
+
+            <div class="roulette-level-card" id="rouletteLevelCard"></div>
+
+            <div class="roulette-input-row">
+              <input type="number" id="roulettePercentInput" min="0" max="100" step="1" placeholder="%" />
+              <button class="roulette-btn primary" id="rouletteSubmitBtn">Submit %</button>
+              <button class="roulette-btn secondary" id="rouletteSkipBtn">Skip Level</button>
+              <button class="roulette-btn danger" id="rouletteResetBtn">Reset</button>
+            </div>
+            <div class="roulette-feedback" id="rouletteFeedback"></div>
+
+            <div class="roulette-history">
+              <h3>Run History</h3>
+              <div class="roulette-history-list" id="rouletteHistory"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="view" id="guidelines-view">
         <div class="guidelines-card">
-          <div class="guidelines-eyebrow">Official Ruleset &middot; Non-negotiable</div>
+          <div class="guidelines-eyebrow">Official Ruleset · Non-negotiable</div>
           <h2>List Guidelines</h2>
           <div class="guidelines-sub">Every submission, run, and profile on this site is held to these four rules.</div>
           <div class="guidelines-spike-row" id="guidelinesSpikeRow"></div>
@@ -1804,27 +2341,13 @@
         </div>
       </div>
 
-      <!-- Dedicated full-page view for a single level, opened via "Open Level Page" -->
       <div class="view" id="level-view"></div>
-
-      <!-- Dedicated full-page view for a single player, opened by clicking any player name -->
       <div class="view" id="player-view"></div>
     </div>
 
     <footer>FriendGroupList © 2026 — built by the crew, for the crew</footer>
 
     <script>
-      // firstPlaced = the rank this level debuted at when it was first added
-      // to the list, before anything else got reshuffled around it.
-      //
-      // song / songNgId / levelID are new fields for the level's own page.
-      // They're left blank below - fill in the real Newgrounds song title,
-      // its Newgrounds ID, and the level's Geometry Dash level ID for each
-      // level and the level page will pick them up automatically.
-      //
-      // isNew: set this to true on any level you want tagged with a glowing
-      // "NEW" badge (sidebar, detail card, level page, and player pages).
-      // Just flip it back to false once it's not new anymore.
       const levels = [
         {
           rank: 1,
@@ -1841,7 +2364,7 @@
           levelID: "145162695",
           isNew: false,
         },
-           {
+        {
           rank: 2,
           name: "KO",
           creator: "Useryipee",
@@ -1877,9 +2400,7 @@
           creator: "Useryipee",
           verifier: "Useryipee",
           firstVictor: "Sirjefferson",
-          victors: [
-          { name: "Sirjefferson", percent: 100 },
-          ],
+          victors: [{ name: "Sirjefferson", percent: 100 }],
           points: 253,
           image: "",
           firstPlaced: 5,
@@ -1909,9 +2430,7 @@
           creator: "Useryipee",
           verifier: "Useryipee",
           firstVictor: "Sirjefferson",
-          victors: [
-            { name: "Sirjefferson", percent: 100 },
-          ],
+          victors: [{ name: "Sirjefferson", percent: 100 }],
           points: 221,
           image: "",
           firstPlaced: 5,
@@ -1926,9 +2445,7 @@
           creator: "Useryipee",
           verifier: "Useryipee",
           firstVictor: "Sirjefferson",
-          victors: [
-            { name: "Sirjefferson", percent: 100 },
-          ],
+          victors: [{ name: "Sirjefferson", percent: 100 }],
           points: 207,
           image: "",
           firstPlaced: 1,
@@ -1943,9 +2460,7 @@
           creator: "Useryipee",
           verifier: "Useryipee",
           firstVictor: "Sirjefferson",
-          victors: [,
-            { name: "Sirjefferson", percent: 100 },
-          ],
+          victors: [{ name: "Sirjefferson", percent: 100 }],
           points: 194,
           image: "",
           firstPlaced: 4,
@@ -1956,10 +2471,6 @@
         },
       ];
 
-      // Flag emoji shown next to each player's name. Every name below is set
-      // to a placeholder white flag - swap each one for the real emoji flag(s)
-      // for that person (e.g. "🇺🇸", "🇬🇧", "🇦🇺", "🇨🇦"...). Multiple flags
-      // in one string (e.g. "🇦🇺 🇬🇧") are supported for mixed heritage.
       const defaultFlag = "🏳️";
       const playerFlags = {
         Useryipee: "🇦🇺 🇬🇧",
@@ -1972,7 +2483,7 @@
         return playerFlags[name] || defaultFlag;
       }
 
-      // ---------- Signature spike divider ----------
+      // ---------- Spike dividers ----------
 
       const spikeRow = document.getElementById("spikeRow");
       for (let i = 0; i < 50; i++) {
@@ -1981,8 +2492,6 @@
         spikeRow.appendChild(s);
       }
 
-
-      // Same spike-strip treatment for the Guidelines card divider.
       const guidelinesSpikeRow = document.getElementById("guidelinesSpikeRow");
       for (let i = 0; i < 30; i++) {
         const s = document.createElement("div");
@@ -2007,7 +2516,7 @@
       document.getElementById("playerCount").textContent = allPlayers.size;
       document.getElementById("victorCount").textContent = levels.filter((level) => level.firstVictor !== "").length;
 
-      // ---------- Difficulty rating ----------
+      // ---------- Helpers ----------
 
       function ratingFor(points) {
         return Math.max(1, Math.min(10, Math.round(points / 50)));
@@ -2045,9 +2554,6 @@
         );
       }
 
-      // Builds a themed cover image on the fly (rank, name, gradient, spike
-      // strip) for any level that doesn't have a real screenshot yet. Drop a
-      // real filename into level.image and it takes over automatically.
       function generateCover(level) {
         const color = tierColorFor(level.rank);
         const spikeCount = 13;
@@ -2082,7 +2588,6 @@
         return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
       }
 
-      // ---------- Inline link builders (clickable names -> pages) ----------
       function playerLink(name) {
         if (!name) return "None";
         return `
@@ -2139,7 +2644,7 @@
                     ${level.isNew ? '<span class="badge new-tag">NEW</span>' : ""}
                 </div>
                 <div class="page-link-row">
-                    <button class="page-link-btn" data-level-rank="${level.rank}">Open Level Page &rarr;</button>
+                    <button class="page-link-btn" data-level-rank="${level.rank}">Open Level Page →</button>
                 </div>
             </div>
         </div>
@@ -2169,7 +2674,7 @@
       renderSidebar();
       renderDetail(levels[0]);
 
-      // ---------- Leaderboard math: two independent boards ----------
+      // ---------- Leaderboard math ----------
 
       function creditFractionsFor(level) {
         const fractions = new Map();
@@ -2312,7 +2817,6 @@
 
       // ---------- Tabs ----------
 
-      // Small reusable fade+rise transition played whenever a view becomes visible.
       function playViewTransition(el) {
         if (!el || !el.animate) return;
         el.animate(
@@ -2336,8 +2840,6 @@
         });
       });
 
-      // ---------- Sub-tabs (Players vs Creators) ----------
-
       document.querySelectorAll(".subtab-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const group = btn.closest(".view");
@@ -2353,11 +2855,8 @@
         });
       });
 
-      // ---------- Overlay pages: dedicated level page + player page ----------
+      // ---------- Overlay pages ----------
 
-      // Remembers which top-level tab (Levels / Leaderboard / Guidelines) was
-      // showing before a level or player page was opened, so the back button
-      // can return to it.
       let lastMainViewId = "levels-view";
 
       function openOverlay(viewId) {
@@ -2405,7 +2904,7 @@
           : "None yet";
 
         view.innerHTML = `
-        <button class="back-btn">&larr; Back</button>
+        <button class="back-btn">← Back</button>
         <div class="level fade-in ${tierFor(level.rank)}">
             <img src="${level.image || generateCover(level)}" onerror="this.src='https://placehold.co/260x300/12152a/2fe8ff?text=No+Image'">
             <div class="info">
@@ -2422,7 +2921,7 @@
                     <p><b>Verifier:</b> ${playerLink(level.verifier)}</p>
                     <p><b>First Victor:</b> ${level.firstVictor ? playerLink(level.firstVictor) : "None yet"}</p>
                     <p><b>Victors:</b> ${victorsHtml}</p>
-                    <p><b>Newgrounds Song:</b> ${level.song ? escapeXml(level.song) : "Not set yet"}${level.songNgId ? ` &middot; NG ID ${escapeXml(level.songNgId)}` : ""}</p>
+                    <p><b>Newgrounds Song:</b> ${level.song ? escapeXml(level.song) : "Not set yet"}${level.songNgId ? ` · NG ID ${escapeXml(level.songNgId)}` : ""}</p>
                     <p><b>Level ID:</b> ${level.levelID ? escapeXml(String(level.levelID)) : "Not set yet"}</p>
                 </div>
                 <div class="badges">
@@ -2454,6 +2953,156 @@
         return v ? v.percent : null;
       }
 
+      // ---------- Achievement badges for profiles ----------
+
+      function getPlayerAchievements(name) {
+        const created = levels.filter((l) => l.creator === name);
+        const firstVictors = levels.filter((l) => l.firstVictor === name);
+        const verified = levels.filter((l) => l.verifier === name);
+        const beaten = levels.filter(
+          (l) => l.verifier === name || l.firstVictor === name || l.victors.some((v) => v.name === name),
+        );
+        const fullyBeaten = beaten.filter((l) => percentFor(l, name) === 100);
+        const top3Beaten = fullyBeaten.filter((l) => l.rank <= 3);
+        const top1Beaten = fullyBeaten.filter((l) => l.rank === 1);
+
+        const playerBoard = computePlayerLeaderboard(levels);
+        const creatorBoard = computeCreatorLeaderboard(levels);
+        const playerRankIdx = playerBoard.findIndex((p) => p.name === name);
+        const creatorRankIdx = creatorBoard.findIndex((p) => p.name === name);
+        const playerEntry = playerRankIdx !== -1 ? playerBoard[playerRankIdx] : null;
+        const points = playerEntry ? playerEntry.points : 0;
+
+        const badges = [];
+
+        if (playerRankIdx === 0) {
+          badges.push({
+            title: "Top Player",
+            desc: "#1 on the player board",
+            icon: "👑",
+            color: "gold",
+          });
+        } else if (playerRankIdx === 1) {
+          badges.push({
+            title: "Silver Spike",
+            desc: "#2 player rank",
+            icon: "🥈",
+            color: "cyan",
+          });
+        } else if (playerRankIdx === 2) {
+          badges.push({
+            title: "Bronze Spike",
+            desc: "#3 player rank",
+            icon: "🥉",
+            color: "magenta",
+          });
+        }
+
+        if (creatorRankIdx === 0) {
+          badges.push({
+            title: "Master Builder",
+            desc: "#1 creator on the list",
+            icon: "🏗️",
+            color: "magenta",
+          });
+        } else if (creatorRankIdx !== -1 && created.length >= 3) {
+          badges.push({
+            title: "Prolific Creator",
+            desc: `${created.length} levels on the list`,
+            icon: "🧩",
+            color: "purple",
+          });
+        }
+
+        if (top1Beaten.length > 0) {
+          badges.push({
+            title: "#1 Conqueror",
+            desc: "Beat the hardest level",
+            icon: "💀",
+            color: "gold",
+          });
+        }
+
+        if (top3Beaten.length > 0 && top1Beaten.length === 0) {
+          badges.push({
+            title: "Top 3 Clear",
+            desc: "Beat a top-3 level",
+            icon: "🔥",
+            color: "magenta",
+          });
+        }
+
+        if (firstVictors.length >= 1) {
+          badges.push({
+            title: "First Blood",
+            desc: firstVictors.length === 1 ? "First victor on 1 level" : `First victor on ${firstVictors.length} levels`,
+            icon: "⚔️",
+            color: "gold",
+          });
+        }
+
+        if (verified.length >= 1) {
+          badges.push({
+            title: "Verifier",
+            desc: verified.length === 1 ? "Verified 1 level" : `Verified ${verified.length} levels`,
+            icon: "✅",
+            color: "cyan",
+          });
+        }
+
+        if (fullyBeaten.length >= 5) {
+          badges.push({
+            title: "List Grinder",
+            desc: `${fullyBeaten.length} full completions`,
+            icon: "📈",
+            color: "cyan",
+          });
+        } else if (fullyBeaten.length >= 3) {
+          badges.push({
+            title: "Getting There",
+            desc: `${fullyBeaten.length} full completions`,
+            icon: "🎯",
+            color: "purple",
+          });
+        }
+
+        if (points >= 1000) {
+          badges.push({
+            title: "Point Hoarder",
+            desc: `${points} list points`,
+            icon: "💎",
+            color: "gold",
+          });
+        } else if (points >= 500) {
+          badges.push({
+            title: "Point Collector",
+            desc: `${points} list points`,
+            icon: "⭐",
+            color: "cyan",
+          });
+        }
+
+        if (created.length >= 1 && fullyBeaten.length >= 1) {
+          badges.push({
+            title: "Dual Threat",
+            desc: "Creates and beats list levels",
+            icon: "⚡",
+            color: "purple",
+          });
+        }
+
+        if (created.some((l) => l.rank === 1)) {
+          badges.push({
+            title: "List #1 Creator",
+            desc: "Built the hardest level",
+            icon: "🏆",
+            color: "gold",
+          });
+        }
+
+        return badges;
+      }
+
       function renderPlayerPage(name) {
         const view = document.getElementById("player-view");
 
@@ -2471,6 +3120,24 @@
         const creatorRankIdx = creatorBoard.findIndex((p) => p.name === name);
         const playerEntry = playerRankIdx !== -1 ? playerBoard[playerRankIdx] : null;
 
+        const achievements = getPlayerAchievements(name);
+        const badgesHtml =
+          achievements.length > 0
+            ? achievements
+                .map(
+                  (b) => `
+            <div class="ach-badge ${b.color}">
+              <div class="ach-icon">${b.icon}</div>
+              <div class="ach-text">
+                <span class="ach-title">${escapeXml(b.title)}</span>
+                <span class="ach-desc">${escapeXml(b.desc)}</span>
+              </div>
+            </div>
+          `,
+                )
+                .join("")
+            : `<div class="empty" style="padding:16px">No badges earned yet — keep grinding.</div>`;
+
         const statCards = [
           playerRankIdx !== -1
             ? `<div class="player-stat rank-player"><span class="player-stat-value">#${playerRankIdx + 1}</span><span class="player-stat-label">Player Rank</span></div>`
@@ -2486,13 +3153,18 @@
           .join("");
 
         view.innerHTML = `
-        <button class="back-btn">&larr; Back</button>
+        <button class="back-btn">← Back</button>
         <div class="player-header fade-in">
             <div class="player-flag">${flagFor(name)}</div>
             <div class="player-name">${escapeXml(name)}</div>
         </div>
 
         <div class="player-stats-row fade-in">${statCards}</div>
+
+        <div class="player-section fade-in">
+            <h3>Achievement Badges</h3>
+            <div class="profile-badges">${badgesHtml}</div>
+        </div>
 
         <div class="player-section fade-in">
             <h3>Hardest Level Beaten</h3>
@@ -2524,8 +3196,243 @@
     `;
       }
 
-      // Single delegated click handler: catches every player link, level link,
-      // "Open Level Page" button, and back button, wherever they're rendered.
+      // ---------- Search ----------
+
+      const searchInput = document.getElementById("searchInput");
+      const searchResults = document.getElementById("searchResults");
+
+      function runSearch(query) {
+        const q = query.trim().toLowerCase();
+        if (!q) {
+          searchResults.classList.remove("open");
+          searchResults.innerHTML = "";
+          return;
+        }
+
+        const levelHits = levels
+          .filter(
+            (l) =>
+              l.name.toLowerCase().includes(q) ||
+              (l.creator && l.creator.toLowerCase().includes(q)) ||
+              (l.verifier && l.verifier.toLowerCase().includes(q)) ||
+              String(l.levelID || "").includes(q),
+          )
+          .slice(0, 6);
+
+        const playerHits = Array.from(allPlayers)
+          .filter((p) => p.toLowerCase().includes(q))
+          .slice(0, 6);
+
+        if (levelHits.length === 0 && playerHits.length === 0) {
+          searchResults.innerHTML = `<div class="search-empty">No matches for "${escapeXml(query)}"</div>`;
+          searchResults.classList.add("open");
+          return;
+        }
+
+        let html = "";
+        levelHits.forEach((l) => {
+          html += `
+            <div class="search-result" data-search-level="${l.rank}">
+              <span class="search-result-type level">Level</span>
+              <span class="search-result-name">#${l.rank} ${escapeXml(l.name)}</span>
+              <span class="search-result-meta">${escapeXml(l.creator)}</span>
+            </div>
+          `;
+        });
+        playerHits.forEach((p) => {
+          html += `
+            <div class="search-result" data-search-player="${escapeXml(p)}">
+              <span class="search-result-type player">Player</span>
+              <span class="search-result-name">${flagFor(p)} ${escapeXml(p)}</span>
+            </div>
+          `;
+        });
+
+        searchResults.innerHTML = html;
+        searchResults.classList.add("open");
+      }
+
+      searchInput.addEventListener("input", () => runSearch(searchInput.value));
+      searchInput.addEventListener("focus", () => {
+        if (searchInput.value.trim()) runSearch(searchInput.value);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search-box")) {
+          searchResults.classList.remove("open");
+        }
+      });
+
+      searchResults.addEventListener("click", (e) => {
+        const levelEl = e.target.closest("[data-search-level]");
+        if (levelEl) {
+          openLevelPage(Number(levelEl.dataset.searchLevel));
+          searchResults.classList.remove("open");
+          searchInput.value = "";
+          return;
+        }
+        const playerEl = e.target.closest("[data-search-player]");
+        if (playerEl) {
+          openPlayerPage(playerEl.dataset.searchPlayer);
+          searchResults.classList.remove("open");
+          searchInput.value = "";
+        }
+      });
+
+      // ---------- FGL Roulette ----------
+
+      const rouletteState = {
+        active: false,
+        target: 1,
+        streak: 0,
+        fails: 0,
+        currentLevel: null,
+        history: [],
+      };
+
+      function pickRandomLevel(excludeRank) {
+        const pool = levels.filter((l) => l.rank !== excludeRank);
+        if (pool.length === 0) return levels[Math.floor(Math.random() * levels.length)];
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      function updateRouletteUI() {
+        document.getElementById("rouletteTarget").textContent = `${rouletteState.target}%`;
+        document.getElementById("rouletteStreak").textContent = rouletteState.streak;
+        document.getElementById("rouletteFails").textContent = rouletteState.fails;
+        const progress = Math.min(100, ((rouletteState.target - 1) / 99) * 100);
+        document.getElementById("rouletteProgressFill").style.width = `${progress}%`;
+
+        const level = rouletteState.currentLevel;
+        if (level) {
+          document.getElementById("rouletteLevelCard").innerHTML = `
+            <div class="rl-rank">#${level.rank}</div>
+            <div class="rl-name">${escapeXml(level.name)}</div>
+            <div class="rl-meta">
+              by ${playerLink(level.creator)} · ${level.points} PTS
+              ${level.levelID ? ` · ID ${escapeXml(String(level.levelID))}` : ""}
+            </div>
+            <div class="rl-target">Reach at least <span>${rouletteState.target}%</span></div>
+          `;
+        }
+
+        const hist = document.getElementById("rouletteHistory");
+        if (rouletteState.history.length === 0) {
+          hist.innerHTML = `<div class="empty" style="padding:16px">No attempts yet.</div>`;
+        } else {
+          hist.innerHTML = rouletteState.history
+            .slice()
+            .reverse()
+            .map(
+              (h) => `
+            <div class="roulette-history-item ${h.pass ? "pass" : "fail"}">
+              <span class="rh-target">T ${h.target}%</span>
+              <span class="rh-got">${h.got != null ? h.got + "%" : "skip"}</span>
+              <span class="rh-level">#${h.rank} ${escapeXml(h.name)}</span>
+            </div>
+          `,
+            )
+            .join("");
+        }
+      }
+
+      function startRoulette() {
+        rouletteState.active = true;
+        rouletteState.target = 1;
+        rouletteState.streak = 0;
+        rouletteState.fails = 0;
+        rouletteState.history = [];
+        rouletteState.currentLevel = pickRandomLevel();
+        document.getElementById("rouletteStartRow").style.display = "none";
+        document.getElementById("rouletteActive").classList.add("show");
+        document.getElementById("rouletteFeedback").textContent = "";
+        document.getElementById("rouletteFeedback").className = "roulette-feedback";
+        document.getElementById("roulettePercentInput").value = "";
+        updateRouletteUI();
+      }
+
+      function resetRoulette() {
+        rouletteState.active = false;
+        document.getElementById("rouletteStartRow").style.display = "flex";
+        document.getElementById("rouletteActive").classList.remove("show");
+        document.getElementById("rouletteFeedback").textContent = "";
+      }
+
+      function submitRoulettePercent() {
+        if (!rouletteState.active || !rouletteState.currentLevel) return;
+        const input = document.getElementById("roulettePercentInput");
+        const raw = input.value.trim();
+        const got = Number(raw);
+        const feedback = document.getElementById("rouletteFeedback");
+
+        if (raw === "" || Number.isNaN(got) || got < 0 || got > 100) {
+          feedback.textContent = "Enter a valid percent between 0 and 100.";
+          feedback.className = "roulette-feedback fail";
+          return;
+        }
+
+        const level = rouletteState.currentLevel;
+        const pass = got >= rouletteState.target;
+
+        rouletteState.history.push({
+          rank: level.rank,
+          name: level.name,
+          target: rouletteState.target,
+          got,
+          pass,
+        });
+
+        if (pass) {
+          rouletteState.streak += 1;
+          if (rouletteState.target >= 100) {
+            feedback.textContent = `You hit 100%! Roulette complete — ${rouletteState.streak} clears, ${rouletteState.fails} fails.`;
+            feedback.className = "roulette-feedback win";
+            updateRouletteUI();
+            input.value = "";
+            return;
+          }
+          rouletteState.target += 1;
+          rouletteState.currentLevel = pickRandomLevel(level.rank);
+          feedback.textContent = `Nice — ${got}% clears the ${rouletteState.target - 1}% target. Next: ${rouletteState.target}%.`;
+          feedback.className = "roulette-feedback ok";
+        } else {
+          rouletteState.fails += 1;
+          feedback.textContent = `${got}% is under the ${rouletteState.target}% target. Same target, new level.`;
+          feedback.className = "roulette-feedback fail";
+          rouletteState.currentLevel = pickRandomLevel(level.rank);
+        }
+
+        input.value = "";
+        updateRouletteUI();
+      }
+
+      function skipRouletteLevel() {
+        if (!rouletteState.active || !rouletteState.currentLevel) return;
+        const level = rouletteState.currentLevel;
+        rouletteState.history.push({
+          rank: level.rank,
+          name: level.name,
+          target: rouletteState.target,
+          got: null,
+          pass: false,
+        });
+        rouletteState.fails += 1;
+        rouletteState.currentLevel = pickRandomLevel(level.rank);
+        document.getElementById("rouletteFeedback").textContent = "Level skipped. Same target, new random level.";
+        document.getElementById("rouletteFeedback").className = "roulette-feedback fail";
+        updateRouletteUI();
+      }
+
+      document.getElementById("rouletteStartBtn").addEventListener("click", startRoulette);
+      document.getElementById("rouletteSubmitBtn").addEventListener("click", submitRoulettePercent);
+      document.getElementById("rouletteSkipBtn").addEventListener("click", skipRouletteLevel);
+      document.getElementById("rouletteResetBtn").addEventListener("click", resetRoulette);
+      document.getElementById("roulettePercentInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") submitRoulettePercent();
+      });
+
+      // ---------- Delegated clicks ----------
+
       document.addEventListener("click", (e) => {
         const backBtn = e.target.closest(".back-btn");
         if (backBtn) {
@@ -2546,59 +3453,33 @@
         }
       });
 
-      // ---------- Loading screen ----------
+      // ---------- Loading screen (no Hexaprism tombstone) ----------
 
-      // Scatters a handful of small spikes/orbs around the loading screen,
-      // each one drifting off on its own random path (random start position,
-      // random distance/direction, random duration/delay) so every reload
-      // looks a little different. Runs behind whichever variant gets picked
-      // below.
       const loadingParticles = document.getElementById("loadingParticles");
       if (loadingParticles) {
         const particleColors = ["#2fe8ff", "#ff3d7f", "#ffce3d"];
-        const particleCount = 18;
-
-        for (let i = 0; i < particleCount; i++) {
+        for (let i = 0; i < 18; i++) {
           const p = document.createElement("div");
           p.className = "loading-particle";
-
-          const isSpike = Math.random() < 0.55;
-          if (!isSpike) {
-            p.style.clipPath = "circle(50% at 50% 50%)";
-          }
-
+          if (Math.random() >= 0.55) p.style.clipPath = "circle(50% at 50% 50%)";
           const size = 5 + Math.random() * 11;
           const color = particleColors[Math.floor(Math.random() * particleColors.length)];
-          const startX = Math.random() * 100;
-          const startY = Math.random() * 100;
-          const dx = (Math.random() - 0.5) * 180;
-          const dy = (Math.random() - 0.5) * 180;
-          const dx2 = (Math.random() - 0.5) * 180;
-          const dy2 = (Math.random() - 0.5) * 180;
-          const dur = 3.5 + Math.random() * 5;
-          const delay = Math.random() * 4;
-          const peakOpacity = 0.2 + Math.random() * 0.45;
-
-          p.style.left = `${startX}%`;
-          p.style.top = `${startY}%`;
+          p.style.left = `${Math.random() * 100}%`;
+          p.style.top = `${Math.random() * 100}%`;
           p.style.width = `${size}px`;
           p.style.height = `${size}px`;
           p.style.background = color;
-          p.style.setProperty("--dx", `${dx}px`);
-          p.style.setProperty("--dy", `${dy}px`);
-          p.style.setProperty("--dx2", `${dx2}px`);
-          p.style.setProperty("--dy2", `${dy2}px`);
-          p.style.setProperty("--dur", `${dur}s`);
-          p.style.setProperty("--delay", `${delay}s`);
-          p.style.setProperty("--peak-opacity", peakOpacity);
-
+          p.style.setProperty("--dx", `${(Math.random() - 0.5) * 180}px`);
+          p.style.setProperty("--dy", `${(Math.random() - 0.5) * 180}px`);
+          p.style.setProperty("--dx2", `${(Math.random() - 0.5) * 180}px`);
+          p.style.setProperty("--dy2", `${(Math.random() - 0.5) * 180}px`);
+          p.style.setProperty("--dur", `${3.5 + Math.random() * 5}s`);
+          p.style.setProperty("--delay", `${Math.random() * 4}s`);
+          p.style.setProperty("--peak-opacity", 0.2 + Math.random() * 0.45);
           loadingParticles.appendChild(p);
         }
       }
 
-      // Builds a little outline-style Geometry Dash icon (cube / spike /
-      // ball / ship) as inline SVG. Used both by the drifting background
-      // icons below and by the icon-carousel loading variant.
       function gdIconSvg(type, color) {
         if (type === "cube") {
           return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
@@ -2621,52 +3502,33 @@
                       <path d="M13 24 Q20 29 27 24" stroke="${color}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
                   </svg>`;
         }
-        // ship
         return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                   <path d="M4 25 L20 12 L36 25 L27 25 L20 32 L13 25 Z" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>
               </svg>`;
       }
 
-      // Scatters a few bigger, recognizable Geometry Dash icons (cube, spike,
-      // ball, ship) around the loading screen, drifting on their own random
-      // paths just like the tiny particles above but larger and slower.
       const loadingIcons = document.getElementById("loadingIcons");
       if (loadingIcons) {
         const iconColors = ["#2fe8ff", "#ff3d7f", "#ffce3d"];
         const iconTypes = ["cube", "spike", "ball", "ship"];
-        const iconCount = 6;
-
-        for (let i = 0; i < iconCount; i++) {
+        for (let i = 0; i < 6; i++) {
           const el = document.createElement("div");
           el.className = "loading-icon";
-
           const type = iconTypes[i % iconTypes.length];
           const color = iconColors[Math.floor(Math.random() * iconColors.length)];
           el.innerHTML = gdIconSvg(type, color);
-
           const size = 26 + Math.random() * 20;
-          const startX = Math.random() * 100;
-          const startY = Math.random() * 100;
-          const dx = (Math.random() - 0.5) * 220;
-          const dy = (Math.random() - 0.5) * 220;
-          const dx2 = (Math.random() - 0.5) * 220;
-          const dy2 = (Math.random() - 0.5) * 220;
-          const dur = 5 + Math.random() * 6;
-          const delay = Math.random() * 4;
-          const peakOpacity = 0.35 + Math.random() * 0.35;
-
-          el.style.left = `${startX}%`;
-          el.style.top = `${startY}%`;
+          el.style.left = `${Math.random() * 100}%`;
+          el.style.top = `${Math.random() * 100}%`;
           el.style.width = `${size}px`;
           el.style.height = `${size}px`;
-          el.style.setProperty("--dx", `${dx}px`);
-          el.style.setProperty("--dy", `${dy}px`);
-          el.style.setProperty("--dx2", `${dx2}px`);
-          el.style.setProperty("--dy2", `${dy2}px`);
-          el.style.setProperty("--dur", `${dur}s`);
-          el.style.setProperty("--delay", `${delay}s`);
-          el.style.setProperty("--peak-opacity", peakOpacity);
-
+          el.style.setProperty("--dx", `${(Math.random() - 0.5) * 220}px`);
+          el.style.setProperty("--dy", `${(Math.random() - 0.5) * 220}px`);
+          el.style.setProperty("--dx2", `${(Math.random() - 0.5) * 220}px`);
+          el.style.setProperty("--dy2", `${(Math.random() - 0.5) * 220}px`);
+          el.style.setProperty("--dur", `${5 + Math.random() * 6}s`);
+          el.style.setProperty("--delay", `${Math.random() * 4}s`);
+          el.style.setProperty("--peak-opacity", 0.35 + Math.random() * 0.35);
           loadingIcons.appendChild(el);
         }
       }
@@ -2677,42 +3539,8 @@
         return out;
       }
 
-      // Five completely different loading-screen scenes. One is picked at
-      // random on every page load, each with its own animation, visuals,
-      // and pool of status messages - the tombstone one is just one of many.
+      // Tombstone / Hexaprism variant intentionally removed
       const loadingVariants = [
-        {
-          id: "tombstone",
-          messages: [
-            "Digging up receipts...",
-            "Lowering the casket...",
-            "Reading the epitaph...",
-            "Paying respects...",
-            "Counting the spikes...",
-            "Sorting the tombstones...",
-          ],
-          render(container) {
-            container.innerHTML = `
-              <div class="loading-title">FriendGroupList</div>
-              <div class="coffin-scene">
-                <svg class="coffin-svg" viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg">
-                  <polygon points="60,10 100,10 130,60 130,170 100,210 60,210 30,170 30,60" fill="#1a1e3d" stroke="#ff3d7f" stroke-width="3"/>
-                  <polygon points="70,30 90,30 108,60 108,160 90,190 70,190 52,160 52,60" fill="#12152a" stroke="#2fe8ff" stroke-width="1.5" opacity="0.6"/>
-                  <circle cx="80" cy="100" r="14" fill="none" stroke="#ffce3d" stroke-width="2" opacity="0.7"/>
-                </svg>
-              </div>
-              <div class="epitaph">
-                <div class="epitaph-line rip">R.I.P.</div>
-                <div class="epitaph-line name">Hexaprism's Records</div>
-                <div class="epitaph-line years">2026 &ndash; 2026</div>
-                <div class="epitaph-line cause">Yeah bro you kinda did this to yourself. A 'secret way' is still not allowed.</div>
-              </div>
-              <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
-              <div class="loading-spike-row">${buildSpikeRowHTML(24)}</div>
-              <div class="loading-status" id="loadingStatus"></div>
-            `;
-          },
-        },
         {
           id: "hud",
           messages: [
@@ -2918,10 +3746,6 @@
         if (chosenVariant.init) chosenVariant.init(extraLoadingIntervals);
       }
 
-      // Cycles through the chosen variant's status lines (shuffled into a
-      // random order on every load) while the bar animates, then fades the
-      // whole screen out once everything (fonts included) is ready and a
-      // minimum show time has elapsed, so it doesn't just flash by.
       const loadingStatus = document.getElementById("loadingStatus");
       const loadingMessages = chosenVariant.messages.slice();
 
@@ -2951,8 +3775,6 @@
         setTimeout(hideLoadingScreen, 2800);
       });
 
-      // Fallback in case the load event is slow to fire (e.g. blocked font
-      // request) - never leave the loading screen up for more than 6.5s.
       setTimeout(hideLoadingScreen, 6500);
     </script>
   </body>
