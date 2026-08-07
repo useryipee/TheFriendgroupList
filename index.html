@@ -3391,7 +3391,7 @@
             input.value = "";
             return;
           }
-          rouletteState.target += 1;
+          rouletteState.target = Math.min(100, got + 1);
           rouletteState.currentLevel = pickRandomLevel(level.rank);
           feedback.textContent = `Nice — ${got}% clears the ${rouletteState.target - 1}% target. Next: ${rouletteState.target}%.`;
           feedback.className = "roulette-feedback ok";
