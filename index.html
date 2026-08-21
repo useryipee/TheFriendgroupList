@@ -702,6 +702,40 @@
         color: #7fd8ff;
       }
 
+      .profile-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        object-fit: cover;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        box-shadow: 0 0 0 2px rgba(47, 232, 255, 0.06);
+      }
+
+      .avatar-small {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+      }
+
+      .avatar-header {
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+        border: 2px solid var(--cyan);
+        box-shadow: 0 0 24px rgba(47, 232, 255, 0.18);
+      }
+
+      .fallback-avatar {
+        font-family: var(--font-display);
+        font-weight: 900;
+        color: var(--cyan);
+        background:
+          linear-gradient(135deg, rgba(47, 232, 255, 0.12), rgba(255, 61, 127, 0.12)),
+          var(--surface-2);
+      }
+
       .level-text-link {
         color: var(--magenta);
         cursor: pointer;
@@ -2507,6 +2541,36 @@
         disapearingguy: "🇦🇺 🇫🇷",
       };
 
+      // Profile pictures. Put your images in the same GitHub repo,
+      // for example: assets/pfps/useryipee.png
+      const playerAvatars = {
+        Useryipee: "assets/pfps/useryipee.png",
+        Sirjefferson: "assets/pfps/sirjefferson.png",
+        disapearingguy: "assets/pfps/disapearingguy.png",
+      };
+
+      function avatarFor(name) {
+        return playerAvatars[name] || "";
+      }
+
+      function avatarHtml(name, sizeClass = "avatar-small") {
+        const avatar = avatarFor(name);
+
+        if (!avatar) {
+          const initial = escapeXml((name || "?").charAt(0).toUpperCase());
+          return `<span class="profile-avatar ${sizeClass} fallback-avatar">${initial}</span>`;
+        }
+
+        return `
+          <img
+            class="profile-avatar ${sizeClass}"
+            src="${escapeXml(avatar)}"
+            alt="${escapeXml(name)}'s profile picture"
+            onerror="this.outerHTML='<span class=&quot;profile-avatar ${sizeClass} fallback-avatar&quot;>${escapeXml((name || '?').charAt(0).toUpperCase())}</span>'"
+          >
+        `;
+      }
+
       function flagFor(name) {
         return playerFlags[name] || defaultFlag;
       }
@@ -2619,8 +2683,9 @@
       function playerLink(name) {
         if (!name) return "None";
         return `
-        <span class="player-link" data-player="${escapeXml(name)}">
-            ${flagFor(name)} ${escapeXml(name)}
+        <span class="player-link" data-player="${escapeXml(name)}" style="display:inline-flex;align-items:center;gap:7px;">
+            ${avatarHtml(name, "avatar-small")}
+            <span>${flagFor(name)} ${escapeXml(name)}</span>
         </span>
     `;
       }
@@ -2795,7 +2860,10 @@
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}" style="display:inline-flex;align-items:center;gap:7px;">
+                    ${avatarHtml(p.name, "avatar-small")}
+                    <span>${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                </span>
                 <small>Hardest beaten: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
@@ -2829,7 +2897,10 @@
         <div class="board-row p${i + 1}">
             <div class="board-rank">${i + 1}</div>
             <div class="board-name">
-                <span class="player-link" data-player="${escapeXml(p.name)}">${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                <span class="player-link" data-player="${escapeXml(p.name)}" style="display:inline-flex;align-items:center;gap:7px;">
+                    ${avatarHtml(p.name, "avatar-small")}
+                    <span>${flagFor(p.name)} ${escapeXml(p.name)}</span>
+                </span>
                 <small>Hardest built: ${p.hardestRank !== Infinity ? `<span class="level-text-link" data-level-rank="${p.hardestRank}">${escapeXml(p.hardestName)}</span>` : "N/A"}</small>
             </div>
             <div class="board-points">${p.points}</div>
@@ -3183,8 +3254,11 @@
         view.innerHTML = `
         <button class="back-btn">← Back</button>
         <div class="player-header fade-in">
-            <div class="player-flag">${flagFor(name)}</div>
-            <div class="player-name">${escapeXml(name)}</div>
+            ${avatarHtml(name, "avatar-header")}
+            <div>
+              <div class="player-flag">${flagFor(name)}</div>
+              <div class="player-name">${escapeXml(name)}</div>
+            </div>
         </div>
 
         <div class="player-stats-row fade-in">${statCards}</div>
@@ -3271,7 +3345,10 @@
           html += `
             <div class="search-result" data-search-player="${escapeXml(p)}">
               <span class="search-result-type player">Player</span>
-              <span class="search-result-name">${flagFor(p)} ${escapeXml(p)}</span>
+              <span class="search-result-name" style="display:flex;align-items:center;gap:7px;">
+                ${avatarHtml(p, "avatar-small")}
+                <span>${flagFor(p)} ${escapeXml(p)}</span>
+              </span>
             </div>
           `;
         });
