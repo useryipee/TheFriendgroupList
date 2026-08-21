@@ -2541,40 +2541,41 @@
         disapearingguy: "🇦🇺 🇫🇷",
       };
 
-      // Profile pictures. Put your images in the same GitHub repo,
-      // for example: assets/pfps/useryipee.png
-      const playerAvatars = {
-        Useryipee: "assets/pfps/useryipee.png",
-        Sirjefferson: "assets/pfps/sirjefferson.png",
-        disapearingguy: "assets/pfps/disapearingguy.png",
-      };
+// ---------- Profile Pictures ----------
 
-      function avatarFor(name) {
-        return playerAvatars[name] || "";
-      }
+// These images are in the root of your GitHub repo
+const playerAvatars = {
+    Useryipee: "useryipee.png",
+    Sirjefferson: "sirjefferson.png",
+    disapearingguy: "disapearingguy.png"
+};
 
-      function avatarHtml(name, sizeClass = "avatar-small") {
-        const avatar = avatarFor(name);
+function avatarFor(name) {
+    return playerAvatars[name] || "";
+}
 
-        if (!avatar) {
-          const initial = escapeXml((name || "?").charAt(0).toUpperCase());
-          return `<span class="profile-avatar ${sizeClass} fallback-avatar">${initial}</span>`;
-        }
+function avatarHtml(name, sizeClass = "avatar-small") {
+    const avatar = avatarFor(name);
+
+    if (!avatar) {
+        const initial = escapeXml((name || "?").charAt(0).toUpperCase());
 
         return `
-          <img
-            class="profile-avatar ${sizeClass}"
-            src="${escapeXml(avatar)}"
-            alt="${escapeXml(name)}'s profile picture"
-            onerror="this.outerHTML='<span class=&quot;profile-avatar ${sizeClass} fallback-avatar&quot;>${escapeXml((name || '?').charAt(0).toUpperCase())}</span>'"
-          >
+            <span class="profile-avatar ${sizeClass} fallback-avatar">
+                ${initial}
+            </span>
         `;
-      }
+    }
 
-      function flagFor(name) {
-        return playerFlags[name] || defaultFlag;
-      }
-
+    return `
+        <img
+            class="profile-avatar ${sizeClass}"
+            src="${avatar}"
+            alt="${escapeXml(name)}"
+            onerror="this.outerHTML='<span class=&quot;profile-avatar ${sizeClass} fallback-avatar&quot;>${escapeXml((name || '?').charAt(0).toUpperCase())}</span>'"
+        >
+    `;
+}
       // ---------- Spike dividers ----------
 
       const spikeRow = document.getElementById("spikeRow");
