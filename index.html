@@ -2503,7 +2503,7 @@
           levelID: "146902898",
           isNew: true,
         },
-         {
+        {
           rank: 8,
           name: "Easy FGL Points",
           creator: "Useryipee",
@@ -2532,9 +2532,9 @@
           songNgId: "574484",
           levelID: "146902898",
           isNew: false,
-        }
+        },
+      ];
 
-        
       const defaultFlag = "🏳️";
       const playerFlags = {
         Useryipee: "🇦🇺 🇬🇧",
@@ -2542,41 +2542,45 @@
         disapearingguy: "🇦🇺 🇫🇷",
       };
 
-// ---------- Profile Pictures ----------
+      function flagFor(name) {
+        return playerFlags[name] || defaultFlag;
+      }
 
-// These images are in the root of your GitHub repo
-const playerAvatars = {
-    Useryipee: "useryipee.png",
-    Sirjefferson: "sirjefferson.png",
-    disapearingguy: "disapearingguy.png"
-};
+      // ---------- Profile Pictures ----------
 
-function avatarFor(name) {
-    return playerAvatars[name] || "";
-}
+      // These images are in the root of your GitHub repo
+      const playerAvatars = {
+          Useryipee: "useryipee.png",
+          Sirjefferson: "sirjefferson.png",
+          disapearingguy: "disapearingguy.png"
+      };
 
-function avatarHtml(name, sizeClass = "avatar-small") {
-    const avatar = avatarFor(name);
+      function avatarFor(name) {
+          return playerAvatars[name] || "";
+      }
 
-    if (!avatar) {
-        const initial = escapeXml((name || "?").charAt(0).toUpperCase());
+      function avatarHtml(name, sizeClass = "avatar-small") {
+          const avatar = avatarFor(name);
 
-        return `
-            <span class="profile-avatar ${sizeClass} fallback-avatar">
-                ${initial}
-            </span>
-        `;
-    }
+          if (!avatar) {
+              const initial = escapeXml((name || "?").charAt(0).toUpperCase());
 
-    return `
-        <img
-            class="profile-avatar ${sizeClass}"
-            src="${avatar}"
-            alt="${escapeXml(name)}"
-            onerror="this.outerHTML='<span class=&quot;profile-avatar ${sizeClass} fallback-avatar&quot;>${escapeXml((name || '?').charAt(0).toUpperCase())}</span>'"
-        >
-    `;
-}
+              return `
+                  <span class="profile-avatar ${sizeClass} fallback-avatar">
+                      ${initial}
+                  </span>
+              `;
+          }
+
+          return `
+              <img
+                  class="profile-avatar ${sizeClass}"
+                  src="${avatar}"
+                  alt="${escapeXml(name)}"
+                  onerror="this.outerHTML='<span class=&quot;profile-avatar ${sizeClass} fallback-avatar&quot;>${escapeXml((name || '?').charAt(0).toUpperCase())}</span>'"
+              >
+          `;
+      }
       // ---------- Spike dividers ----------
 
       const spikeRow = document.getElementById("spikeRow");
